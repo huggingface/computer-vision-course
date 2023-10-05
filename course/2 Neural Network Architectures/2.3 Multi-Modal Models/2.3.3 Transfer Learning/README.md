@@ -6,7 +6,7 @@ In this directory, you can find multiple notebooks that introduce how to fine-tu
  - Visual Document Question Answering 
  - Form Understanding, etc.
 
-We use different type of Multimodal Models ranging from:
+We use different types of Multimodal Models ranging from:
  - LayoutLM family
  - DETR
  - DiT, etc.
