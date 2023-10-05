@@ -1,6 +1,6 @@
 # Document Image Classification
 
-Document image classification task is a downstream task for multimodal model that combines between text and image as an input, specifically in [Document AI](https://arxiv.org/abs/2111.08609).
+Document Image Classification is a downstream task for multimodal models that combines text and image as an input. More on the topic can be found here:  [Document AI](https://arxiv.org/abs/2111.08609).
 
 The goal is to create a model that is able to classify the type of document based on an input image and a list of different labels.
 
