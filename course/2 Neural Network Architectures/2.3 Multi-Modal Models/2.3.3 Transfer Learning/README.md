@@ -11,7 +11,7 @@ We use different types of Multimodal Models ranging from:
  - DETR
  - DiT, etc.
 
-This would include also the setup for training, fine-tuning and inferencing at the end. Feel free to use as sources for your project.
+This includes also the setup for fine-tuning and inferencing at the end. Feel free to use them as sources for your project.
 
 For Multimodal model related to Text and Image, feel free to start with this [paper](https://arxiv.org/abs/2111.08609).
 
