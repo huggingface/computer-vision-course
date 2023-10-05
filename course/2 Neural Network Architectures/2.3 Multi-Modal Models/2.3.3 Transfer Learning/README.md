@@ -20,7 +20,7 @@ For Multimodal model related to Text and Image, feel free to start with this [pa
 ## LayoutLM Family
 LayoutLM is a multimodal model that is develop by the [Microsoft Document AI](https://www.microsoft.com/en-us/research/project/document-ai/overview/) team where they most focusing on develop techniques and models to solve the problem of understanding, extracting and analysing complex document such as PDF, Word Document, HTML, XML, etc.
 
-The backbone of the model is Transformers architecture with Text Embedding to handle text input and Image Embedding to handle image input. Depend on the version, the embedding techniques and pre-trained task might be slightly different.
+The backbone of the model is the Transformers architecture, which uses Text Embeddings to handle text input and Image Embedding to handle image input. Depending on the version, the embedding techniques and pre-trained tasks might be slightly different.
 
 The model can fine-tune downstream various tasks:
 - Sequence Classification (Document Image Classification)
