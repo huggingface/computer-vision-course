@@ -6,7 +6,7 @@ The goal is to create a model that is able to classify the type of document base
 
 This folder contains the implementation, training, fine-tuning and inference using different multimodal models. Refer to the list below for more information.
 
-List of Model for Document Image Classfication task:
+List of Models for the Document Image Classification task:
 - LayoutLM: [Code](https://colab.research.google.com/drive/1Tuha3PWqvUicwhS7uUGKH0HBI185pDY-?usp=sharing)
 - LayoutLMv2: _TBA_
 - LayoutLMv3: _TBA_
