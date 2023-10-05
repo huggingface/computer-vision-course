@@ -1,6 +1,6 @@
 # Transfer Learning / Fine Tuning for Multimodal Models
 
-In this directory, you can find multiple notebooks that introduce you how to fine-tuning Multimodal models to downstream task like:
+In this directory, you can find multiple notebooks that introduce how to fine-tune Multimodal models to downstream task like:
  - Image-to-Text / Text-to-Image
  - Document Classification
  - Visual Document Question Answering 
