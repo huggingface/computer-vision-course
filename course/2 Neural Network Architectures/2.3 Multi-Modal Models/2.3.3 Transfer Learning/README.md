@@ -1,61 +1,32 @@
 # Transfer Learning / Fine Tuning for Multimodal Models
-
 In this directory, you can find multiple notebooks that introduce how to fine-tune Multimodal models to downstream task like:
  - Image-to-Text / Text-to-Image
  - Document Classification
- - Visual Document Question Answering 
- - Form Understanding, etc.
+ - Visual Question Answering 
+ - Speech-to-Text
+ - Text-to-Video
 
-We use different types of Multimodal Models ranging from:
- - LayoutLM family
- - DETR
- - DiT, etc.
+We also included some sources with SOTA and currently development for Multimodal Models as well.
 
 This includes also the setup for fine-tuning and inferencing at the end. Feel free to use them as sources for your project.
 
-For Multimodal model related to Text and Image, feel free to start with this [paper](https://arxiv.org/abs/2111.08609).
+## Table of Contents
+1. [Fine Tuning and Transfer Learning with Multimodal](#finetune)
+2. [Current SOTA](#sota)
+3. [Resources](#resource)
+4. [What's next ?](#next)
 
-# Model Introduction
 
-## LayoutLM Family
-LayoutLM is a multimodal model that is develop by the [Microsoft Document AI](https://www.microsoft.com/en-us/research/project/document-ai/overview/) team where they most focusing on develop techniques and models to solve the problem of understanding, extracting and analysing complex document such as PDF, Word Document, HTML, XML, etc.
+## [Fine tuning and Transfer Learning with Multimodal](#finetune)
+__TBA__
 
-The backbone of the model is the Transformers architecture, which uses Text Embeddings to handle text input and Image Embedding to handle image input. Depending on the version, the embedding techniques and pre-trained tasks might be slightly different.
+## [Current State-of-the-art](#sota)
+__TBA__
 
-The model can fine-tune downstream various tasks:
-- Sequence Classification (Document Image Classification)
-- Token Classification (Similar like Named Entity Recognition)
-- Visual Question Answering (Talk with your Document)
+## [Resources](resource)
+__TBA__
 
-![LayoutLMv2 Architecture](https://th.bing.com/th/id/OIP.uS8KaZ-dipmmY57gkEReZgHaGm?pid=ImgDet&w=897&h=800&rs=1)
+## [What's next ?](#next)
+We are committed to continually improving and expanding our collection of notebooks and resources. If you have suggestions for additional models or tasks that you'd like us to explore, please create an issue, and we'll investigate the possibilities.
 
-For more paper related to LayoutLM family:
-- __LayoutLMv1: Pre-training of Text and Layout for Document Image Understanding__
-    - Research Paper: [arXiv:1912.13318](https://arxiv.org/abs/1912.13318)
-    - HuggingFace Documentation: [Documentation](https://huggingface.co/docs/transformers/model_doc/layoutlm)
-    - Model Hub: [Base](https://huggingface.co/microsoft/layoutlm-base-uncased) | [Large](https://huggingface.co/microsoft/layoutlm-large-uncased)
-    - GitHub: [Repository](https://github.com/microsoft/unilm/tree/master/layoutlm)
-
-- __LayoutLMv2: Multi-modal Pre-training for Visually-Rich Document Understanding__
-    - Research Paper: [arXiv:2012.14740](https://arxiv.org/abs/2012.14740)
-    - HuggingFace Documentation: [Documentation](https://huggingface.co/docs/transformers/model_doc/layoutlmv2)
-    - Model Hub: [Base](https://huggingface.co/microsoft/layoutlmv2-base-uncased) | [Large](https://huggingface.co/microsoft/layoutlmv2-large-uncased)
-    - GitHub: [Repository](https://github.com/microsoft/unilm/tree/master/layoutlmv2)
-
-- __LayoutLMv3: Pre-training for Document AI with Unified Text and Image Masking__
-    - Research Paper: [arXiv:2204.08387](https://arxiv.org/abs/2204.08387)
-    - HuggingFace Documentation: [Documentation](https://huggingface.co/docs/transformers/model_doc/layoutlmv3)
-    - Model Hub: [Base](https://huggingface.co/microsoft/layoutlmv3-base) | [Large](https://huggingface.co/microsoft/layoutlmv3-large)
-    - GitHub: [Repository](https://github.com/microsoft/unilm/tree/master/layoutlmv3)
-
-- __LayoutXLM: Multimodal Pre-training for Multilingual Visually-rich Document Understanding__
-    - Research Paper: [arXiv:2104.08836](https://arxiv.org/abs/2104.08836)
-    - HuggingFace Documentation: [Documentation](https://huggingface.co/docs/transformers/model_doc/layoutxlm)
-    - Model Hub: [Base](https://huggingface.co/microsoft/layoutxlm-base)
-    - GitHub: [Repository](https://github.com/microsoft/unilm/tree/master/layoutxlm)
-
-- __LayoutReader: Pre-training of Text and Layout for Reading Order Detection__
-    - Research Paper: [arXiv:2108.11591v2](https://arxiv.org/abs/2108.11591v2)
-    - HuggingFace Documentation: N/A
-    - Model Hub: [Nielsr Model Card](https://huggingface.co/nielsr/layoutreader-readingbank)
-    - GitHub: [Repository](https://github.com/microsoft/unilm/tree/master/layoutreader)
+Let's dive into the notebooks to see how we can use fine-tuning and transfer learning to enhance multimodal models for various tasks. If you have any questions or ideas, don't hesitate to reach out.
