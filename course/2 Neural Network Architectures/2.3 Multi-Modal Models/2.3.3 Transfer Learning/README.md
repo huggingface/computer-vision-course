@@ -4,11 +4,11 @@ In this directory, you can find multiple notebooks that introduce how to fine-tu
  - Document Classification
  - Visual Question Answering 
  - Speech-to-Text
- - Text-to-Video
+ - Text-to-Vide
 
-We also included some sources with SOTA and currently development for Multimodal Models as well.
+We have also included sources on state-of-the-art (SOTA) and current developments in multimodal models, providing you with the most up-to-date information in this field..
 
-This includes also the setup for fine-tuning and inferencing at the end. Feel free to use them as sources for your project.
+This also includes the setup for fine-tuning and running inference at the end. Feel free to use them as sources for your project.
 
 ## Table of Contents
 1. [Fine Tuning and Transfer Learning with Multimodal](#finetune)
@@ -27,6 +27,6 @@ __TBA__
 __TBA__
 
 ## [What's next ?](#next)
-We are committed to continually improving and expanding our collection of notebooks and resources. If you have suggestions for additional models or tasks that you'd like us to explore, please create an issue, and we'll investigate the possibilities.
+We are continuously improving and expanding our collection of notebooks and resources. If you have any suggestions for additional models or tasks that you'd like us to explore, please create an issue, and we'll investigate the possibilities.
 
 Let's dive into the notebooks to see how we can use fine-tuning and transfer learning to enhance multimodal models for various tasks. If you have any questions or ideas, don't hesitate to reach out.
