@@ -1,10 +1,8 @@
 # Multimodal Models
 
-Multimodal is a multi-disciplinary research field where we aim to develop and create model that able to solve multiple aspects at the same time in terms but not limited to text, image, video, etc.
+Multimodal is a multidisciplinary research field focused on developing and creating models that can simultaneously address multiple aspects across various modalities, such as text, image, video, and more. 
 
-Example that could be model work with Image and Text like LayoutLM, CLIP, DETR, etc.
-
-In this folder, you will be able to find:
+Contents found in this folder:
 - Connecting Text and Vision
 - CLIP and Friends
 - Transfer Learning
