@@ -1,4 +1,4 @@
-transformers==4.34.0
+transformers==4.34.1
 timm==0.9.7
 evaluate==0.4.1
 datasets==2.14.5
