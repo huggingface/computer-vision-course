@@ -17,7 +17,7 @@ This is the repository for a community-led course on Computer Vision. Once finis
 
 1. Join us in Discord 👾
 
-   Join [the Hugging Face discord](https://huggingface.co/join/discord), take the role open-source and join us at the channel #cv-community-project.
+   Join [the Hugging Face discord](https://discord.gg/hugging-face-879548962464493619), take the role open-source and join us at the channel #cv-community-project.
 <img width="491" alt="image" src="https://github.com/lunarflu/fork-computer-vision-course/assets/70143200/c13d5b34-ed1c-4f12-b044-192484b94f9d">
 <img width="180" alt="image" src="https://github.com/lunarflu/fork-computer-vision-course/assets/70143200/b3372a47-711f-4b43-bc85-0ba2b6f8b914">
 

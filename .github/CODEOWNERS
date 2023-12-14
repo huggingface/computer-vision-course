@@ -7,6 +7,6 @@
 # modifies files in /chapters/ or /notebooks/, only the here mentioned 
 # and not the global owner(s) will be requested for a review.
 
-/chapters/    @merveenoyan @MKhalusova @NielsRogge
+/chapters/    @merveenoyan @MKhalusova
 
-/notebooks/    @merveenoyan @MKhalusova @NielsRogge
+/notebooks/    @merveenoyan @MKhalusova
