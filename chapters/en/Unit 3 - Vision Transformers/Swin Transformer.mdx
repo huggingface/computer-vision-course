@@ -1,0 +1,17 @@
+# Swin Transformer
+Introduced in the 2021 paper, [Swin Transformer: Hierarchical Vision Transformer using Shifted Windows](https://arxiv.org/pdf/2103.14030.pdf), the Swin Transformer architecture optimizes for latency and performance using a shifted window (as opposed to sliding window) approach which reduces the number of operations required. Swin is considered a **hierarchical backbone** for computer vision. Swin can be used for tasks like image classification.
+
+<Tip>
+A **backbone**, in terms of deep learning, is a part of a neural network that does feature extraction. Additional layers can be added to the backbone to do a variety of vision tasks. **Hierarchical backbones** have tiered structures, sometimes with varying resolutions. This is in contrast to the non-hierarchical **plain backbone** in [VitDet](https://arxiv.org/abs/2203.16527)
+</Tip>
+
+## Swin Transformer V2 [(paper)](https://arxiv.org/abs/2111.09883)
+Swin Transformer V2 is a large vision model that can support up to 3B parameters and capable of training with high resolution images. It improves upon the original Swin Transformer by stabilizing training, transfer models pre-trained with low-resolution images to high-resolution tasks, and using [SimMIM](https://arxiv.org/abs/2111.09886), a self-supervised training approach that reduces the number of labeled images required for training.
+
+## Applications in Image Restoration
+
+### SwinIR [(paper)](https://arxiv.org/abs/2108.10257)
+SwinIR is a model for turning low resolution images into high resolution images based on Swin Transformer.
+
+### Swin2SR  [(paper)](https://arxiv.org/abs/2209.11345)
+Swin2SR is another image restoration model. It is an improvement on SwinIR by incorporating Swin Transformer V2, applying the benefits of Swin V2 like training stability and higher image resolution capacity.
