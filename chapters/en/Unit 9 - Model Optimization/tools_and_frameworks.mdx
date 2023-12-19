@@ -1,0 +1,114 @@
+# Model optimization tools and frameworks
+
+## Tensorflow Model optimization Toolkit (TMO)
+
+### Overview
+
+The TensorFlow Model Optimization Toolkit is a suite of tools for optimizing machine learning models for deployment. 
+The TensorFlow Lite post-training quantization tool enable users to convert weights to 8 bit precision which reduces the trained model size by about 4 times. 
+The tools also include API for pruning and quantization during training is post-training quantization is insufficient.
+These help user to reduce latency and inference cost, deploy models to edge devices with restricted resources and optimized execution for existing hardware or new special purpose accelerators
+
+### Setup guide
+
+The Tensorflow Model Optimization Toolkit is available as a pip package, `tensorflow-model-optimization`. To install the package, run the following command:
+```
+pip install -U tensorflow-model-optimization
+```
+
+## Pytorch Quantization
+
+### Overview
+
+For optimizing model, pyTorch supports INT8 quantization compared to typical FP32 models which leads to 4x reduction in the model size and a 4x reduction in memory bandwidth requirements. 
+PyTorch supports multiple approaches to quantizing a deep learning model which are as follows:
+1. Model is trained in FP32 and then the model is converted to INT8. 
+2. Quantization aware training, where models quantization errors in both the forward and backward passes using fake-quantization modules. 
+3. Represent quantized tensors and perform operations with them. They can be used to directly construct models that perform all or part of the computation in lower precision. 
+
+For more details on quantization in PyTorch, see [here](https://pytorch.org/docs/stable/quantization.html)
+
+### Setup guide
+
+Pytorch quantization is available as API in the pytorch package. To use it simple install pytorch and import the quantization API as follows: 
+```
+pip install torch
+import torch.quantization
+```
+
+## ONNX Runtime
+
+### Overview
+
+ONNX Runtime is a cross-platform machine-learning model accelerator, with a flexible interface to integrate hardware-specific libraries. 
+ONNX Runtime can be used with models from PyTorch, Tensorflow/Keras, TFLite, scikit-learn, and other frameworks.
+The benefits of using ONNX Runtime for Inferencing are as follows:
+- Improve inference performance for a wide variety of ML models
+- Run on different hardware and operating systems
+- Train in Python but deploy into a C#/C++/Java app
+- Train and perform inference with models created in different frameworks
+
+For more details on ONNX Runtime, see [here](https://onnxruntime.ai/docs/)
+
+### Setup guide
+
+ONNX Runtime has 2 python package and only one of these packages should be installed at a time in any one environment. 
+Use the GPU package if you want to use ONNX Runtime with GPU support.
+The python package for ONNX Runtime is available as a pip package. To install the package, run the following command:
+```
+pip install onnxruntime
+```
+
+For GPU version, run the following command:
+```
+pip install onnxruntime-gpu
+```
+
+## TensorRT
+
+### Overview
+
+NVIDIA® TensorRT™ is an SDK for optimizing trained deep learning models to enable high-performance inference. 
+TensorRT contains a deep learning inference optimizer for trained deep learning models, and a runtime for execution.
+After user have trained their deep learning model in a framework of their choice, TensorRT enables user to run it with higher throughput and lower latency.
+
+### Setup guide
+
+TensorRT is available as a pip package, `tensorrt`. To install the package, run the following command:
+```
+pip install tensorrt
+```
+for other installation methods, see [here](https://docs.nvidia.com/deeplearning/tensorrt/quick-start-guide/index.html#install) 
+
+## OpenVINO
+
+### Overview
+
+The OpenVINO™ toolkit enables user to optimize a deep learning model from almost any framework and deploy it with best-in-class performance on a range of Intel® processors and other hardware platforms.
+The benefits of using OpenVINO includes:
+- link directly with OpenVINO Runtime to run inference locally or use OpenVINO Model Server to serve model inference from a separate server or within Kubernetes environment
+- Write an application once, deploy it anywhere on your preferred device, language and OS.
+- has minimal external dependencies 
+- Reduces first-inference latency by using the CPU for initial inference and then switching to another device once the model has been compiled and loaded to memory
+
+### Setup guide
+
+Openvino is available as a pip package, `openvino`. To install the package, run the following command:
+```
+pip install openvino
+```
+
+For other installation methods, see [here](https://docs.openvino.ai/2023.2/openvino_docs_install_guides_overview.html?VERSION=v_2023_2_0&OP_SYSTEM=LINUX&DISTRIBUTION=ARCHIVE)
+
+## EdgeTPU
+
+### Overview
+
+Edge TPU is Google’s purpose-built ASIC designed to run AI at the edge. It delivers high performance in a small physical and power footprint, enabling the deployment of high-accuracy AI at the edge.
+The benefits of using EdgeTPU includes:
+- Complements Cloud TPU and Google Cloud services to provide an end-to-end, cloud-to-edge, hardware + software infrastructure for AI-based solutions deployment
+- High performance in a small physical and power footprint
+- Combined custom hardware, open software, and state-of-the-art AI algorithms to provide high-quality, easy to deploy AI solutions for the edge.
+
+For more details on EdgeTPU, see [here](https://cloud.google.com/edge-tpu)
+
