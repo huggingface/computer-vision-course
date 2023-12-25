@@ -1,0 +1,85 @@
+# Applications of Computer Vision
+
+
+In today's world, computer vision systems perform ever more challenging tasks. Some of which are even difficult for humans to do. Let's consider India. Do you know India has the highest number of registered two-wheelers in the world? With that many people, sometimes they forget to use a helmet. This is dangerous and can cause severe injuries to the person. To address these issues, the government of India, in collaboration with other institutions, developed a computer vision system that automatically catches riders without a helmet and their license plate and imposes strict fines against them to discourage people from breaking the law.
+
+Of course, fining people is not the only application of computer vision. There are many more in different fields, such as healthcare, retail, and other industries. Here, we provide a few high-level examples of computer vision systems.
+
+## A High Level Overview of Computer Vision System with Examples
+
+
+### Autonomous Vehicles
+
+
+Self-driving cars heavily rely on computer vision to perceive and interpret the environment. They use cameras and sensors to identify objects, pedestrians, traffic signs, lane markings, and other vehicles on the road. Based on the analyzed data, computer vision algorithms help these vehicles make real-time decisions, such as steering, accelerating, or braking. Companies like Tesla, Waymo, and Uber are actively working on this technology to make transportation safer and more efficient.
+
+### Retail and E-commerce
+
+Computer vision is revolutionizing the retail industry. Many online retailers and brick-and-mortar stores are using it for various purposes. One significant application for this is the object recognition and recommendation systems. By analyzing images or videos of products, computer vision algorithms can identify items, understand their features, and recommend similar products to customers. For example, platforms like Amazon, eBay, and Walmart use computer vision to suggest related products based on users' viewing or purchasing. Additionally, in physical stores, computer vision-powered systems can track inventory levels, detect stock shortages, and even analyze customer behavior to optimize store layouts and marketing strategies, which can ultimately help them enhance their stores.
+
+### Quality Control in Assembly Lines
+
+CV in quality control on assembly lines helps achieve higher accuracy, efficiency, and consistency in detecting and rectifying defects, reducing waste, improving product quality, and streamlining manufacturing processes. There are many domains in which this is used; some of them are:
+
+**Defect detection**:  CV systems can analyze products on assembly lines in real-time, identifying defects or irregularities that might not be immediately visible to the human eye. For instance, CV can inspect electronic components, automotive parts, or packaged goods in manufacturing to spot imperfections, scratches, dents, or incorrect assembly. These systems compare the product against a standard reference to determine if it meets quality standards.
+
+**Automated Inspection**: Traditional quality control often involves manual inspection, which is time-consuming and prone to human error. CV systems automate this process by using cameras and machine learning algorithms to capture images or videos of products as they move along the assembly line. These images are then analyzed to detect deviations from the standard, ensuring consistency and high quality in mass production.
+
+**Real-time Feedback and Maintenance System**: By integrating CV into assembly lines, manufacturers can receive real-time feedback about product quality. If a defect is detected, the system can trigger immediate actions, such as alerting a human operator, diverting the faulty product for rework, or even adjusting the machinery to correct the issue, minimizing the production of defective items and optimizing the overall production process.
+
+### Medical Image Analysis
+
+Medical image analysis involves the application of computer vision and machine learning techniques to interpret and extract information from medical images like X-rays, CT scans, MRIs, ultrasounds, and histopathology slides.
+
+1. **Diagnostic Assistance**: Computer vision aids in diagnosing diseases and conditions by analyzing medical images. For instance, in radiology, algorithms can detect abnormalities such as tumors and fractures in X-rays or MRIs. These systems assist healthcare professionals by highlighting areas of concern or providing quantitative data that helps decision-making.
+
+2. **Segmentation and Detection:**: Medical image analysis involves segmenting and detecting specific structures or anomalies within the images. This process helps isolate organs, tissues, or pathologies for closer examination. For example, in cancer detection, computer vision algorithms can segment and analyze tumors from MRI or CT scans, assisting in treatment planning and monitoring.
+
+3. **Treatment Planning and Monitoring**: Computer vision contributes to treatment planning by providing precise measurements, tracking changes over time, and assisting in surgical planning. It helps doctors understand the extent and progression of a disease, enabling them to plan and adjust treatment strategies accordingly. Doctors were already capable of doing most of these tasks, but they needed to do them by hand. CV systems can do it automatically, which frees us doctors to do other tasks.
+
+4. **AI-Assisted Radiology**: AI-powered systems in radiology assist radiologists by automating routine tasks, reducing workload, and improving accuracy. These systems can flag potentially abnormal findings, provide quantitative analysis, and even predict potential health issues based on patterns identified in medical images.
+5. **Drug Development and Research**:  In drug development and medical research, computer vision techniques assist in analyzing cellular structures, tissue samples, or genetic materials. This aids in understanding diseases at a microscopic level, contributing to the development of new drugs, therapies, or diagnostic tools.
+
+## Challenges for CV Systems
+
+Computer Vision systems face a multitude of challenges that arise from the complexity of processing visual information in real-world scenarios, ranging from poor data quality, privacy, and ethical concerns along with other concerns, which are mentioned in the table below:
+
+| Factor                               | Challenges                                                                                                                                                                                                                                    |
+|--------------------------------------|-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| Variability in Data	                 | The data collected from the real world is highly diverse, with variations in lighting, viewpoint, occlusions, and backgrounds, making it challenging for reliable computer vision systems to be developed.                                    |
+| Scalability                          | Computer vision systems need to be scalable to manage large datasets and meet real-time processing requirements due to the continuous increase in visual data.                                                                                |
+| Accuracy                             | Achieving high accuracy in object detection, scene interpretation, and tracking is a significant challenge, especially in complex or cluttered scenes, often due to noise, irrelevant features, and poor image quality.                       |
+| Robustness to Noise	                 | Real-world data is noisy, containing defects, sensor artifacts, and distortions. Computer vision systems must be robust enough to handle and process such noisy data effectively.                                                             |
+| Integration with Other Technologies	 | Integrating computer vision with technologies like natural language processing, robotics, or augmented reality poses challenges related to system interoperability, expanding the usability of machine learning and computer vision.          |
+| Privacy and Ethical Concerns	        | Real-world applications of computer vision, especially in surveillance, facial recognition, and data gathering, raise concerns about privacy and ethics, necessitating proper handling of databases and personal information.                 |
+| Real-time Processing	                | Applications like autonomous vehicles and augmented reality require real-time processing, posing challenges in achieving the necessary computational efficiency, often requiring substantial computational power and capable cloud platforms. |
+| Long-term Reliability	               | Maintaining the reliability of computer vision systems over extended periods in real-life scenarios is challenging, as ensuring continued accuracy and flexibility can be difficult.                                                          |
+| Generalization                       | Developing models with good generalization across diverse contexts and domains is a significant challenge, requiring the ability to adapt to changing circumstances without extensive retraining.                                             |
+| Calibration and Maintenance	         | Calibrating and maintaining hardware, such as cameras and sensors, in real-world settings presents challenges, often due to logistical complications and the need to withstand extreme weather conditions.                                    |
+
+## Ethical Considerations
+
+Ethical considerations in computer vision are of paramount importance as this technology becomes increasingly integrated into various aspects of our lives. It is important to note that ethical consideration existed long before the spread of AI based technologies. It is intrinsecately tied to its birth.
+
+The London Hospital survival predictor is a great example of that. It was created in 1972 and its job was to predict whether patients would recover from a coma. It had a dial that either indictated "survive" or "irreversible brain damage". It was the first applications of patter recognition. Most surprisingly, it was one of the early forms of neural networks. Even at its birth, this raised concerned and doctors were advise to not take its input solely and the machine was never used to remove patient's life support.
+
+Life has changed between then and now. We lived in a global, digital society. The ethical considerations of a model must keep considered in these lenses too. Today, we talk a lot of about buildin fair models. Fairness, in this context, refers to a property of a model to behave in a equitative manner, without target discrimination or unfair bias against a group of a individual. Where bias refers to the inclination for or against a person or group. This is tricky in practice.
+
+ In contrast to performance metrics, there is not a mathematical metric of fairness. To evaluate it, you must understand the problem at hand. To complicate things fowards, bias can pop at any point in model development; on the data, the AI design, the deployment, and the model applications.
+
+There are several efforts in this direction, including the systematic report of model risks, limitation and biases in model cards (special files that accopany the model and provide important information on it). There is a lot more to be said on this topic and that is why there is a dedicated chapter on it in this course. However, there are some key concepts will introduce here to provide a high-level overview of some of the ethical considerations behind it. We summarize these in the table below.
+
+| Ethical Considerations                | Challenges                                                                                                                                                                                                                                                                                    |
+|---------------------------------------|-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| Privacy Concerns	                     | Computer vision often involves collecting and analyzing visual data, raising concerns about individual privacy. Issues include unauthorized surveillance, facial recognition, and the potential for misuse of sensitive information.                                                          |
+| Bias and Fairness	                    | Biases in data, algorithms, or the design of computer vision systems can lead to unfair outcomes, perpetuating social inequalities. Ensuring fairness in data collection, algorithm design, and decision-making is crucial to prevent discrimination based on race, gender, or other factors. |
+| Accuracy and Accountability	          | Computer vision systems must be accurate and reliable. Accountability measures are necessary to address errors or failures, ensuring that those responsible for system development are held accountable for any unintended consequences.                                                      |
+| Consent and Informed Decision Making	 | Obtaining informed consent from individuals whose data is being collected or used by computer vision systems is essential. Users should be informed about how their data will be used and have the right to make informed decisions about its usage.                                          |
+| Dual Use Concerns	                    | Computer vision technology can have both beneficial and potentially harmful uses. Ensuring that the technology is not used for malicious purposes, such as surveillance or invasion of privacy, is crucial.                                                                                   |
+| Transparency and Explainability	      | Computer vision systems should be transparent in their functioning and decisions. Users should be able to understand how these systems work and the reasons behind their decisions.                                                                                                           |
+| Child Protection	                     | Special care must be taken when dealing with visual data involving children. Safeguards should be in place to protect minors from privacy violations or any other potential harm.                                                                                                             |
+| Cultural and Contextual Sensitivity	  | Computer vision systems should be sensitive to cultural differences and diverse contexts to avoid misinterpretations or biases based on cultural or regional norms.                                                                                                                           |
+| Human Oversight	                      | Human oversight and intervention are crucial in ensuring that computer vision systems operate ethically and make accurate decisions. Humans should have the ability to intervene in cases where the system's decisions might cause harm.                                                      |
+| Environmental Impact                  | The development and deployment of computer vision systems should consider their environmental impact. This includes energy consumption, electronic waste, and other ecological factors.                                                                                                       |
+| Educational and Ethical Training	     | Training programs and educational initiatives are essential to raise awareness about the ethical implications of computer vision technology among developers, users, and policymakers.                                                                                                        |
+

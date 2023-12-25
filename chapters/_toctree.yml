@@ -2,6 +2,11 @@
   sections:
   - local: chapter0/1
     title: Introduction
+
+- title: Unit 4. Multimodal Models
+  sections:
+  - local: chapters/en/Unit 4 - Multimodal Models/transfer_learning
+    title: Transfer learning
  
 - title: Unit 10. Synthetic Data Creation
   sections:

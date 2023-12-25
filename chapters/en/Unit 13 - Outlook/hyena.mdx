@@ -1,0 +1,83 @@
+## Overview
+
+### What is Hyena 
+
+Hyena is a new type of operator that serves as a substitute for the attention mechanism. Developed by Hazy Research, it features a subquadratic computational efficiency, constructed by interleaving implicitly parametrized long convolutions and data-controlled gating.
+
+![transformer2hyena.png](https://huggingface.co/datasets/hf-vision/course-assets/resolve/main/outlook_hyena_images/transformer2hyena.png)
+It consists of recursively computing convolutions and multiplicative element-wise gating operations. This approach builds on top of the [Hungry Hungry Hippo (H3)](https://arxiv.org/abs/2212.14052) mechanism, also developed by the same researchers. The H3 mechanism is characterized by its data-controlled, parametric decomposition, acting as a surrogate attention mechanism.
+
+Another way of understanding Hyena is to consider it as a generalization of the H3 mechanism for an arbitrary number of projections, where the Hyena layer extends recursively H3 with a different choice of parametrization for the long convolution.
+
+### From Attention to Hyena operator
+
+The attention mechanism is characterized by two fundamental properties:
+1. It possesses a global contextual awareness, enabling it to assess interactions between pairs of visual tokens within a sequence.
+2. It is data-dependent, meaning the operation of the attention equation varies based on the input data itself, specifically the input projections  $q$, $k$ and $v$.
+
+In an attempt to replicate these characteristics, the Hyena operator incorporates two key elements:
+1. It employs long convolution to provide a sense of global context, akin to the first property of the attention mechanism.
+2. For data dependency, Hyena uses element-wise gating. This is essentially an element-wise multiplication of input projections, mirroring the data-dependent nature of traditional attention.
+
+In the realm of computational efficiency, the Hyena operator attains an evaluation time complexity of $O(L \times \log_2 L)$, indicating a noteworthy enhancement in processing speed.
+
+
+### Hyena operator
+
+Let's delve into the second-order recursion of the Hyena operator, which simplifies its representation for illustrative purposes.
+![hyena_mechanism.png](https://huggingface.co/datasets/hf-vision/course-assets/resolve/main/outlook_hyena_images/hyena_mechanism.png)
+
+In this context, $x_1$ and $x_2$ are equivalent to $q$ and $v$ attention vectors from the Attention mechanism. However, unlike the attention mechanism, which typically uses a dense layer for projecting the input sequence into representations, Hyena incorporates both a dense layer and standard convolutions. Here, $k$ and $v$ are aggregated with an elementwise multiplication operation. 
+
+The core idea is to repeatedly apply linear operators that are fast to evaluate to an input sequence $u \in \mathbb{R}^{L}$ with $L$ the length of the sequence. A notable design choice is the use of **implicit convolutions**. Unlike standard convolutional layers, the convolution filter $h$ is learned implicitly with a small neural network $\gamma_{\theta}$ (also called the Hyena Filter). This network takes the positional index and potentially positional encodings as inputs. From the outputs of $\gamma_{\theta}$ one can construct a Toeplitz matrix $T_{h}$. *This implies that instead of learning the values of the convolution filter directly, we learn a mapping from a temporal positional encoding to the values, which is more computationally efficient, especially for long sequences.
+
+NB : It's important to note that the mapping function  $\gamma_{\theta}$  can be conceptualized within various abstract models, such Neural Field or State Space Models (S4) as discussed in H3 paper.
+
+### Implicit convolutions
+
+Convolutions can be transformed into matrix multiplication using a [Toeplitz matrix](https://en.wikipedia.org/wiki/Toeplitz_matrix). 
+
+
+![toeplitz_conv.jpg](https://huggingface.co/datasets/hf-vision/course-assets/resolve/main/outlook_hyena_images/toeplitz_conv.jpg)
+This transformation leads to greater parameter efficiency. Instead of directly learning fixed kernel weight values, a parametrized function is employed. This function intelligently deduces the values of the kernel weights and their dimensions during the network's forward pass, optimizing resource use.
+
+In practice, convolutions are accelerated to a subquadratic time complexity by the Cooley-Tukey fast Fourier transform (FFT) algorithm. Some work has been conducted to speed up this computation like FastFFTConv based on Monarch decomposition. 
+### Wrapping up everything
+
+![nd_hyena.png](https://huggingface.co/datasets/hf-vision/course-assets/resolve/main/outlook_hyena_images/nd_hyena.png)
+In essence, Hyena can be performed in two steps: 
+1) Compute a set of N+1 linear projections similarly of attention (it can be more than 3 projections)
+2) Mixing up the projections : The matrix H(u) is defined by a combination of matrix multiplications
+
+## Why it matters
+
+While Transformer is a well established and very capable architecture, the quadratic computational cost is an expensive price to pay, especially in inference. The H3 mechanism proposition went close to the perplexity of multi-headed attention mechanisms, but there was still a narrow gap in terms of perplexity. 
+
+
+A variety of attention replacements have been proposed over the last few years, and evaluating the quality of a new architecture during the exploratory phase remains challenging. Creating a versatile layer that can effectively process N-Dimensional data within deep neural networks while maintaining good expressiveness is a significant area of ongoing research.
+
+Empirically, Hyena operators are able to significantly shrink the quality gap with attention at scale, reaching similar perplexity and downstream performance with a smaller computational budget and without hybridization of attention. It has already achieved a state-of-the-art status for [DNA sequence modeling](https://arxiv.org/abs/2306.15794) and shows great promise in the field of large language models with Stripped-Hyena-7B. 
+
+Similarly to Attention, Hyena can be used in computer vision tasks. In image classification, Hyena is able to match attention in accuracy when training on ImageNet-1k from scratch.
+
+![hyena_vision_benchmarks.png](https://huggingface.co/datasets/hf-vision/course-assets/resolve/main/outlook_hyena_images/hyena_vision_benchmarks.png)
+Hyena has been applied to N-Dimensional data with the Hyena N-D layer and can be used as direct drop-in replacement within the ViT, Swin, DeiT backbones. 
+
+
+![vit_vs_hyenavit.png](https://huggingface.co/datasets/hf-vision/course-assets/resolve/main/outlook_hyena_images/vit_vs_hyenavit.png)
+here is a noticeable enhancement in GPU memory efficiency with the increase in the number of image patches.
+
+Hyena Hierarchy facilitates the development of larger, more efficient convolution models for long sequences. The potential for Hyena type models for computer vision would be a more efficient GPU memory consumption of patches, that would allow : 
+* The processing of larger, higher-resolution images
+* The use ofwith smaller patches, allowing a fine-graine feature representation
+## Toward Transformers Alternatives 
+Building new layers from simple design principles is an emerging research field that is progressing very quickly. 
+
+The H3 mechanism serves as the foundation for many State Space Model based (SSM) architectures, typically featuring a structure that alternates between a block inspired by linear attention and a multi-layer perceptron (MLP) block. Hyena, as an enhancement of this approach, has paved the way for even more efficient architectures such as Mamba.
+
+## Further reading
+
+- On the landscape of subquadratic models: [The Safari of Deep Signal Processing: Hyena and Beyond · Hazy Research (stanford.edu)](https://hazyresearch.stanford.edu/blog/2023-06-08-hyena-safari)
+- On speeding up the FFT algorithm: [FlashFFTConv: Efficient Convolutions for Long Sequences with Tensor Cores · Hazy Research (stanford.edu)](https://hazyresearch.stanford.edu/blog/2023-11-13-flashfftconv)
+- On the subquadratic model landscape: [Zoology (Blogpost 1): Measuring and Improving Recall in Efficient Language Models · Hazy Research (stanford.edu)](https://hazyresearch.stanford.edu/blog/2023-12-11-zoology1-analysis)
+- Hyena applied to computer vision: [[2309.13600] Multi-Dimensional Hyena for Spatial Inductive Bias (arxiv.org)](https://arxiv.org/abs/2309.13600)
