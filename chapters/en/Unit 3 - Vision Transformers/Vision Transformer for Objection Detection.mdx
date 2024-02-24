@@ -1,0 +1,550 @@
+# Vision Transformers for Object Detection 
+
+In this section we are going to understand about how Object detection tasks are achieved using Vision Transformers. We will understand how we can fine-tune existing pre-trained object detection models for our specific usecase. Before getting started, check out this HuggingFace Space, where you can play around with the final output.
+
+<iframe
+	src="https://huggingface.co/spaces/hf-vision/finetuning_demo_for_object_detection"
+	frameborder="0"
+	width="850"
+	height="450">
+</iframe>
+
+## Introduction
+
+![intro](https://huggingface.co/datasets/hf-vision/course-assets/resolve/main/object_detection_wiki.png)
+
+Object detection is a computer vision task aims at identifying and localizing objects within an image or video. It involves two primary steps:
+
+1. first, recognizing the types of objects present (such as cars, people, or animals).
+2. Second, determining their precise locations by drawing bounding boxes around them.
+
+The input to these models are often an image (static or a video frame) containing multiple objects. Example: An image containing objects like a car, a person, a cycle etc. The output of these models are simply some set of numbers, which tells us the following:
+
+1. Where the object is located? (regressive output containing co-ordinates of the bounding box)
+2. What is that object? (classification)
+
+There are huge number of applications around object detection. One most significant example being in the fields of autonomous driving. Where Object detection is used to detect different objects (like pedestrians, road signs, and traffic lights etc)  around the car that becomes one of the input for taking decisions.
+
+If you want to understand more around the ins-and-outs of object detection, check out our [dedicated chapter](#) on Object Detection 🤗
+
+### Why do we need fine-tuning for object detection 🤔
+
+That is an awesome question. Before reading the answer, checkout our definitions of fine-tuning and it's difference with transfer learning [here](#).
+
+Training an object detection model from scratch means:
+
+1. Doing already done research over and over again.
+2. Writing repetitive model code and training them and maintaining different repositories for different use cases.
+3. Lot of experimentation and waste of resources.
+
+So, instead what we can do is, simply take a superstar pre-trained model (a model which does an awesome job in recognizing general features), and tweak or re-tune their weights (or some part of their weights) to adapt it for our use case. We believe or assume that, the pre-trained model has already learned enough to extract significant features inside an image to locate and classify objects. So, if new objects are introduced, then the same model can be trained for a small period of time and compute to start detecting those new objects with the help of already learned and new features.
+
+### What to expect from this tutorial?
+
+By the end of this tutorial, you should be able to make a full pipeline (from loading datasets, fine-tuning a model and doing inference) for object detection use case.
+
+## Installation
+
+Let's start with installation. Just execute the below cells to install the necessary packages. For this tutorial, we will be using Hugging Face 🤗 Transformers and PyTorch.
+
+```bash
+!pip install -U -q datasets transformers[torch] evaluate timm albumentations accelerate
+```
+
+## Scenario
+
+To make this tutorial interesting, let's consider a real-world example. Consider this scenario: construction workers require the utmost safety when working in construction areas. Basic safety protocol requires wearing them helmet every time. Since there are lot of construction workers, it is hard to keep and eye on everyone everytime.
+
+But, if we can have a camera system, which can detect persons and whether the person is wearing a helmet or not in real time, that would be awesome, right?
+
+So, we are going to fine-tune a light weight object detection model for doing the same. Let's dive in.
+
+
+### Dataset
+
+Keeping in mind for the above scenerio, we will be using the [hardhat](https://huggingface.co/datasets/hf-vision/hardhat) dataset provided by [Northeaster University China](https://dataverse.harvard.edu/dataset.xhtml?persistentId=doi:10.7910/DVN/7CBGOS). We will be using 🤗 `datasets` to download and load this dataset.
+
+```python
+from datasets import load_dataset
+
+dataset = load_dataset("anindya64/hardhat")
+dataset
+```
+
+This will give you the following data structure:
+
+```
+DatasetDict({
+    train: Dataset({
+        features: ['image', 'image_id', 'width', 'height', 'objects'],
+        num_rows: 5297
+    })
+    test: Dataset({
+        features: ['image', 'image_id', 'width', 'height', 'objects'],
+        num_rows: 1766
+    })
+})
+```
+
+Above is a [Hugging Face DatasetDict](https://huggingface.co/docs/datasets/v2.17.1/en/package_reference/main_classes#datasets.DatasetDict), which is an efficient dict like structure containing the whole dataset in train and test splits. As you can under each split (train and test), we have `features` and `num_rows`. Under features we have the `image` which is a [Pillow Object](https://realpython.com/image-processing-with-the-python-pillow-library/), the id of the image, height and width and objects. 
+Now let's see how does each datapoint (in train/test set) looks like. To do that, you just have to write this:
+
+```python
+dataset['train'][0]
+```
+
+And this will give you the following structure:
+
+```
+{'image': <PIL.JpegImagePlugin.JpegImageFile image mode=RGB size=500x375>,
+ 'image_id': 1,
+ 'width': 500,
+ 'height': 375,
+ 'objects': {'id': [1, 1],
+  'area': [3068.0, 690.0],
+  'bbox': [[178.0, 84.0, 52.0, 59.0], [111.0, 144.0, 23.0, 30.0]],
+  'category': ['helmet', 'helmet']}}
+```
+
+As you see `objects` is an another dict containing the object ids (which are the class ids here), the area of the objects, and the bounding box co-ordinates (bbox) and the category which are the label. Here is a more detailed explaination of each of the keys and values of a data element. 
+
+
+1. `image`: This is a Pillow Image object that helps to look into the image directly before even loading from the path.
+2. `image_id`: Denotes which number of image is from the train file.
+3. `width`: The width of the image.
+4. `height`: The height of the image.
+5. `objects`:  Another dictionary containing information about annotation. This contains the following:
+    1. `id`: A list, where length of list denotes the number of objects and value of each denotes the class index.
+    2. `area`: The area of the object.
+    3. `bbox`: Denotes bounding box coordinates of the object.
+    4. `category`: The class (string) of the object.
+
+Now let's properly extract the train and test samples. For this example, we have around 5000 training samples and 1700 test samples. 
+
+```python
+# First, extract out the train and test set
+
+train_dataset = dataset['train']
+test_dataset = dataset['test']
+```
+
+Now, that we know what a sample data point contains, let's start with plotting that sample. Here we are going to first draw the image and then also draw the corresponding bounding box associated.
+
+Here is what we are going to do:
+
+1. Get the image and it's corresponding height and width.
+2. Make a draw object that can easily draw text and lines on image.
+3. Get the annotations dict from the sample.
+4. Iterate over it.
+5. For each, get the bounding box co-ordinates, which are x (where the bounding box starts horizontally), y (where the bounding box starts vertically), w (width of the bounding box), h (height of the bounding box).
+6. Now if the bounding box measures are normalized then scale it, else leave it.
+7. And finally draw the rectangle and the the class category text.
+
+```python 
+import numpy as np
+from PIL import Image, ImageDraw
+
+def draw_image_from_idx(dataset, idx):
+    sample = dataset[idx]
+    image = sample["image"]
+    annotations = sample['objects']
+    draw = ImageDraw.Draw(image)
+    width, height = sample['width'], sample['height']
+
+    for i in range(len(annotations["id"])):
+        box = annotations["bbox"][i]
+        class_idx = annotations["id"][i]
+        x, y, w, h = tuple(box)
+        if max(box) > 1.0:
+            x1, y1 = int(x), int(y)
+            x2, y2 = int(x + w), int(y + h)
+        else:
+            x1 = int(x * width)
+            y1 = int(y * height)
+            x2 = int((x + w) * width)
+            y2 = int((y + h) * height)
+        draw.rectangle((x1, y1, x2, y2), outline="red", width=1)
+        draw.text((x1, y1), annotations["category"][i], fill="white")
+    return image
+
+
+draw_image_from_idx(dataset=train_dataset, idx=10)
+```
+
+Now, we have written a function to plot one single image, let's write a simple function using the above to plot multiple images. This will let us to do some analysis.
+
+```python
+import matplotlib.pyplot as plt
+
+def plot_images(dataset, indices):
+    """
+    Plot images and their annotations.
+    """
+    num_rows = len(indices) // 3
+    num_cols = 3
+    fig, axes = plt.subplots(num_rows, num_cols, figsize=(15, 10))
+
+    for i, idx in enumerate(indices):
+        row = i // num_cols
+        col = i % num_cols
+
+        # Draw image
+        image = draw_image_from_idx(dataset, idx)
+
+        # Display image on the corresponding subplot
+        axes[row, col].imshow(image)
+        axes[row, col].axis('off')
+
+    plt.tight_layout()
+    plt.show()
+
+
+# Now use the function to plot images
+
+plot_images(train_dataset, range(9))
+```
+
+## AutoImageProcessor
+
+Before fine-tuning the model, we must preprocess the data in such a way that it matches exactly with the approach it was used during the time if pre-training. HuggingFace [AutoImageProcessor](https://huggingface.co/docs/transformers/v4.36.0/en/model_doc/auto#transformers.AutoImageProcessor) takes care of processing the image data to create pixel_values, pixel_mask, and labels that a DETR model can train with.
+
+Now, let us instantiate the image processor from the same checkpoint we want to use our model to fine-tune.
+
+```python
+from transformers import AutoImageProcessor
+
+checkpoint = "facebook/detr-resnet-50-dc5"
+image_processor = AutoImageProcessor.from_pretrained(checkpoint)
+```
+
+## Preprocessing the dataset
+
+In this section, we will preprocess the dataset. Basically, we will apply different types of augmentations to the images, along with their corresponding bounding boxes.
+
+In simple terms, augmentations are some set of random transformations like rotations, resizing etc. These are applied for the following reasons:
+
+1. To get more samples.
+2. To make the vision model more robust towards different conditions of the image.
+
+We will use the [albumentations](https://github.com/albumentations-team/albumentations) library to achieve this. If you want to dig deeper into different types of augmentations, check out the corresponding unit to learn more. Let's create some random transformations using albumentations.
+
+```python
+import albumentations
+import numpy as np
+import torch
+
+transform = albumentations.Compose(
+    [
+        albumentations.Resize(480, 480),
+        albumentations.HorizontalFlip(p=1.0),
+        albumentations.RandomBrightnessContrast(p=1.0),
+    ],
+    bbox_params=albumentations.BboxParams(format="coco", label_fields=["category"]),
+)
+```
+
+Once we initialize all the transformations, we need to make a function which formats the annotations and returns the a list of annotation with a very specific format.
+
+This is because, The `image_processor` expects the annotations to be in the following format: `{'image_id': int, 'annotations': List[Dict]}`, where each dictionary is a COCO object annotation. 
+
+```python
+def formatted_anns(image_id, category, area, bbox):
+    annotations = []
+    for i in range(0, len(category)):
+        new_ann = {
+            "image_id": image_id,
+            "category_id": category[i],
+            "isCrowd": 0,
+            "area": area[i],
+            "bbox": list(bbox[i]),
+        }
+        annotations.append(new_ann)
+
+    return annotations
+```
+
+Finally, we combine the image and annotation transformations to do transformations over the whole batch of dataset.
+
+Here is the final code to do so:
+
+```python
+# transforming a batch
+
+def transform_aug_ann(examples):
+    image_ids = examples["image_id"]
+    images, bboxes, area, categories = [], [], [], []
+    for image, objects in zip(examples["image"], examples["objects"]):
+        image = np.array(image.convert("RGB"))[:, :, ::-1]
+        out = transform(image=image, bboxes=objects["bbox"], category=objects["id"])
+
+        area.append(objects["area"])
+        images.append(out["image"])
+        bboxes.append(out["bboxes"])
+        categories.append(out["category"])
+
+    targets = [
+        {"image_id": id_, "annotations": formatted_anns(id_, cat_, ar_, box_)}
+        for id_, cat_, ar_, box_ in zip(image_ids, categories, area, bboxes)
+    ]
+
+    return image_processor(images=images, annotations=targets, return_tensors="pt")
+```
+
+Finally, all you have to do is apply this preprocessing function to the entire dataset. You can achieve this by using HuggingFace 🤗 [Datasets with transform](https://huggingface.co/docs/datasets/v2.15.0/en/package_reference/main_classes#datasets.Dataset.with_transform) method.
+
+```python
+# Apply transformations for both train and test dataset
+
+train_dataset_transformed = train_dataset.with_transform(transform_aug_ann)
+test_dataset_transformed = test_dataset.with_transform(transform_aug_ann)
+```
+
+Now let's see how a transformed train dataset sample looks like:
+
+```python
+train_dataset_transformed[0]
+```
+
+This will return a dictionary of tensors. What we mainly require here is the `pixel_values` which represent the image, `pixel_mask` which is the attention masks and the `labels`. Here is one data point looks like:
+
+```
+{'pixel_values': tensor([[[-0.1657, -0.1657, -0.1657,  ..., -0.3369, -0.4739, -0.5767],
+          [-0.1657, -0.1657, -0.1657,  ..., -0.3369, -0.4739, -0.5767],
+          [-0.1657, -0.1657, -0.1828,  ..., -0.3541, -0.4911, -0.5938],
+          ...,
+          [-0.4911, -0.5596, -0.6623,  ..., -0.7137, -0.7650, -0.7993],
+          [-0.4911, -0.5596, -0.6794,  ..., -0.7308, -0.7993, -0.8335],
+          [-0.4911, -0.5596, -0.6794,  ..., -0.7479, -0.8164, -0.8507]],
+ 
+         [[-0.0924, -0.0924, -0.0924,  ...,  0.0651, -0.0749, -0.1800],
+          [-0.0924, -0.0924, -0.0924,  ...,  0.0651, -0.0924, -0.2150],
+          [-0.0924, -0.0924, -0.1099,  ...,  0.0476, -0.1275, -0.2500],
+          ...,
+          [-0.0924, -0.1800, -0.3200,  ..., -0.4426, -0.4951, -0.5301],
+          [-0.0924, -0.1800, -0.3200,  ..., -0.4601, -0.5126, -0.5651],
+          [-0.0924, -0.1800, -0.3200,  ..., -0.4601, -0.5301, -0.5826]],
+ 
+         [[ 0.1999,  0.1999,  0.1999,  ...,  0.6705,  0.5136,  0.4091],
+          [ 0.1999,  0.1999,  0.1999,  ...,  0.6531,  0.4962,  0.3916],
+          [ 0.1999,  0.1999,  0.1825,  ...,  0.6356,  0.4614,  0.3568],
+          ...,
+          [ 0.4788,  0.3916,  0.2696,  ...,  0.1825,  0.1302,  0.0953],
+          [ 0.4788,  0.3916,  0.2696,  ...,  0.1651,  0.0953,  0.0605],
+          [ 0.4788,  0.3916,  0.2696,  ...,  0.1476,  0.0779,  0.0431]]]),
+ 'pixel_mask': tensor([[1, 1, 1,  ..., 1, 1, 1],
+         [1, 1, 1,  ..., 1, 1, 1],
+         [1, 1, 1,  ..., 1, 1, 1],
+         ...,
+         [1, 1, 1,  ..., 1, 1, 1],
+         [1, 1, 1,  ..., 1, 1, 1],
+         [1, 1, 1,  ..., 1, 1, 1]]),
+ 'labels': {'size': tensor([800, 800]), 'image_id': tensor([1]), 'class_labels': tensor([1, 1]), 'boxes': tensor([[0.5920, 0.3027, 0.1040, 0.1573],
+         [0.7550, 0.4240, 0.0460, 0.0800]]), 'area': tensor([8522.2217, 1916.6666]), 'iscrowd': tensor([0, 0]), 'orig_size': tensor([480, 480])}}
+```
+
+We are almost there 🚀. As a last preprocessing step, we need to write a custom `collate_fn`. Now what is a `collate_fn` ?
+
+A `collate_fn` is responsible for taking a list of samples from a dataset and converting them into a batch suitable for model's input format.
+
+In general a `DataCollator` typically performs tasks such as padding, truncating etc. In a custom collate function, we often define what and how we want to group the data into batches or simply, how to represent each batch.
+
+(BTW data collator is mainly puts the data together and then preprocesses them). Let's make our collate function. 
+
+```python
+def collate_fn(batch):
+    pixel_values = [item["pixel_values"] for item in batch]
+    encoding = image_processor.pad(pixel_values, return_tensors="pt")
+    labels = [item["labels"] for item in batch]
+    batch = {}
+    batch["pixel_values"] = encoding["pixel_values"]
+    batch["pixel_mask"] = encoding["pixel_mask"]
+    batch["labels"] = labels
+    return batch
+```
+
+## Training a DETR Model.
+
+So, all the heavy lifting is done so far. Now, all that is left is to assemble each part of the puzzle one by one. Let's go!
+
+The training procedure involves the following steps:
+
+1. Loading the base (pre-trained) model with [AutoModelForObjectDetection](https://huggingface.co/docs/transformers/v4.36.0/en/model_doc/auto#transformers.AutoModelForObjectDetection) using the same checkpoint as in the preprocessing.
+
+2. Defining all the hyperparameters and additional arguments inside [TrainingArguments](https://huggingface.co/docs/transformers/v4.36.0/en/main_classes/trainer#transformers.TrainingArguments).
+
+3. Pass the training arguments inside [HuggingFace Trainer](https://huggingface.co/docs/transformers/v4.36.0/en/main_classes/trainer#transformers.Trainer), along with the model, dataset and image.
+
+4. Call the `train()` method and fine-tune your model.
+
+> When loading the model from the same checkpoint that you used for the preprocessing, remember to pass the label2id and id2label maps that you created earlier from the dataset’s metadata. Additionally, we specify ignore_mismatched_sizes=True to replace the existing classification head with a new one.
+
+```python
+
+from transformers import AutoModelForObjectDetection
+
+id2label = {0:'head', 1:'helmet', 2:'person'}
+label2id = {v: k for k, v in id2label.items()}
+
+
+model = AutoModelForObjectDetection.from_pretrained(
+    checkpoint,
+    id2label=id2label,
+    label2id=label2id,
+    ignore_mismatched_sizes=True,
+)
+
+```
+
+Before proceeding further, login to Hugging Face, to upload your model on the fly while training. In this way you do not need to take care of handling the checkpoints and saving them somewhere. 
+
+```python
+from huggingface_hub import notebook_login
+
+notebook_login
+```
+
+Once done, let's start training the model. We start by defining the training arguments and defining a trainer object that uses those arguments to do the training, as shown here:
+
+
+```python
+
+from transformers import TrainingArguments
+from transformers import Trainer
+
+# Define the training arguments
+
+training_args = TrainingArguments(
+    output_dir="detr-resnet-50-hardhat-finetuned",
+    per_device_train_batch_size=8,
+    num_train_epochs=3,
+    max_steps=1000,
+    fp16=True,
+    save_steps=10,
+    logging_steps=30,
+    learning_rate=1e-5,
+    weight_decay=1e-4,
+    save_total_limit=2,
+    remove_unused_columns=False,
+    push_to_hub=True,
+)
+
+# Define the trainer 
+
+trainer = Trainer(
+    model=model,
+    args=training_args,
+    data_collator=collate_fn,
+    train_dataset=train_dataset_transformed,
+    eval_dataset=test_dataset_transformed,
+    tokenizer=image_processor,
+)
+
+trainer.train()
+```
+
+Once training is finished, you can now delete the model, because checkpoints are already uploaded in HuggingFace Hub. 
+
+```python
+del model
+torch.cuda.synchronize()
+```
+
+### Testing and Inference
+
+Now we will try to do inference of our new fine-tuned model. Here we first write a very simple code on doing inference for object detection for some new images. 
+
+And then we will club togather everything up and make a function out of it.
+
+```python
+
+import requests
+from transformers import pipeline
+
+# download a sample image
+
+url = "https://huggingface.co/datasets/hf-vision/course-assets/blob/main/test-helmet-object-detection.jpg"
+image = Image.open(requests.get(url, stream=True).raw)
+
+# make the object detection pipeline
+
+obj_detector = pipeline("object-detection", model="anindya64/detr-resnet-50-dc5-hardhat-finetuned")
+results = obj_detector(train_dataset[0]['image'])
+
+print(results)
+```
+
+Now let's make a very simple function to plot the results. Simply what ever results, we get, parse each of the result instance. Get the score, label and corresponding bounding boxes. And finally draw that.
+
+```python
+
+def plot_results(image, results, threshold = 0.7):
+    image = Image.fromarray(np.uint8(image))
+    draw = ImageDraw.Draw(image)
+    for result in results:
+        score = result['score']
+        label = result['label']
+        box = list(result['box'].values())
+        if score > threshold:
+            x, y, x2, y2 = tuple(box)
+            draw.rectangle((x, y, x2, y2), outline="red", width=1)
+            draw.text((x, y), label, fill="white")
+            draw.text((x+0.5, y-0.5), text=str(score), fill='green' if score > 0.7 else 'red')
+    return image
+
+
+```
+
+And finally use this function for the same test image we used.
+
+
+```
+plot_results(image, results)
+```
+
+### Clubbing it altogather into a function
+
+Now, let's club everything togather into a simple function.
+
+```python
+def predict(image, pipeline, threshold=0.7):
+    results = pipeline(image)
+    return plot_results(image, results, threshold)
+
+# Let's test for another test image
+
+img = test_dataset[0]['image']
+predict(img, obj_detector)
+```
+
+Let's even plot multiple images using our inference function on a small test sample. 
+
+```python 
+from tqdm.auto import tqdm
+
+def plot_images(dataset, indices):
+    """
+    Plot images and their annotations.
+    """
+    num_rows = len(indices) // 3
+    num_cols = 3
+    fig, axes = plt.subplots(num_rows, num_cols, figsize=(15, 10))
+
+    for i, idx in tqdm(enumerate(indices), total=len(indices)):
+        row = i // num_cols
+        col = i % num_cols
+
+        # Draw image
+        image = predict(dataset[idx]['image'], obj_detector)
+
+        # Display image on the corresponding subplot
+        axes[row, col].imshow(image)
+        axes[row, col].axis('off')
+
+    plt.tight_layout()
+    plt.show()
+
+
+plot_images(test_dataset, range(6))
+```
+
+Well, that's not bad. We can improve the results if we fine-tune further. You can find this fine-tuned checkpoint [here](hf-vision/detr-resnet-50-dc5-harhat-finetuned). 
