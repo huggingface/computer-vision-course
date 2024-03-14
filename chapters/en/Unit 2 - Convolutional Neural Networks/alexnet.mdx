@@ -1,0 +1,90 @@
+# Alexnet
+
+# Introduction
+
+In this chapter we will take a look at AlexNet, the network that began the revolution of deep convolutional neural network Architechture that revolutionized the field
+of computer vision.It was introduced by Alex Krizhevsky, Ilya Sutskever, and Geoffrey Hinton in their 2012 paper [ImageNet Classification with Deep Convolutional Neural Networks](https://proceedings.neurips.cc/paper_files/paper/2012/file/c399862d3b9d6b76c8436e924a68c45b-Paper.pdf) and won the ImageNet Large Scale Visual Recognition Challenge (ILSVRC) in 2012.
+The ImageNet dataset consisted of more than 15 million high resolution images.
+
+### Architechture of Alexnet
+
+The AlexNet architecture consists of the following layers:
+
+1. Convolutional Layers:
+- The input image is processed by the first convolutional layer, which applies 96 kernels of size 11x11x3 with a stride of 4 pixels.
+- The second convolutional layer applies 256 kernels of size 5x5x48.
+- Both convolutional layers are followed by ReLU (Rectified Linear Unit) activation and max-pooling layers.
+
+2.Fully Connected Layers:
+
+- After the convolutional layers, there are three fully connected layers.
+-The first two fully connected layers have 4096 neurons each, followed by dropout regularization to reduce overfitting.
+-The final fully connected layer has 1000 neurons, representing the 1000 object categories in the ImageNet dataset.
+
+3.Softmax Layer:
+
+- The output of the final fully connected layer is passed through a softmax activation function to produce the final class probabilities.
+
+4.Normalization Layers:
+
+- AlexNet also introduced Local Response Normalization (LRN) layers, which helped to improve the generalization performance of the network.
+
+5.ReLU Activation:
+
+- AlexNet was one of the first architectures to effectively utilize the Rectified Linear Unit (ReLU) activation function, which helped to address the vanishing gradient problem and accelerated the training process.
+
+### Key features
+
+- 'ReLU' is used as an activation function than 'tanh'
+    - 'tanh' was the standard activation function which was used back in those days.
+    - The primary advantage than 'ReLU' offered was the fact it reduced training time and also help in helped to alleviating the vanishing gradient problem
+- Usage of Dropout mechanism
+    - It is a regularization technique that helps to prevent overfitting in neural networks by randomly dropping out (setting to zero) a proportion of units (neurons) and their connections during the training process.
+    - Forces the network to learn more robust representation
+- Data Augmentation techniques such as flipping,jittering,cropping etc were performed.
+    - The authors employed employed extensive data augmentation techniques to artificially increase the size and diversity of the training data.
+    - This helped in not only increasing the dataset size , but also improved generalization and acted as a form of regularization.
+
+### Example implementation using Pytorch
+
+```
+import torch
+import torch.nn as nn
+
+class AlexNet(nn.Module):
+    def __init__(self, num_classes=1000):
+        super(AlexNet, self).__init__()
+        self.features = nn.Sequential(
+            nn.Conv2d(3, 96, kernel_size=11, stride=4, padding=2),
+            nn.ReLU(inplace=True),
+            nn.MaxPool2d(kernel_size=3, stride=2),
+            nn.LocalResponseNorm(5, alpha=0.0001, beta=0.75, k=2),
+            nn.Conv2d(96, 256, kernel_size=5, padding=2, groups=2),
+            nn.ReLU(inplace=True),
+            nn.MaxPool2d(kernel_size=3, stride=2),
+            nn.LocalResponseNorm(5, alpha=0.0001, beta=0.75, k=2),
+            nn.Conv2d(256, 384, kernel_size=3, padding=1),
+            nn.ReLU(inplace=True),
+            nn.Conv2d(384, 384, kernel_size=3, padding=1, groups=2),
+            nn.ReLU(inplace=True),
+            nn.Conv2d(384, 256, kernel_size=3, padding=1, groups=2),
+            nn.ReLU(inplace=True),
+            nn.MaxPool2d(kernel_size=3, stride=2),
+        )
+        self.classifier = nn.Sequential(
+            nn.Dropout(),
+            nn.Linear(256 * 6 * 6, 4096),
+            nn.ReLU(inplace=True),
+            nn.Dropout(),
+            nn.Linear(4096, 4096),
+            nn.ReLU(inplace=True),
+            nn.Linear(4096, num_classes),
+        )
+
+    def forward(self, x):
+        x = self.features(x)
+        x = x.view(x.size(0), 256 * 6 * 6)
+        x = self.classifier(x)
+        return x
+
+```

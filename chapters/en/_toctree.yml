@@ -30,6 +30,8 @@
     local: "Unit 2 - Convolutional Neural Networks/introduction"
   - title: Introduction to Transfer Learning
     local: "Unit 2 - Convolutional Neural Networks/intro-transfer-learning"
+  - title: Alexnet
+    local: "Unit 2 - Convolutional Neural Networks/alexnet"
   - title: MobileNet
     local: "Unit 2 - Convolutional Neural Networks/mobilenet"
   - title: Lets Dive Further with MobileNet
