@@ -2,9 +2,10 @@
 
 # Introduction
 
-In this chapter we will take a look at AlexNet, the network that began the revolution of deep convolutional neural network Architechture that revolutionized the field
+In this chapter we will take a look at AlexNet, the network that began the revolution of deep convolutional neural network Architechture.
 of computer vision.It was introduced by Alex Krizhevsky, Ilya Sutskever, and Geoffrey Hinton in their 2012 paper [ImageNet Classification with Deep Convolutional Neural Networks](https://proceedings.neurips.cc/paper_files/paper/2012/file/c399862d3b9d6b76c8436e924a68c45b-Paper.pdf) and won the ImageNet Large Scale Visual Recognition Challenge (ILSVRC) in 2012.
-The ImageNet dataset consisted of more than 15 million high resolution images.
+The ImageNet dataset consisted of more than 15 million high resolution images that posed a significant challenge to traditional computer vision algorithms, as it demanded an unprecedented level of visual understanding and classification capabilities.
+AlexNet's triumph in the ILSVRC marked a turning point in the field of computer vision, demonstrating the superior performance of deep convolutional neural networks over conventional machine learning techniques.
 
 ### Architechture of Alexnet
 
@@ -35,15 +36,15 @@ The AlexNet architecture consists of the following layers:
 
 ### Key features
 
-- 'ReLU' is used as an activation function than 'tanh'
+- 'ReLU' is used as an activation function as opposed to 'tanh'
     - 'tanh' was the standard activation function which was used back in those days.
-    - The primary advantage than 'ReLU' offered was the fact it reduced training time and also help in helped to alleviating the vanishing gradient problem
+    - The primary advantage than 'ReLU' offered was the fact it reduced training time and also helped to alleviate the vanishing gradient problem
 - Usage of Dropout mechanism
     - It is a regularization technique that helps to prevent overfitting in neural networks by randomly dropping out (setting to zero) a proportion of units (neurons) and their connections during the training process.
     - Forces the network to learn more robust representation
-- Data Augmentation techniques such as flipping,jittering,cropping etc were performed.
-    - The authors employed employed extensive data augmentation techniques to artificially increase the size and diversity of the training data.
-    - This helped in not only increasing the dataset size , but also improved generalization and acted as a form of regularization.
+- Data Augmentation techniques such as flipping ,jittering ,cropping, etc. were performed.
+    - The authors employed  extensive data augmentation techniques to artificially increase the size and diversity of the training data.
+    - This helped in not only increasing the dataset size, but also aided generalization and acted as a form of regularization.
 
 ### Example implementation using Pytorch
 
@@ -87,4 +88,4 @@ class AlexNet(nn.Module):
         x = self.classifier(x)
         return x
 
-```
+```python
