@@ -2,6 +2,8 @@
   sections:
   - title: Welcome to the Community Computer Vision Course
     local: "Unit 0 - Welcome/welcome"
+  - title: Table of Contents for Notebooks
+    local: "Unit 0 - Welcome/TableOfContents"
 - title: Unit 1 - Fundamentals
   sections:
   - title: Vision
@@ -74,36 +76,36 @@
     local: "Unit 4 - Multimodal Models/tasks-models-part1"
   - title: Introduction to CLIP
     local: "Unit 4 - Multimodal Models/CLIP and relatives/Introduction"
-  - title: Multimodal Text Generation (BLIP)
-    local: "Unit 4 - Multimodal Models/CLIP and relatives/blip"
-  - title: Contrastive Language-Image Pre-training (CLIP)
-    local: "Unit 4 - Multimodal Models/CLIP and relatives/clip"
   - title: Losses
     local: "Unit 4 - Multimodal Models/CLIP and relatives/losses"
+  - title: Contrastive Language-Image Pre-training (CLIP)
+    local: "Unit 4 - Multimodal Models/CLIP and relatives/clip"
+  - title: Multimodal Text Generation (BLIP)
+    local: "Unit 4 - Multimodal Models/CLIP and relatives/blip"
+  - title: Multimodal Object Detection (OWL-ViT)
+    local: "Unit 4 - Multimodal Models/CLIP and relatives/owl_vit"
   - title: Transfer Learning of Multimodal Models
     local: "Unit 4 - Multimodal Models/transfer_learning"
   - title: Introduction to Vision Language Models
     local: "Unit 4 - Multimodal Models/vlm-intro"
-  - title: Multimodal Object Detection (OWL-ViT)
-    local: "Unit 4 - Multimodal Models/CLIP and relatives/owl_vit"
   - title: Supplementary Reading and Resources
     local: "Unit 4 - Multimodal Models/supplementary-material"
 - title: Unit 5 - Generative Models
   sections:
   - title: Introduction
     local: "Unit 5 - Generative Models/Introduction/Introduction"
-  - title: Introduction to Diffusion Models
-    local: "Unit 5 - Generative Models/Diffusion models/Introduction - Diffusions"
-  - title: Introduction to Stable Diffusion
-    local: "Unit 5 - Generative Models/Diffusion models/stable_diffusion"
-  - title: Generative Adversarial Networks
-    local: "Unit 5 - Generative Models/gans"
   - title: Variational Autoencoders
     local: "Unit 5 - Generative Models/variational_autoencoders"
+  - title: Generative Adversarial Networks
+    local: "Unit 5 - Generative Models/gans"
   - title: StyleGAN Variants
     local: "Unit 5 - Generative Models/GANs & VAEs/StyleGAN"
   - title: CycleGAN Introduction
     local: "Unit 5 - Generative Models/PRACTICAL APPLICATIONS & CHALLENGES/cycle_gan"
+  - title: Introduction to Diffusion Models
+    local: "Unit 5 - Generative Models/Diffusion models/Introduction - Diffusions"
+  - title: Introduction to Stable Diffusion
+    local: "Unit 5 - Generative Models/Diffusion models/stable_diffusion"
   - title: Control over Diffusion Models
     local: "Unit 5 - Generative Models/Diffusion models/Simple explanation and showcase of external resources"
   - title: Privacy, Bias and Societal Concerns

@@ -26,7 +26,7 @@ Luckily, there's a more pragmatic version of ZSL that doesn't have this strict r
 
 ## History of Zero-shot Learning 
 
-The question of whether we can make models that perform well on tasks that they were not explicitly trained on, came soon after deep learning started to seem feasible[^1]. In 2008, the seeds of ZSL were sowed with two independent papers presented at the Association for the Advancement of Artificial Intelligence (AAAI) conference. The first paper, titled **Dataless Classification**, explored the concept of zero-shot learning in the context of natural language processing (NLP). The second one, titled **Zero-Data Learning**, focused on applying ZSL to computer vision tasks. The term zero-shot learning itself first appeared in 2009 at NeurIPS in a paper co-authored by, wait for it… Geoffrey Hinton!
+The question of whether we can make models that perform well on tasks that they were not explicitly trained on, came soon after deep learning started to seem feasible. In 2008, the seeds of ZSL were sowed with two independent papers presented at the Association for the Advancement of Artificial Intelligence (AAAI) conference. The first paper, titled **Dataless Classification**, explored the concept of zero-shot learning in the context of natural language processing (NLP). The second one, titled **Zero-Data Learning**, focused on applying ZSL to computer vision tasks. The term zero-shot learning itself first appeared in 2009 at NeurIPS in a paper co-authored by, wait for it… Geoffrey Hinton!
 
 Let’s have a nice outline for the most important moments in ZSL below.
 
@@ -34,10 +34,10 @@ Let’s have a nice outline for the most important moments in ZSL below.
 |------|-------------------------------------------------------------------------|
 | 2008 | The first sparks of (the question of) zero-shot learning                |
 | 2009 | The term zero-shot learning was coined                                  |
-| 2013 | The concept of Generalized ZSL was introduced[^2]                       |
-| 2017 | The first application of the encoder-decoder paradigm to ZSL[^3]        |
-| 2020 | OpenAI’s GPT-3 achieves an impressive performance on zero-shot NLP[^4]  |
-| 2021 | OpenAI’s CLIP takes zero-shot computer vision to a whole new level[^5]  |
+| 2013 | The concept of Generalized ZSL was introduced                           |
+| 2017 | The first application of the encoder-decoder paradigm to ZSL            |
+| 2020 | OpenAI’s GPT-3 achieves an impressive performance on zero-shot NLP      |
+| 2021 | OpenAI’s CLIP takes zero-shot computer vision to a whole new level      |
 
 The impact of CLIP has been profound, ushering in a new era of zero-shot computer vision research. Its versatility and performance have opened up exciting new possibilities. It could be said that the history of zero-shot computer vision can be divided into two eras: The **pre-CLIP** and **post-CLIP** eras.
 
@@ -54,7 +54,7 @@ Yes, you’re absolutely right! We need some **other information** about that ob
 Because of this other information, zero-shot computer vision is essentially multi-modal. If generalization is like learning a language by reading books and talking to people, zero-shot computer vision is like learning a language by reading a dictionary and listening to someone describe what it sounds like.
 
 <Tip>
-Can we think of zero-shot learning as an unsupervised learning problem? No, this is still supervised learning. In unsupervised learning, the model learns from **unlabeled data**. In zero-shot learning, the model learns from dataless labels, remember it was called dataless classification in its infancy.
+Can we think of zero-shot learning as an unsupervised learning problem? No, this is still supervised learning. In unsupervised learning, the model learns from unlabeled data. In zero-shot learning, the model learns from dataless labels, remember it was called dataless classification in its infancy.
 </Tip>
 
 ### What Other Information?
@@ -101,10 +101,11 @@ We’ve gone a long way! We now have a decent idea of zero-shot learning, its hi
 - **Out of Distribution (OOD) Detection**: Think of this problem as a continuous variant of open set recognition. Here we don’t want to detect any instances that weren’t included in the training process, but rather just instances that deviate significantly from the training data distribution distribution. By recognizing and handling unexpected data effectively, OOD detection can pave the way for more trustworthy and robust AI systems that can adapt to unpredictable environments.
 - **Open Vocabulary Learning (OVL)**: This is what zero-shot learning aspires to be. Like, ZSL on steroids. Overall, OVL can be considered an extension of ZSL, encompassing the ability to learn from limited data for unseen classes while also extending to handle seen classes and potentially infinite new classes and tasks. 
 
+## References
 
-[^1]: [A fast learning algorithm for deep belief nets](https://dl.acm.org/doi/10.1162/neco.2006.18.7.1527)
-[^2]: [Zero-Shot Learning Through Cross-Modal Transfer](https://arxiv.org/abs/1301.3666)
-[^3]: [Semantic Autoencoder for Zero-Shot Learning](https://arxiv.org/abs/1704.08345)
-[^4]: [Language Models are Few-Shot Learners](https://arxiv.org/abs/2005.14165)
-[^5]: [Learning Transferable Visual Models From Natural Language Supervision](https://arxiv.org/abs/2103.00020)
-[^6]: [Learning Structured Output Representation using Deep Conditional Generative Models](https://papers.nips.cc/paper_files/paper/2015/hash/8d55a249e6baa5c06772297520da2051-Abstract.html)
+- [A fast learning algorithm for deep belief nets](https://dl.acm.org/doi/10.1162/neco.2006.18.7.1527)
+- [Zero-Shot Learning Through Cross-Modal Transfer](https://arxiv.org/abs/1301.3666)
+- [Semantic Autoencoder for Zero-Shot Learning](https://arxiv.org/abs/1704.08345)
+- [Language Models are Few-Shot Learners](https://arxiv.org/abs/2005.14165)
+- [Learning Transferable Visual Models From Natural Language Supervision](https://arxiv.org/abs/2103.00020)
+- [Learning Structured Output Representation using Deep Conditional Generative Models](https://papers.nips.cc/paper_files/paper/2015/hash/8d55a249e6baa5c06772297520da2051-Abstract.html)
