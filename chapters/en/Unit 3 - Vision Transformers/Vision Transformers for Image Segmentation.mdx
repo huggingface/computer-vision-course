@@ -13,7 +13,7 @@ In this section, we'll explore how Vision Transformers compare to Convolutional 
 
 Before the emergence of Vision Transformers, CNNs (Convolutional Neural Networks) have been the go-to choice for image segmentation. Models like [U-Net](https://arxiv.org/abs/1505.04597) and [Mask R-CNN](https://arxiv.org/abs/1703.06870) captured the details that are needed to distinguish different objects in an image, making them state-of-the-art for segmentation tasks.
 
-Despite their excellent results over the past decade, CNN-based models have some limitations, which Transformers aims to solve:
+Despite their excellent results over the past decade, CNN-based models have some limitations, which Transformers aim to solve:
 
 - **Spatial limitations**: CNNs learn local patterns through small receptive fields. This local focus makes it hard for them to "link" features that are far apart but related within the image, affecting their ability to accurately segment complex scenes/objects. Unlike CNNs, ViTs are designed to capture global dependencies within an image, leveraging the attention mechanism. This means ViT-based models consider the entire image at once, allowing them to understand complex relationships between distant parts of an image. For segmentation, this global perspective can lead to a more accurate delineation of objects.
 - **Task-Specific Components**: Methods like Mask R-CNN incorporate hand-designed components (e.g., non-maximum suppression, spatial anchors) to encode prior knowledge about segmentation tasks. These components add complexity and require manual tuning. In contrast, ViT-based segmentation methods simplify the segmentation process by eliminating the need for hand-designed components, making them more straightforward to optimize.
@@ -90,7 +90,7 @@ As you can see below, the results include multiple instances of the same classes
 ## Fine-tuning Vision Transformer-based Segmentation Models
 
 With many pre-trained segmentation models available, transfer learning and finetuning are commonly used to adapt these models to specific use cases, especially since transformer-based segmentation models, like MaskFormer, are data-hungry and challenging to train from scratch.
-these techniques leverage pre-trained representations to adapt these models to new data efficiently. Typically, for MaskFormer, the backbone, the pixel decoder, and the transformer decoder are kept frozen to leverage their learned general features, while the transformer module is finetuned to adapt its class prediction and mask generation capabilities to new segmentation tasks.
+These techniques leverage pre-trained representations to adapt these models to new data efficiently. Typically, for MaskFormer, the backbone, the pixel decoder, and the transformer decoder are kept frozen to leverage their learned general features, while the transformer module is finetuned to adapt its class prediction and mask generation capabilities to new segmentation tasks.
 
 [This notebook](https://colab.research.google.com/github/johko/computer-vision-course/blob/main/notebooks/Unit%203%20-%20Vision%20Transformers/transfer-learning-segmentation.ipynb) will walk you through a transfer learning tutorial on image segmentation using MaskFormer.
 

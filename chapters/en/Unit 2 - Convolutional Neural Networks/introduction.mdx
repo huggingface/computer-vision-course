@@ -7,58 +7,85 @@ Don’t panic! We’re getting to it.
 
 To illustrate the intuition, let's take a look at this example. We have this 1D data, and we visualize it. Visualization will help understand the effects of convolution operation.
 
-![Kernel Image](https://huggingface.co/datasets/hf-vision/course-assets/resolve/main/CNNs/kernel_image.png)
+<div class="flex justify-center">
+    <img src="https://huggingface.co/datasets/hf-vision/course-assets/resolve/main/CNNs/kernel_image.png" alt="Kernel Image">
+</div>
 
 We have this kernel [-1, 1]. We’ll start from the left-most element, put the kernel, multiply the overlapping numbers, and sum them up. Kernels have centers; it’s one of the elements. Here, we pick the center as 1 (the element on the right). We picked the center here as 1, assuming an imaginary zero on the left, it is called a pad, you will see later on. Now, the kernel’s center has to touch every single element, so we put a zero to the left of the element for convenience. If we don’t pad it, I’ll have to start multiplying -1 with the left-most element, and 1 will not touch the left-most element, so we apply padding. Let’s see what it looks like.
 
-![1D Conv](https://huggingface.co/datasets/hf-vision/course-assets/resolve/main/CNNs/1d_conv.jpg)
+<div class="flex justify-center">
+    <img src="https://huggingface.co/datasets/hf-vision/course-assets/resolve/main/CNNs/1d_conv.jpg" alt="1D Conv">
+</div>
 
 I’m multiplying the left-most element (that is currently a pad) with -1, and the first element (zero) with 1 and sum them up, get a 0, and note it down. Now, we’ll move the kernel by one position and do the same. Note it down again, this movement is called striding, this is usually done by moving the kernel by one pixel. You can also move it with more pixels. The result (convolved data) is currently an array [0, 0].
 
-![1D Conv Multiplication](https://huggingface.co/datasets/hf-vision/course-assets/resolve/main/CNNs/1d_conv_multiplication.png)
+<div class="flex justify-center">
+    <img src="https://huggingface.co/datasets/hf-vision/course-assets/resolve/main/CNNs/1d_conv_multiplication.png" alt="1D Conv Multiplication">
+</div>
+
 We will repeat it until the right element of the kernel touches every element, which yields the below result.
 
-![1D Conv Result](https://huggingface.co/datasets/hf-vision/course-assets/resolve/main/CNNs/1d_conv_result.png)
+<div class="flex justify-center">
+    <img src="https://huggingface.co/datasets/hf-vision/course-assets/resolve/main/CNNs/1d_conv_result.png" alt="1D Conv Result">
+</div>
 
 Notice anything? The filter gives the rate of change in the data (the derivatives!). This is one characteristic we could extract from our data. Let’s visualize it.
 
-![Convolved Illustrated](https://huggingface.co/datasets/hf-vision/course-assets/resolve/main/CNNs/convolved_illustrated.png)
+<div class="flex justify-center">
+    <img src="https://huggingface.co/datasets/hf-vision/course-assets/resolve/main/CNNs/convolved_illustrated.png" alt="Convolved Illustrated">
+</div>
 
 The convolved data (the result of the convolution) is called a feature map. And it makes sense, as it shows the features we can extract, the characteristics related to the data, and the rate of change.
 
 This is exactly what edge detection filters do! Let’s see it in 2-dimensional data. This time, our kernel will be different. It will be a 3x3 kernel (just so you know it could’ve been a 2x2 too).
-![2D Conv ](https://huggingface.co/datasets/hf-vision/course-assets/resolve/main/CNNs/2d_conv.png)
+
+<div class="flex justify-center">
+    <img src="https://huggingface.co/datasets/hf-vision/course-assets/resolve/main/CNNs/2d_conv.png" alt="2D Conv">
+</div>
 
 This filter is actually quite famous, but we won’t spoil it for you now :). The previous filter was [-1 1]. Meanwhile, this one is [-1 0 1]. It’s just of shape 3x3 and nothing different, and it shows increments and decrements on the horizontal axis. Let’s see an example and apply convolution. Below is our 2D data.
 
-![2D Conv Matrix](https://huggingface.co/datasets/hf-vision/course-assets/resolve/main/CNNs/2d_conv_matrix.png)
+<div class="flex justify-center">
+    <img src="https://huggingface.co/datasets/hf-vision/course-assets/resolve/main/CNNs/2d_conv_matrix.png" alt="2D Conv">
+</div>
 
 Think of this as an image, and we want to extract the horizontal changes. Now, the center of the filter has to touch every single pixel, so we pad the image.
 
-![Padding](https://huggingface.co/datasets/hf-vision/course-assets/resolve/main/CNNs/padding.png)
+<div class="flex justify-center">
+    <img src="https://huggingface.co/datasets/hf-vision/course-assets/resolve/main/CNNs/padding.png" alt="Padding">
+</div>
 
 The feature map will be the same size as the original data. The result of the convolution will be written to the same position that the center of the kernel touched in the original matrix, meaning, for this one, it will touch the leftmost and the top positions.
 
-![2d_conv_illustrated](https://huggingface.co/datasets/hf-vision/course-assets/resolve/main/CNNs/2d_conv_illustrated.png)
+<div class="flex justify-center">
+    <img src="https://huggingface.co/datasets/hf-vision/course-assets/resolve/main/CNNs/2d_conv_illustrated.png" alt="2D Conv">
+</div>
 
 If we keep applying the convolution, we get the following feature map.
 
-![2D Feature Map](https://huggingface.co/datasets/hf-vision/course-assets/resolve/main/CNNs/2d_feature_map.png)
+<div class="flex justify-center">
+    <img src="https://huggingface.co/datasets/hf-vision/course-assets/resolve/main/CNNs/2d-feature_map.png" alt="2D Feature Map">
+</div>
 
 Which shows us the horizontal changes (the edges). This filter is actually called the Prewitt Filter.
 
-![Prewitt Sobel](https://huggingface.co/datasets/hf-vision/course-assets/resolve/main/CNNs/prewitt_sobel.png)
+<div class="flex justify-center">
+    <img src="https://huggingface.co/datasets/hf-vision/course-assets/resolve/main/CNNs/prewitt_sobel.png" alt="Prewitt and Sobel">
+</div>
 
 You can flip [the Prewitt filter](https://en.wikipedia.org/wiki/Prewitt_operator) to get the changes in vertical direction. [The Sobel filter](https://en.wikipedia.org/wiki/Sobel_operator) is another famous filter for edge detection.
 
-## Convolutional Neural Networks
+## Convolutional Neural Networks
 
 Fine, but what does it have to do with deep learning? Well, brute forcing filters to extract features does not work well with every image. Imagine if we could somehow find the optimal filters to extract important information or even detect objects in the images. That’s where convolutional neural networks come into play. We convolve images with various filters, and these pixels in the feature maps will eventually become the parameters that we will optimize, and in the end, we will find the best filters for our problem.
 
 The idea is, that we will use filters to extract information. We will randomly initialize multiple filters, create our feature maps, feed them to a classifier, and do backpropagation. Before diving into it, I’d like to introduce you to something we call “pooling”.
 
 As you can see above, there are many pixels that show the change in the feature map. To know that there’s an edge, we only need to see that there’s a change (an edge, a corner, anything), and that’s it. 
-![Max Pooling](https://huggingface.co/datasets/hf-vision/course-assets/resolve/main/CNNs/max_pooling.png)
+
+<div class="flex justify-center">
+    <img src="https://huggingface.co/datasets/hf-vision/course-assets/resolve/main/CNNs/max_pooling.png" alt="Pooling">
+</div>
 
 In the above example, we could have got only one of the two, and that would be enough. This way, we would store fewer parameters and still have the features. This operation of getting the most important element in the feature map is called pooling. With pooling, we lose the exact pixel location of where there’s an edge but we store fewer parameters. Also, this way, our feature extraction mechanism will be more robust to small changes, e.g., we only need to know that there are two eyes, a nose, and a mouth to know that there’s a face in an image, the distance between those elements and the size of those elements tend to change from face to face, and pooling enables the model to be more robust against these changes. Another good thing about pooling is that it helps us handle varying input sizes. We’d like you to watch this video to gain a better intuition. Below is the max pooling operation, where every four pixels, we get the maximum pixel. There are various types of pooling, e.g., average pooling, weighted pooling, or L2 pooling.
 
@@ -108,17 +135,20 @@ Non-trainable params: 0
 _________________________________________________________________
 ```
 Convolutional neural networks start with an input layer and a convolutional layer. Keras Conv2D layers take a number of kernels and the size of the kernel as parameters. What’s happening is illustrated below. Here, we convolve the image with 32 kernels and end up with 32 feature maps, each having the size of the image.
-
-![Network Illustration](https://huggingface.co/datasets/hf-vision/course-assets/resolve/main/CNNs/network_illustration.png)
+<div class="flex justify-center">
+    <img src="https://huggingface.co/datasets/hf-vision/course-assets/resolve/main/CNNs/network_illustration.png" alt="Network">
+</div>
 
 After convolutional layers, we put a max pooling layer to reduce the number of parameters stored and make the model robust to the changes, as discussed above. This will reduce the number of parameters calculated.
 
-![Network Illustration 2](https://huggingface.co/datasets/hf-vision/course-assets/resolve/main/CNNs/network_illustration_2.png)
-
+<div class="flex justify-center">
+    <img src="https://huggingface.co/datasets/hf-vision/course-assets/resolve/main/CNNs/network_illustration_2.png" alt="Network">
+</div>
 Then, these feature maps are concatenated together and flattened.
 
-![Network Illustration 3](https://huggingface.co/datasets/hf-vision/course-assets/resolve/main/CNNs/network_illustration_3.png)
-
+<div class="flex justify-center">
+    <img src="https://huggingface.co/datasets/hf-vision/course-assets/resolve/main/CNNs/network_illustration_3.png" alt="Network">
+</div>
 Later on, we use something called dropout to drop a portion of parameters to avoid overfitting. Finally, the final form of weights will go through a dense layer to get classified and backpropagation will take place.
 
 ### Backpropagation in Convolutional Neural Networks in Theory

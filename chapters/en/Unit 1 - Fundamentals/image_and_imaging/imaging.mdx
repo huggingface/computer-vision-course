@@ -8,12 +8,12 @@ As mentioned before, the first step in digital imaging is the sensors. To create
 
 Sensor arrays, like CCDs in digital cameras, consist of 2D arrays of sensing elements. They capture a complete image without motion, as each element detects part of the scene. These arrays are advantageous as they don't require movement to capture an image, unlike single sensing elements and sensor strips. The captured energy is focused onto the sensor array, converted into an analog signal, and then digitized to form a digital image.
 
-![The structure of the 2D sensing element array (i.e., imaging sensor) which converts light energy into electrical voltage. These sensing elements can form 1D or 2D arrays to generate “images”](https://huggingface.co/datasets/hf-vision/course-assets/resolve/4def8c412ee6b08f4522e818a0474d155363d87b/pic_1.png)
-
 ## Digital Image Formation and Representation
 The core of digital image formation is the function \\(f(x,y)\\), which is determined by the illumination source \\(i(x,y)\\), and the reflectance \\(r(x,y)\\) from the scene.
 
-![Image acquisition by collecting the reflected light from the scene.](https://huggingface.co/datasets/hf-vision/course-assets/resolve/4def8c412ee6b08f4522e818a0474d155363d87b/pic_6.png)
+<div class="flex justify-center">
+    <img src="https://huggingface.co/datasets/hf-vision/course-assets/resolve/4def8c412ee6b08f4522e818a0474d155363d87b/pic_6.png" alt="Image acquisition by collecting the reflected light from the scene">
+</div>
 
 In transmission-based imaging, such as X-rays, transmissivity takes the place of reflectivity. The digital representation of an image is essentially a matrix or array of numerical values, each corresponding to a pixel. The process of transforming continuous image data into a digital format is twofold: 
 - Sampling, which digitizes the coordinate values
@@ -23,18 +23,25 @@ The resolution and quality of a digital image significantly depend on the follow
 - The number of samples and discrete intensity levels used. 
 - The dynamic range of the imaging system, which is the ratio of the maximum measurable intensity to the minimum detectable intensity. This also plays a crucial role in the appearance and contrast of the image.
   
-![The first digital photograph by Russell A. Kirsch in 1957](https://huggingface.co/datasets/hf-vision/course-assets/resolve/4def8c412ee6b08f4522e818a0474d155363d87b/pic_5.png)
+<div class="flex justify-center">
+    <img src="https://huggingface.co/datasets/hf-vision/course-assets/resolve/4def8c412ee6b08f4522e818a0474d155363d87b/pic_5.png" alt="The first digital photograph by Russell A. Kirsch in 1957">
+</div>
 
 ## Understanding Resolution in Digital Imaging
 Spatial resolution refers to the smallest distinguishable detail in an image and is often measured in line pairs per unit distance or pixels per unit distance. The meaningfulness of spatial resolution is context-dependent, varying according to the spatial units used. For example, a 20-megapixel camera typically offers higher detail resolution than an 8-megapixel camera. 
 Intensity resolution relates to the smallest detectable change in intensity level and is often limited by the hardware's capabilities. It's quantized in binary increments, such as 8 bits or 256 levels. The perception of these intensity changes is influenced by various factors, including noise, saturation, and the capabilities of human vision.
 
-![The illustration of image resolution](https://huggingface.co/datasets/hf-vision/course-assets/resolve/4def8c412ee6b08f4522e818a0474d155363d87b/pic_7.png)
+<div class="flex justify-center">
+    <img src="https://huggingface.co/datasets/hf-vision/course-assets/resolve/4def8c412ee6b08f4522e818a0474d155363d87b/pic_7.png" alt="The illustration of image resolution">
+</div>
+
 
 ## Image Restoration and Reconstruction Techniques
 Image restoration focuses on recovering a degraded image using knowledge about the degradation phenomenon. It often involves modelling the degradation process and applying inverse processes to regain the original image.
 
-![An example for image restoration where the image is restored and colorized](https://huggingface.co/datasets/hf-vision/course-assets/resolve/4def8c412ee6b08f4522e818a0474d155363d87b/pic_8.jpg)
+<div class="flex justify-center">
+    <img src="https://huggingface.co/datasets/hf-vision/course-assets/resolve/4def8c412ee6b08f4522e818a0474d155363d87b/pic_8.jpg" alt="An example for image restoration where the image is restored and colorized">
+</div>
 
 In contrast, image enhancement is more subjective. It aims to improve the visual appearance of an image. Restoration techniques include dealing with issues like noise, which can originate from various sources during image acquisition or transmission. Advanced filters, both adaptive and non-adaptive, are used in this case because of their noise-reduction capabilities. In medical imaging, particularly in computed tomography (CT), image reconstruction from projections is a crucial application.
 
@@ -44,15 +51,18 @@ In contrast, image enhancement is more subjective. It aims to improve the visual
 ## Colour in Image Processing
 Color is a powerful descriptor in image processing. It plays a role in object identification and recognition. Color image processing includes both pseudo-color and full-color processing. 
 
-![The first colour photograph by James Clerk Maxwell in 1861 using 3 colour filters
-](https://huggingface.co/datasets/hf-vision/course-assets/resolve/4def8c412ee6b08f4522e818a0474d155363d87b/pic_4.png)
+<div class="flex justify-center">
+    <img src="https://huggingface.co/datasets/hf-vision/course-assets/resolve/4def8c412ee6b08f4522e818a0474d155363d87b/pic_4.png" alt="The first colour photograph by James Clerk Maxwell in 1861 using 3 colour filters">
+</div>
+
 
 Pseudo-color processing assigns colors to grayscale intensities, while full-color processing uses actual color data from sensors. Understanding the fundamentals of color, including human color perception, the color spectrum, and the attributes of chromatic light, is key. The fundamentals of color involve the trichromatic nature of human vision, which perceives red, green, and blue. On the other hand, color perception is how the three types of cones in our eyes are stimulated. Finally, the color spectrum is the range of wavelengths in the electromagnetic spectrum that elicit distinct visual sensations.
 
 Different color models, such as RGB for monitors and cameras and CMY/CMYK for printing, standardize color representation in digital imaging. In the RGB color model, images have three components (i.e., channels), each for red, green, and blue. The pixel depth in RGB images determines the number of possible colors, with a typical full-color image having a 24-bit depth (8 bits for each color component). This allows for over 16 million possible colors! The RGB color cube represents the range of colors achievable in this model, with the grayscale extending from black to white. 
 
-![Figure 9: The colour channels of an image
-](https://huggingface.co/datasets/hf-vision/course-assets/resolve/4def8c412ee6b08f4522e818a0474d155363d87b/pic_9.png)
+<div class="flex justify-center">
+    <img src="https://huggingface.co/datasets/hf-vision/course-assets/resolve/4def8c412ee6b08f4522e818a0474d155363d87b/pic_9.png" alt="Figure 9: The colour channels of an image">
+</div>
 
 ## Image Compression
 Data compression reduces the data needed to represent information. It distinguishes between data (the means of conveying information) and information itself. It targets redundancy, which is data that is either irrelevant or repetitive. For example, a 10:1 compression ratio indicates 90% data redundancy. 

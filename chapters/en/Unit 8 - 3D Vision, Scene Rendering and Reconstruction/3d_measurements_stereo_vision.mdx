@@ -59,30 +59,31 @@ Figure 2: Image formation using 2 cameras
 
 With the above configuration in place, we have the below equations which map a point in 3D to the image plane in 2D. 
 
-1. Left camera
-    1. \\(u\_left = f\_x * \frac{x}{z} + O\_x\\)
-    2. \\(v\_left = f\_y * \frac{y}{z} + O\_y\\) 
-2. Right camera 
-    1. \\(u\_right = f\_x * \frac{x-b}{z} + O\_x\\)
-    2. \\(v\_right = f\_y * \frac{y}{z} + O\_y\\)
+1. Left camera  
+    1.  \\(u\_left = f\_x * \frac{x}{z} + O\_x\\)   
+    2.  \\(v\_left = f\_y * \frac{y}{z} + O\_y\\)   
+  
+2. Right camera   
+    1.  \\(u\_right = f\_x * \frac{x-b}{z} + O\_x\\)   
+    2.  \\(v\_right = f\_y * \frac{y}{z} + O\_y\\)    
 
-Different symbols used in above equations are defined below: 
-* \\(u_left\\), \\(v_left\\) refer to pixel coordinates of point P in the left image 
-* \\(u_right\\), \\(v_right\\) refer to pixel coordinates of point P in the right image 
-* \\(f_X\\) refers to the focal length (in pixels) in x direction and \\(f_y\\) refers to the focal length (in pixels) in y direction. Actually, there is only 1 focal length for a camera which is the distance between the pinhole (/ optical center of the lens) to the image plane. However, pixels may be rectangular and not perfect squares, resulting in different fx and fy values when we represent f in terms of pixels.
-* x,y,z are 3D coordinates of the point P (any unit like cm, feet, etc can be used)
-* \\(0_X\\) and \\(0_y\\) refer to pixel coordinates of the principal point 
-* b is called the baseline and refers to the distance between the left and right cameras. Same units are used for both b and x,y,z coordinates (any unit like cm, feet, etc can be used)
-
+Different symbols used in above equations are defined below:    
+*  \\(u\_left\\), \\(v\_left\\) refer to pixel coordinates of point P in the left image    
+*  \\(u\_right\\),  \\(v\_right\\) refer to pixel coordinates of point P in the right image    
+*  \\(f\_x\\) refers to the focal length (in pixels) in x direction and \\(f\_y\\) refers to the focal length (in pixels) in y direction. Actually, there is only 1 focal length for a camera which is the distance between the pinhole (optical center of the lens) to the image plane. However, pixels may be rectangular and not perfect squares, resulting in different fx and fy values when we represent f in terms of pixels.    
+*  x,y,z are 3D coordinates of the point P (any unit like cm, feet, etc can be used)    
+*  \\(O\_x\\)  and  \\(O\_y\\)  refer to pixel coordinates of the principal point     
+*  b is called the baseline and refers to the distance between the left and right cameras. Same units are used for both b and x,y,z coordinates (any unit like cm, feet, etc can be used)    
+  
 We have 4 equations above and 3 unknowns - x, y and z coordinates of a 3D point P. Intrinsic camera parameters - focal lengths and principal point are assumed to be known. Equations 1.2 and 2.2 indicate that the v coordinate value in the left and right images is the same. 
 
-3. \\(v\_left = v\_right\\)
+3.  \\(v\_left = v\_right\\)    
 
-Using equations 1.1, 1.2 and 2.1 we can derive the x,y,z coordinates of point P. 
-
-4. \\(x = \frac{b * (u\_left - O\_x)}{u\_left - u\_right}\\)
-5. \\(y = \frac{b * f\_x * (v\_left - O\_y)}{ f\_y * (u\_left - u\_right)}\\)
-6. \\(z = \frac{b * f\_x}{u\_left - u\_right}\\)
+Using equations 1.1, 1.2 and 2.1 we can derive the x,y,z coordinates of point P.    
+     
+4.  \\(x = \frac{b * (u\_left - O\_x)}{u\_left - u\_right}\\)    
+5.  \\(y = \frac{b * f\_x * (v\_left - O\_y)}{ f\_y * (u\_left - u\_right)}\\)    
+6.  \\(z = \frac{b * f\_x}{u\_left - u\_right}\\)     
 
 Note that the x and y values above concern the left camera since the origin of the coordinate system is aligned with the left camera. The above equations show that we can find 3D coordinates of a point P using its 2 images captured from 2 different camera locations. z value is also referred to as the depth value. Using this technique, we can find the depth values for different pixels within an image and their real-world x and y coordinates. We can also find real-world distances between different points in an image. 
 
@@ -105,7 +106,7 @@ Raw Right Image
 ![Raw Stacked Left and Right Images ](https://huggingface.co/datasets/hf-vision/course-assets/resolve/main/3d_stereo_vision_images/unrectified_stacked_frames.jpg?download=true)
 Raw Stacked Left and Right Images 
 
-Let's focus on a single point - the top left corner of the laptop. As per equation 3 above,\\(v\_left = v\_right\\) for the same point in the left and right images. However, notice that the red line, which is at a constant v value, touches the top-left corner of the laptop in the left image but misses this point by a few pixels in the right image. There are two main reasons for this discrepancy:
+Let's focus on a single point - the top left corner of the laptop. As per equation 3 above,  \\(v\_left = v\_right\\)  for the same point in the left and right images. However, notice that the red line, which is at a constant v value, touches the top-left corner of the laptop in the left image but misses this point by a few pixels in the right image. There are two main reasons for this discrepancy:
 
 * The intrinsic parameters for the left and right cameras are different. The principal point for the left camera is at (319.13, 233.86), whereas it is (298.85, 245.52) for the right camera. The focal length for the left camera is 450.9, whereas it is 452.9 for the right camera. The values of fx are equal to fy for both the left and right cameras. These intrinsic parameters were read from the device using it's python API and could be different for different OAK-D Lite devices.
 * Left and right camera orientations differ slightly from the geometry of the simplified solution detailed above. 
@@ -122,7 +123,7 @@ Rectified Right Image
 Rectified and Stacked Left and Right Images 
 ![Rectified and Stacked Left and Right Images](https://huggingface.co/datasets/hf-vision/course-assets/resolve/main/3d_stereo_vision_images/rectified_stacked_frames.jpg?download=true)
 
-Let's also overlap the rectified left and right images to see the difference. We can see that the v values for different points remain mostly constant in the left and right images. However, the u values change, and this difference in the u values helps us find the depth information for different points in the scene, as shown in Equation 6 above. This difference in 'u' values \\(u\_left - u\_right\\) is called disparity, and we can notice that the disparity for points near the camera is greater compared to points further away. Depth z and disparity \\(u\_left - u\_right\\) are inversely proportional, as shown in equation 6.
+Let's also overlap the rectified left and right images to see the difference. We can see that the v values for different points remain mostly constant in the left and right images. However, the u values change, and this difference in the u values helps us find the depth information for different points in the scene, as shown in Equation 6 above. This difference in 'u' values \\(u\_left - u\_right\\) is called disparity, and we can notice that the disparity for points near the camera is greater compared to points further away. Depth z and disparity  \\(u\_left - u\_right\\)  are inversely proportional, as shown in equation 6.
 
 Rectified and Overlapped Left and Right Images 
 ![Rectified and Overlapped Left and Right Images](https://huggingface.co/datasets/hf-vision/course-assets/resolve/main/3d_stereo_vision_images/rectified_overlapping_frames.jpg?download=true)
@@ -139,7 +140,7 @@ Annotated Right Image
 ### 3D Coordinate Calculations  
 Twelve points are selected in the scene, and their (u,v) values in the left and right images are tabulated below. Using equations 4, 5, and 6, (x,y,z) coordinates for these points are also calculated and tabulated below. X and Y coordinates concerning the left camera, and the origin is at the left camera's pinhole (or optical center of the lens). Therefore, 3D points left and above the pinhole have negative X and Y values, respectively.
 
-| point    |   \\(u_left\\)  |   \\(v_left\\)  |   \\(u_right\\)  |   \\(v_right\\)  |   depth/z(cm)  |   \\(x_wrt_left\\)|   \\(y_wrt_left\\)  |
+| point    |   \\(u\_left\\)  |   \\(v\_left\\)  |   \\(u\_right\\)  |   \\(v\_right\\)  |   depth/z(cm)  |   \\(x\_wrt\_left\\)|   \\(y\_wrt\_left\\)  |
 |:--------:|:---------:|:---------:|:----------:|:----------:|:--------------:|:-----------------:|:-----------------:|
 | pt1     |      138 |      219 |       102 |       219 |         94.36 |           -33.51 |            -5.53 |
 | pt2     |      264 |      216 |       234 |       217 |        113.23 |            -8.72 |            -7.38 |
@@ -167,8 +168,8 @@ We can also compute 3D distances between different points using their (x,y,z) va
 | d5(9-10)    |           16.9 |         16.7 |               1.2  |
 | d6(9-11)    |           23.8 |         24   |               0.83 |
 
-Calculated Dimension Results 
-![Calculated Dimension Results] (https://huggingface.co/datasets/hf-vision/course-assets/resolve/main/3d_stereo_vision_images/calculated_dim_results.png?download=true)
+Calculated Dimension Results   
+![Calculated Dimension Results](https://huggingface.co/datasets/hf-vision/course-assets/resolve/main/3d_stereo_vision_images/calculated_dim_results.png?download=true)
 
 ## Conclusion
 1. In summary, we learned how stereo vision works, the equations used to find the real-world coordinates (x, y, z) of a point P given its two images captured from different viewpoints, and compared theoretical values with experimental results. 
