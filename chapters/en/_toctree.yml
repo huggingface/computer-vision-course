@@ -26,6 +26,8 @@
     local: "unit1/feature-extraction/feature-matching"
   - title: Real-world Applications of Feature Extraction in Computer Vision
     local: "unit1/feature-extraction/real-world-applications"
+  - title: Exercise of Feature Extraction in Computer Vision
+    local: "unit1/feature-extraction/exercise"
 - title: Unit 2 - Convolutional Neural Networks
   sections:
   - title: Introduction to Convolutional Neural Networks
