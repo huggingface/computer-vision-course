@@ -2,9 +2,7 @@
 
 We are going to learn about Knowledge Distillation, the method behind [distilGPT](https://huggingface.co/distilgpt2) and [distilbert](https://huggingface.co/distilbert-base-uncased-finetuned-sst-2-english), two of *the most downloaded models on the Hugging Face Hub!*
 
-Presumably, we've all had teachers who "teach" by simply providing us the correct answers and then testing us on questions we haven't seen before, analogous to supervised learning
-of machine learning models where we provide a labeled dataset to train on. Instead of having a model train on labels, however,
-we can pursue [Knowledge Distillation](https://arxiv.org/abs/1503.02531) as an alternative to arriving at a much smaller model that can perform comparably to the larger model and much faster to boot.
+Presumably, we've all had teachers who "teach" by simply providing us the correct answers and then testing us on questions we haven't seen before, analogous to supervised learning of machine learning models where we provide a labeled dataset to train on. Instead of having a model train on labels, however, we can pursue [Knowledge Distillation](https://arxiv.org/abs/1503.02531) as an alternative to arriving at a much smaller model that can perform comparably to the larger model and much faster to boot.
 
 ## Intuition Behind Knowledge Distillation
 
@@ -14,25 +12,19 @@ Imagine you were given this multiple-choice question:
 
 If you had someone just tell you, "The answer is Draco Malfoy," that doesn't teach you a whole lot about each of the characters' relative relationships with Harry Potter.
 
-On the other hand, if someone tells you, "I am very confident it is not Ron Weasley, I am somewhat confident it is not Neville Longbottom, and 
-I am very confident that it *is* Draco Malfoy", this gives you some information about these characters' relationships to Harry Potter! 
-This is precisely the kind of information that gets passed down to our student model under the Knowledge Distillation paradigm.
+On the other hand, if someone tells you, "I am very confident it is not Ron Weasley, I am somewhat confident it is not Neville Longbottom, and I am very confident that it *is* Draco Malfoy," this gives you some information about these characters' relationships to Harry Potter! This is precisely the kind of information that gets passed down to our student model under the Knowledge Distillation paradigm.
 
 ## Distilling the Knowledge in a Neural Network
 
-In the paper [*Distilling the Knowledge in a Neural Network*](https://arxiv.org/abs/1503.02531), Hinton et al. introduced the training methodology known as knowledge distillation,
-taking inspiration from *insects*, of all things. Just as insects transition from larval to adult forms that are optimized for different tasks, large-scale machine learning models can 
-initially be cumbersome, like larvae, for extracting structure from data but can distill their knowledge into smaller, more efficient models for deployment.
+In the paper [*Distilling the Knowledge in a Neural Network*](https://arxiv.org/abs/1503.02531), Hinton et al. introduced the training methodology known as knowledge distillation, taking inspiration from *insects*, of all things. Just as insects transition from larval to adult forms that are optimized for different tasks, large-scale machine learning models can initially be cumbersome, like larvae, for extracting structure from data but can distill their knowledge into smaller, more efficient models for deployment.
 
-The essence of Knowledge Distillation is using the predicted logits from a teacher network to pass information to a smaller, more efficient student model. We do this
-by re-writing the loss function to contain a *distillation loss*, which encourages the student model's distribution over the output space to approximate the teacher's.
+The essence of Knowledge Distillation is using the predicted logits from a teacher network to pass information to a smaller, more efficient student model. We do this by re-writing the loss function to contain a *distillation loss*, which encourages the student model's distribution over the output space to approximate the teacher's.
 
 The distillation loss is formulated as:
 
 ![Distillation Loss](https://huggingface.co/datasets/hf-vision/course-assets/resolve/main/KL-Loss.png)
 
-The KL loss refers to the [Kullback-Leibler Divergence](https://en.wikipedia.org/wiki/Kullback–Leibler_divergence) between the teacher and the student's output distributions. 
-The overall loss for the student model is then formulated as the sum of this distillation loss with the standard cross-entropy loss over the ground-truth labels.
+The KL loss refers to the [Kullback-Leibler Divergence](https://en.wikipedia.org/wiki/Kullback–Leibler_divergence) between the teacher and the student's output distributions. The overall loss for the student model is then formulated as the sum of this distillation loss with the standard cross-entropy loss over the ground-truth labels.
 
 To see this loss function implemented in Python and a fully worked out example in Python, let's check out the [notebook for this section](https://github.com/johko/computer-vision-course/blob/main/notebooks/Unit%203%20-%20Vision%20Transformers/KnowledgeDistillation.ipynb).
 
@@ -40,3 +32,14 @@ To see this loss function implemented in Python and a fully worked out example i
   <img src="https://colab.research.google.com/assets/colab-badge.svg" alt="Open In Colab"/>
 </a>
 
+## So How Can We Use This to Our Advantage?
+
+Knowledge distillation became very useful when the machine learning community realized there was great potential in deploying AI models on edge devices. However, we can't just deploy a model that's 1 GB in size and has a 1-second latency for users to use—it’s too big and too slow. These drawbacks are mainly caused by the large size of the model. From that moment, people started distilling models and reducing their parameter count by more than 90% with negligible performance drops.
+
+### Why Does Knowledge Distillation Work?
+
+1. **Entropy Gain**: Distillation helps in transferring the "dark knowledge" (i.e., soft probabilities) from the teacher model to the student model, which contains more information than hard labels. This extra information helps the student model generalize better.
+
+2. **Coherent Gradient Updates**: The gradients provided by the teacher model's soft targets help in more stable and coherent updates during training, resulting in a smoother training process for the student model.
+
+3. **Ability to Train on Unlabeled Data**: The availability of the teacher model allows the student model to be trained on unlabeled data. The teacher model can provide pseudo-labels for the unlabeled samples, which the student model can then use for training, significantly increasing the amount of usable training data.
