@@ -38,7 +38,7 @@ Knowledge distillation became very useful when the machine learning community re
 
 ### Why Does Knowledge Distillation Work?
 
-1. **Entropy Gain**: Distillation helps in transferring the "dark knowledge" (i.e., soft probabilities) from the teacher model to the student model, which contains more information than hard labels. This extra information helps the student model generalize better.
+1. **Entropy Gain**: One way distillation works is by transferring the "dark knowledge" (i.e., soft probabilities) from the teacher model to the student model, which contains more information than hard labels. This extra information helps the student model generalize better.
 
 2. **Coherent Gradient Updates**: The gradients provided by the teacher model's soft targets help in more stable and coherent updates during training, resulting in a smoother training process for the student model.
 
