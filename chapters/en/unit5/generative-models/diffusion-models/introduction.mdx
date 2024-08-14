@@ -3,16 +3,16 @@
 What you will learn from this chapter:
 
 - What are diffusion models and how do they differ from GANs
-- Major sub categories of Diffusion models
-- Use cases of Diffusion models
-- Drawback in Diffusion models
+- Major sub categories of diffusion models
+- Use cases of diffusion models
+- Drawback in diffusion models
 
 
 ## Diffusion Models and their Difference from GANs
 
 Diffusion models are a new and exciting area in computer vision that has shown impressive results in creating images. These generative models work on two stages, a forward diffusion stage and a reverse diffusion stage: first, they slightly change the input data by adding some noise, and then they try to undo these changes to get back to the original data. This process of making changes and then undoing them helps generate realistic images.
 
-These generative models raised the bar to a new level in the area of generative modeling, particularly referring to models such as [Imagen](https://imagen.research.google/) and [Latent Diffusion Models](https://arxiv.org/abs/2112.10752)(LDMs). For instance consider the below images generated via such models
+These generative models raised the bar to a new level in the area of generative modeling, particularly referring to models such as [Imagen](https://imagen.research.google/) and [Latent Diffusion Models](https://arxiv.org/abs/2112.10752)(LDMs). For instance consider the below images generated via such models.
 
 ![Example images generated using diffusion models](https://huggingface.co/datasets/hwaseem04/Documentation-files/resolve/main/CV-Course/diffusion-eg.png)
 
@@ -33,9 +33,9 @@ In diffusion models, Gaussian noise is added step-by-step to the training images
 
 ## Major Variants of Diffusion models
 
-There are 3 major diffusion modelling frameworks
+There are 3 major diffusion modelling frameworks:
 - Denoising diffusion probabilistic models (DDPMs):
-	- DDPMs are models that employ latent variables to estimate the probability distribution. From this point of view, DDPMs can be viewed as a special kind of variational auto-encoders (VAEs), where the forward diffusion stage corresponds to the encoding process inside VAE, while the reverse diffusion stage corresponds to the decoding process
+	- DDPMs are models that employ latent variables to estimate the probability distribution. From this point of view, DDPMs can be viewed as a special kind of variational auto-encoders (VAEs), where the forward diffusion stage corresponds to the encoding process inside VAE, while the reverse diffusion stage corresponds to the decoding process.
 - Noise conditioned score networks (NCSNs):
 	- It is based on training a shared neural network via score matching to estimate the score function (defined as the gradient of the log density) of the perturbed data distribution at different noise levels.
 - Stochastic differential equations (SDEs):
@@ -46,12 +46,12 @@ There are 3 major diffusion modelling frameworks
 ## Use Cases of Diffusion Models
 
 Diffusion is used in a variety of tasks including, but not limited to:
-- Image generation - Generating images based on prompts
-- Image super-resolution - Increasing resolution of images
-- Image inpainting - Filling up a degraded portion of an image based on prompts
+- Image generation - Generating images based on prompts.
+- Image super-resolution - Increasing resolution of images.
+- Image inpainting - Filling up a degraded portion of an image based on prompts.
 - Image editing - Editing specific/entire part of the image without losing its visual identity.
-- Image-to-image translation - This includes changing background, attributes of the location etc
-- Learned Latent representation from diffusion models can also be used for
+- Image-to-image translation - This includes changing background, attributes of the location etc.
+- Learned Latent representation from diffusion models can also be used for.
     - Image segmentation
     - Classification
     - Anomaly detection

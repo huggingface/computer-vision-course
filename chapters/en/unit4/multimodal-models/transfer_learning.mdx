@@ -4,7 +4,7 @@ In the preceding sections, we've delved into the fundamental concepts of multimo
 
 There are several approaches to how you can adapt multimodal models to your use case:
 
-1. **Zero\few-shot learning**. Zero\few-shot learning involves leveraging large pretrained models capable of solving problems not present in the training data. These approaches can be useful when there is little labeled data for a task (5-10 examples) or there is none at all. [Unit 11](../Unit%2011%20%20-%20Zero%20Shot%20Computer%20Vision/1.mdx) will delve deeper into this topic.
+1. **Zero\few-shot learning**. Zero\few-shot learning involves leveraging large pretrained models capable of solving problems not present in the training data. These approaches can be useful when there is little labeled data for a task (5-10 examples) or there is none at all. [Unit 11](https://huggingface.co/learn/computer-vision-course/unit11/1) will delve deeper into this topic.
 
 2. **Training the model from scratch**. When pre-trained model weights are unavailable or the model's dataset substantially differs from your own, this method becomes necessary. Here, we initialize model weights randomly (or via more sophisticated methods like [He initialization](https://arxiv.org/abs/1502.01852)) and proceed with the usual training. However, this approach demands substantial amounts of training data.
 
@@ -38,12 +38,12 @@ However, despite its advantages, transfer learning has some challenges that shou
 
 ## Transfer Learning Applications
 
-We'll explore practical applications of transfer learning across various tasks. Navigate to the Jupyter notebook relevant to your task of interest from the provided table.
+We'll explore practical applications of transfer learning across various tasks. The table below provides a description of the tasks that can be solved using multimodal models, as well as examples of how you can fine-tune them on your data.
 
-| Task        | Description                                                      | Model                                             | Notebook    |
-| ----------- | ---------------------------------------------------------------- | ------------------------------------------------- | ----------- |
-| Fine-tune CLIP             | Fine-tuning CLIP on a custom dataset                             | [openai/clip-vit-base-patch32](https://huggingface.co/openai/clip-vit-base-patch32) | [CLIP notebook](https://) |
-| VQA                        | Answering a question in natural <br/> language based on an image | [dandelin/vilt-b32-finetuned-vqa](https://huggingface.co/dandelin/vilt-b32-finetuned-vqa) | [VQA notebook](https://) |
-| Image-to-Text              | Describing an image in natural language                          | [Salesforce/blip-image-captioning-large](https://huggingface.co/Salesforce/blip-image-captioning-large) | [Text 2 Image notebook](https://) |
-| Open-set object detection  | Detect objects by natural language input                         |  [Grounding DINO](https://github.com/IDEA-Research/GroundingDINO) | [Grounding DINO notebook](https://) |
-| Assistant (GTP-4V like)    | Instruction tuning in the multimodal field                       | [LLaVA](https://github.com/haotian-liu/LLaVA) | [LLaVa notebook](https://) |
+| Task        | Description                                                      | Model                                             |
+| ----------- | ---------------------------------------------------------------- | ------------------------------------------------- |
+| [Fine-tune CLIP](https://colab.research.google.com/github/fariddinar/computer-vision-course/blob/main/notebooks/Unit%204%20-%20Multimodal%20Models/Clip_finetune.ipynb)| Fine-tuning CLIP on a custom dataset | [openai/clip-vit-base-patch32](https://huggingface.co/openai/clip-vit-base-patch32) |
+| [VQA](https://huggingface.co/docs/transformers/main/en/tasks/visual_question_answering#train-the-model) | Answering a question in natural <br/> language based on an image | [dandelin/vilt-b32-mlm](https://huggingface.co/dandelin/vilt-b32-mlm) |
+| [Image-to-Text](https://huggingface.co/docs/transformers/main/en/tasks/image_captioning) | Describing an image in natural language | [microsoft/git-base](https://huggingface.co/microsoft/git-base) |
+| [Open-set object detection](https://docs.ultralytics.com/models/yolo-world/) | Detect objects by natural language input |  [YOLO-World](https://huggingface.co/papers/2401.17270) |
+| [Assistant (GTP-4V like)](https://github.com/haotian-liu/LLaVA?tab=readme-ov-file#train) | Instruction tuning in the multimodal field | [LLaVA](https://huggingface.co/docs/transformers/model_doc/llava) |

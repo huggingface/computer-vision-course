@@ -22,22 +22,22 @@ The 3D Point Data is mainly used in self-driving capabilities, but now other AI 
 
 ## Generation and Data Representation
 
-We will be using the python library [point-cloud-utils](https://github.com/fwilliams/point-cloud-utils), and [open-3d](https://github.com/isl-org/Open3D), which can be installed by
+We will be using the python library [point-cloud-utils](https://github.com/fwilliams/point-cloud-utils), and [open-3d](https://github.com/isl-org/Open3D), which can be installed by:
 
 ```bash
- pip install point-cloud-utils
+pip install point-cloud-utils
 ```
 
-We will be also using the python library open-3d, which can be installed by
+We will be also using the python library open-3d, which can be installed by:
 
 ```bash
- pip install open3d
+pip install open3d
 ```
 
-OR a Smaller CPU only version
+OR a Smaller CPU only version:
 
 ```bash
- pip install open3d-cpu
+pip install open3d-cpu
 ```
 
 Now, first we need to understand the formats in which these point clouds are stored in, and for that, we need to look at mesh cloud.
@@ -53,13 +53,13 @@ The type of file is inferred from its file extension. Some of the extensions sup
 
 - A simple PLY object consists of a collection of elements for representation of the object. It consists of a list of (x,y,z) triplets of a vertex and a list of faces that are actually indices into the list of vertices.
 - Vertices and faces are two examples of elements and the majority of the PLY file consists of these two elements.
-- New properties can also be created and attached to the elements of an object, but these should be added in such a way that old programs do not break when these new properties are encountered
+- New properties can also be created and attached to the elements of an object, but these should be added in such a way that old programs do not break when these new properties are encountered.
 
 ** STL (Standard Tessellation Language) **
 
 - This format approximates the surfaces of a solid model with triangles.
 - These triangles are also known as facets, where each facet is described by a perpendicular direction and three points representing the vertices of the triangle.
-- However, these files have no description of Color and Texture
+- However, these files have no description of Color and Texture.
 
 ** OFF (Object File Format) **
 
@@ -77,11 +77,11 @@ The type of file is inferred from its file extension. Some of the extensions sup
 
 - X3D is an XML based 3D graphics file format for presentation of 3D information. It is a modular standard and is defined through several ISO specifications.
 - The format supports vector and raster graphics, transparency, lighting effects, and animation settings including rotations, fades, and swings.
-- X3D has the advantage of encoding color information (unlike STL) that is used during printing the model on a color 3D printer
+- X3D has the advantage of encoding color information (unlike STL) that is used during printing the model on a color 3D printer.
 
 ** DAE (Digital Asset Exchange) **
 
 - This is an XML schema which is an open standard XML schema, from which DAE files are built.
-- This file format is based on the COLLADA (COLLAborative Design Activity) XML schema which is an open standard XML schema for the exchange of digital assets among graphics software applications
+- This file format is based on the COLLADA (COLLAborative Design Activity) XML schema which is an open standard XML schema for the exchange of digital assets among graphics software applications.
 - The format's biggest selling point is its compatibility across multiple platforms.
 - COLLADA files aren't restricted to one program or manufacturer. Instead, they offer a standard way to store 3D assets.

@@ -42,6 +42,8 @@
     local: "unit2/cnns/intro-transfer-learning"
   - title: Lets Dive Further with MobileNet
     local: "unit2/cnns/mobilenetextra"
+  - title: Resnet 
+    local: "unit2/cnns/resnet"
 - title: Unit 3 - Vision Transformers
   sections:
   - title: Vision Transformers for Image Classification

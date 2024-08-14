@@ -91,8 +91,8 @@ Some work has been conducted to speed up this computation like FastFFTConv based
 
 ![nd_hyena.png](https://huggingface.co/datasets/hf-vision/course-assets/resolve/main/outlook_hyena_images/nd_hyena.png)
 In essence, Hyena can be performed in two steps: 
-1. Compute a set of N+1 linear projections similarly of attention (it can be more than 3 projections)
-2. Mixing up the projections: The matrix \\(H(u)\\) is defined by a combination of matrix multiplications
+1. Compute a set of N+1 linear projections similarly of attention (it can be more than 3 projections).
+2. Mixing up the projections: The matrix \\(H(u)\\) is defined by a combination of matrix multiplications.
 
 ## Why Hyena Matters
  
@@ -113,7 +113,7 @@ Hyena has been applied to N-Dimensional data with the Hyena N-D layer and can be
 here is a noticeable enhancement in GPU memory efficiency with the increase in the number of image patches.
 
 Hyena Hierarchy facilitates the development of larger, more efficient convolution models for long sequences. 
-The potential for Hyena type models for computer vision would be a more efficient GPU memory consumption of patches, that would allow : 
+The potential for Hyena type models for computer vision would be a more efficient GPU memory consumption of patches, that would allow: 
 - The processing of larger, higher-resolution images
 - The use of smaller patches, allowing a fine-graine feature representation 
 

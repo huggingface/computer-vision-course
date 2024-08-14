@@ -8,15 +8,16 @@ Now, let's say we are given this 2D image and the location of the pixel coordina
 
 We aim to solve the problem of determining the 3D structure of objects. In our problem statement, we can represent an object in 3D as a set of 3D points. Finding the 3D coordinates of each of these points helps us determine the 3D structure of the object.
 
-![Figure 1: Image formation using single camera](https://huggingface.co/datasets/hf-vision/course-assets/resolve/main/3d_stereo_vision_images/image_formation_single_camera.png?download=true) 
-
-Figure 1: Image formation using single camera
+<div style="display: flex; flex-direction: column; align-items: center;">
+  <img src="https://huggingface.co/datasets/hf-vision/course-assets/resolve/main/3d_stereo_vision_images/image_formation_single_camera.png?download=true" alt="Figure 1: Image formation using single camera" />
+  <p>Figure 1: Image formation using single camera</p>
+</div>
 
 ## Solution 
 Let's assume we are given the following information:
 
 1. Single image of a scene point P
-2. Pixel coordinates of point P in the image 
+2. Pixel coordinates of point P in the image
 3. Position and orientation of the camera used to capture the image. For simplicity, we can also place an XYZ coordinate system at the location of the pinhole, with the z-axis perpendicular to the image place and the x-axis, and y-axis parallel to the image plane like in Figure 1.
 4. Internal parameters of the camera, such as focal length and location of principal point. The principal point is where the optical axis intersects the image plane. Its location in the image plane is usually denoted as (Ox,Oy).
 
@@ -31,9 +32,9 @@ With the information provided above, we can find a 3D line that originates from 
 
 Given 2 lines in 3D, there are are three possibilities for their intersection:
 
-1. Intersect at exactly 1 point 
-2. Intersect at infinite number of points 
-3. Do not intersect 
+1. Intersect at exactly 1 point
+2. Intersect at infinite number of points
+3. Do not intersect
 
 If both images (with original and new camera positions) contain point P, we can conclude that the 3D lines must intersect at least once and that the intersection point is point P. Furthermore, we can envision infinite points where both lines intersect only if the two lines are collinear. This is achievable if the pinhole at the new camera position lies somewhere on the original 3D line. For all other positions and orientations of the new camera location, the two 3D lines must intersect precisely at one point, where point P lies. 
 
@@ -42,9 +43,10 @@ Therefore, using 2 images of the same scene point P, known positions and orienta
 ## Simplified Solution 
 Since there are many different positions and orientations for the camera locations which can be selected, we can select a location that makes the math simpler, less complex, and reduces computational processing when running on a computer or an embedded device. One configuration that is popular and generally used is shown in Figure 2. We use 2 cameras in this configuration, which is equivalent to a single camera for capturing 2 images from 2 different locations.
 
-![Figure 2: Image formation using 2 cameras](https://huggingface.co/datasets/hf-vision/course-assets/resolve/main/3d_stereo_vision_images/image_formation_simple_stereo.jpg?download=true)
-
-Figure 2: Image formation using 2 cameras 
+<div style="display: flex; flex-direction: column; align-items: center;">
+  <img src="https://huggingface.co/datasets/hf-vision/course-assets/resolve/main/3d_stereo_vision_images/image_formation_simple_stereo.jpg?download=true" alt="Figure 2: Image formation using 2 cameras" />
+  <p>Figure 2: Image formation using 2 cameras</p>
+</div>
 
 1. Origin of the coordinate system is placed at the pinhole of the first camera which is usually the left camera.
 2. Z axis of the coordinate system is defined perpendicular to the image plane. 
@@ -52,10 +54,10 @@ Figure 2: Image formation using 2 cameras
 4. We also have X and Y directions in a 2D image. X is the horizontal direction and Y is the vertical direction. We will refer to these directions in the image plane as u and v respectively. Therefore, pixel coordinates of a point are defined using (u,v) values.  
 5. X axis of the coordinate system is defined as the u direction / horizontal direction in the image plane.
 6. Similarly Y axis of the coordinate system is defined as the v direction / vertical direction in the image plane. 
-7. Second camera (more precisely the pinhole of the second camera) is placed at a distance b called baseline in the positive x direction to the right of the first camera. Therefore, x,y,z coordinates of pinhole of second camera are (b,0,0)
+7. Second camera (more precisely the pinhole of the second camera) is placed at a distance b called baseline in the positive x direction to the right of the first camera. Therefore, x,y,z coordinates of pinhole of second camera are (b,0,0).
 5. Image plane of the second camera is oriented parallel to the image plane of the first camera.  
-6. u and v directions in the image plane of second/right camera are aligned with the u and v directions in the image plane of the first/left camera
-7. Both left and right cameras are assumed to have the same intrinsic parameters like focal length and location of principal point
+6. u and v directions in the image plane of second/right camera are aligned with the u and v directions in the image plane of the first/left camera.
+7. Both left and right cameras are assumed to have the same intrinsic parameters like focal length and location of principal point.
 
 With the above configuration in place, we have the below equations which map a point in 3D to the image plane in 2D. 
 
@@ -68,12 +70,12 @@ With the above configuration in place, we have the below equations which map a p
     2.  \\(v\_right = f\_y * \frac{y}{z} + O\_y\\)    
 
 Different symbols used in above equations are defined below:    
-*  \\(u\_left\\), \\(v\_left\\) refer to pixel coordinates of point P in the left image    
-*  \\(u\_right\\),  \\(v\_right\\) refer to pixel coordinates of point P in the right image    
+*  \\(u\_left\\), \\(v\_left\\) refer to pixel coordinates of point P in the left image.
+*  \\(u\_right\\),  \\(v\_right\\) refer to pixel coordinates of point P in the right image.   
 *  \\(f\_x\\) refers to the focal length (in pixels) in x direction and \\(f\_y\\) refers to the focal length (in pixels) in y direction. Actually, there is only 1 focal length for a camera which is the distance between the pinhole (optical center of the lens) to the image plane. However, pixels may be rectangular and not perfect squares, resulting in different fx and fy values when we represent f in terms of pixels.    
-*  x,y,z are 3D coordinates of the point P (any unit like cm, feet, etc can be used)    
-*  \\(O\_x\\)  and  \\(O\_y\\)  refer to pixel coordinates of the principal point     
-*  b is called the baseline and refers to the distance between the left and right cameras. Same units are used for both b and x,y,z coordinates (any unit like cm, feet, etc can be used)    
+*  x, y, z are 3D coordinates of the point P (any unit like cm, feet, etc can be used).
+*  \\(O\_x\\)  and  \\(O\_y\\)  refer to pixel coordinates of the principal point.   
+*  b is called the baseline and refers to the distance between the left and right cameras. Same units are used for both b and x,y,z coordinates (any unit like cm, feet, etc can be used).   
   
 We have 4 equations above and 3 unknowns - x, y and z coordinates of a 3D point P. Intrinsic camera parameters - focal lengths and principal point are assumed to be known. Equations 1.2 and 2.2 indicate that the v coordinate value in the left and right images is the same. 
 
@@ -98,13 +100,19 @@ We'll work through an example, capture some images, and perform some calculation
 The left and right cameras in OAK-D Lite are oriented similarly to the geometry of the simplified solution detailed above. The baseline distance between the left and right cameras is 7.5cm. Left and right images of a scene captured using this device are shown below. The figure also shows these images stacked horizontally with a red line drawn at a constant height (i.e. at a constant v value ). We'll refer to the horizontal x-axis as u and the vertical y-axis as v. 
 
 Raw Left Image
-![Raw Left Image](https://huggingface.co/datasets/hf-vision/course-assets/resolve/main/3d_stereo_vision_images/unrectified_left_frame.jpg?download=true)
+<div style="display: flex; flex-direction: column; align-items: center;">
+  <img src="https://huggingface.co/datasets/hf-vision/course-assets/resolve/main/3d_stereo_vision_images/unrectified_left_frame.jpg?download=true" alt="Raw Left Image" />
+</div>
 
 Raw Right Image 
-![Raw Right Image](https://huggingface.co/datasets/hf-vision/course-assets/resolve/main/3d_stereo_vision_images/unrectified_right_frame.jpg?download=true)
+<div style="display: flex; flex-direction: column; align-items: center;">
+  <img src="https://huggingface.co/datasets/hf-vision/course-assets/resolve/main/3d_stereo_vision_images/unrectified_right_frame.jpg?download=true" alt="Raw Right Image" />
+</div>
 
-![Raw Stacked Left and Right Images ](https://huggingface.co/datasets/hf-vision/course-assets/resolve/main/3d_stereo_vision_images/unrectified_stacked_frames.jpg?download=true)
 Raw Stacked Left and Right Images 
+<div style="display: flex; flex-direction: column; align-items: center;">
+  <img src="https://huggingface.co/datasets/hf-vision/course-assets/resolve/main/3d_stereo_vision_images/unrectified_stacked_frames.jpg?download=true" alt="Raw Stacked Left and Right Images" />
+</div>
 
 Let's focus on a single point - the top left corner of the laptop. As per equation 3 above,  \\(v\_left = v\_right\\)  for the same point in the left and right images. However, notice that the red line, which is at a constant v value, touches the top-left corner of the laptop in the left image but misses this point by a few pixels in the right image. There are two main reasons for this discrepancy:
 
@@ -115,27 +123,39 @@ Let's focus on a single point - the top left corner of the laptop. As per equati
 We can perform image rectification/post-processing to correct for differences in intrinsic parameters and orientations of the left and right cameras. This process involves performing 3x3 matrix transformations. In the OAK-D Lite API, a stereo node performs these calculations and outputs the rectified left and right images. Details and source code can be viewed [here](https://github.com/luxonis/depthai-experiments/blob/master/gen2-stereo-on-host/main.py). In this specific implementation, correction for intrinsic parameters is performed using intrinsic camera matrices, and correction for orientation is performed using rotation matrices(part of calibration parameters) for the left and right cameras. The rectified left image is transformed as if the left camera had the same intrinsic parameters as the right one. Therefore, in all our following calculations, we'll use the intrinsic parameters for the right camera i.e. focal length of 452.9 and principal point at (298.85, 245.52). In the rectified and stacked images below, notice that the red line at constant v touches the top-left corner of the laptop in both the left and right images.
 
 Rectified Left Image
-![Rectified Left Image](https://huggingface.co/datasets/hf-vision/course-assets/resolve/main/3d_stereo_vision_images/rectified_left_frame.jpg?download=true)
+<div style="display: flex; flex-direction: column; align-items: center;">
+  <img src="https://huggingface.co/datasets/hf-vision/course-assets/resolve/main/3d_stereo_vision_images/rectified_left_frame.jpg?download=true" alt="Rectified Left Image" />
+</div>
 
 Rectified Right Image 
-![Rectified Right Image](https://huggingface.co/datasets/hf-vision/course-assets/resolve/main/3d_stereo_vision_images/rectified_right_frame.jpg?download=true)
+<div style="display: flex; flex-direction: column; align-items: center;">
+  <img src="https://huggingface.co/datasets/hf-vision/course-assets/resolve/main/3d_stereo_vision_images/rectified_right_frame.jpg?download=true" alt="Rectified Right Image" />
+</div>
 
 Rectified and Stacked Left and Right Images 
-![Rectified and Stacked Left and Right Images](https://huggingface.co/datasets/hf-vision/course-assets/resolve/main/3d_stereo_vision_images/rectified_stacked_frames.jpg?download=true)
+<div style="display: flex; flex-direction: column; align-items: center;">
+  <img src="https://huggingface.co/datasets/hf-vision/course-assets/resolve/main/3d_stereo_vision_images/rectified_stacked_frames.jpg?download=true" alt="Rectified and Stacked Left and Right Images" />
+</div>
 
 Let's also overlap the rectified left and right images to see the difference. We can see that the v values for different points remain mostly constant in the left and right images. However, the u values change, and this difference in the u values helps us find the depth information for different points in the scene, as shown in Equation 6 above. This difference in 'u' values \\(u\_left - u\_right\\) is called disparity, and we can notice that the disparity for points near the camera is greater compared to points further away. Depth z and disparity  \\(u\_left - u\_right\\)  are inversely proportional, as shown in equation 6.
 
 Rectified and Overlapped Left and Right Images 
-![Rectified and Overlapped Left and Right Images](https://huggingface.co/datasets/hf-vision/course-assets/resolve/main/3d_stereo_vision_images/rectified_overlapping_frames.jpg?download=true)
+<div style="display: flex; flex-direction: column; align-items: center;">
+  <img src="https://huggingface.co/datasets/hf-vision/course-assets/resolve/main/3d_stereo_vision_images/rectified_overlapping_frames.jpg?download=true" alt="Rectified and Overlapped Left and Right Images" />
+</div>
 
 ### Annotated Left and Right Rectified Images
 Let's find the 3D coordinates for some points in the scene. A few points are selected and manually annotated with their (u,v) values, as shown in the figures below. Instead of manual annotations, we can also use template-based matching, feature detection algorithms like SIFT, etc for finding corresponding points in left and right images. 
 
 Annotated Left Image 
-![Annotated Left Image](https://huggingface.co/datasets/hf-vision/course-assets/resolve/main/3d_stereo_vision_images/annotated_left_img.jpg?download=true)
+<div style="display: flex; flex-direction: column; align-items: center;">
+  <img src="https://huggingface.co/datasets/hf-vision/course-assets/resolve/main/3d_stereo_vision_images/annotated_left_img.jpg?download=true" alt="Annotated Left Image" />
+</div>
 
 Annotated Right Image 
-![Annotated Right Image](https://huggingface.co/datasets/hf-vision/course-assets/resolve/main/3d_stereo_vision_images/annotated_right_img.jpg?download=true)
+<div style="display: flex; flex-direction: column; align-items: center;">
+  <img src="https://huggingface.co/datasets/hf-vision/course-assets/resolve/main/3d_stereo_vision_images/annotated_right_img.jpg?download=true" alt="Annotated Right Image" />
+</div>
 
 ### 3D Coordinate Calculations  
 Twelve points are selected in the scene, and their (u,v) values in the left and right images are tabulated below. Using equations 4, 5, and 6, (x,y,z) coordinates for these points are also calculated and tabulated below. X and Y coordinates concerning the left camera, and the origin is at the left camera's pinhole (or optical center of the lens). Therefore, 3D points left and above the pinhole have negative X and Y values, respectively.
@@ -168,7 +188,7 @@ We can also compute 3D distances between different points using their (x,y,z) va
 | d5(9-10)    |           16.9 |         16.7 |               1.2  |
 | d6(9-11)    |           23.8 |         24   |               0.83 |
 
-Calculated Dimension Results   
+Calculated Dimension Results  
 ![Calculated Dimension Results](https://huggingface.co/datasets/hf-vision/course-assets/resolve/main/3d_stereo_vision_images/calculated_dim_results.png?download=true)
 
 ## Conclusion

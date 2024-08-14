@@ -5,7 +5,7 @@ In this section, we will briefly look at the different multimodal tasks involvin
 ## Examples of Tasks
 Before looking into specific models, it's crucial to understand the diverse range of tasks involving image and text. These tasks include but are not limited to:
 
-- **Visual Question Anwering (VQA) and Visual Reasoning:** Imagine a machine that looks at a picture and understands your questions about it. Visual Question Answering (VQA) is just that! It trains computers to extract meaning from images and answer questions like "Who's driving the car?" while Visual Reasoning is the secret sauce, enabling the machine to go beyond simple recognition and infer relationships, compare objects, and understand scene context to give accurate answers. It's like asking a detective to read the clues in a picture, only much faster and better!
+- **Visual Question Answering (VQA) and Visual Reasoning:** Imagine a machine that looks at a picture and understands your questions about it. Visual Question Answering (VQA) is just that! It trains computers to extract meaning from images and answer questions like "Who's driving the car?" while Visual Reasoning is the secret sauce, enabling the machine to go beyond simple recognition and infer relationships, compare objects, and understand scene context to give accurate answers. It's like asking a detective to read the clues in a picture, only much faster and better!
 
 - **Document Visual Question Answering (DocVQA):** Imagine a computer understanding both the text and layout of a document, like a map or contract, and then answering questions about it directly from the image. That's Document Visual Question Answering (DocVQA) in a nutshell. It combines computer vision for processing image elements and natural language processing to interpret text, allowing machines to "read" and answer questions about documents just like humans do. Think of it as supercharging document search with AI to unlock all the information trapped within those images.
 
@@ -187,7 +187,7 @@ Learn more about how to train and use DocVQA models in HuggingFace `transformers
 *Example of Input (Image) and Output (Text) for the Image Captioning Model. [[1]](#pretraining-paper)*
 - **Inputs:**
     - Image: Image in various formats (e.g., JPEG, PNG).
-    - Pre-trained image feature extractor (optional): A pre-trained neural network that can extract meaningful features from images, such as a convolutional neural network (CNN)
+    - Pre-trained image feature extractor (optional): A pre-trained neural network that can extract meaningful features from images, such as a convolutional neural network (CNN).
 - **Outputs:** Textual captions: Single Sentence or Paragraph that accurately describe the content of the input images, capturing objects, actions, relationships, and overall context. See the above example for the reference.
 - **Task:** To automatically generate natural language descriptions of images. This involves: (1) Understanding the visual content of the image (objects, actions, relationships). (2) Encoding this information into a meaningful representation. (3) Decoding this representation into a coherent, grammatically correct, and informative sentence or phrase.
 
@@ -350,7 +350,7 @@ You can try out the Grounding DINO model in the Google Colab [here](https://cola
 
 Now, let's how can we use text-image generation models in HuggingFace.
 
-Install `diffusers` library
+Install `diffusers` library:
 ```bash
 pip install diffusers --upgrade
 ```

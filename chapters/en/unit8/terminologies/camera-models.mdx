@@ -1,8 +1,10 @@
 # Camera models
 
 ## Pinhole Cameras
+<div style="display: flex; flex-direction: column; align-items: center;">
+  <img src="https://huggingface.co/datasets/hf-vision/course-assets/resolve/main/Pinhole-camera.png" alt="Pinhole camera from https://commons.wikimedia.org/wiki/File:Pinhole-camera.svg" />
+</div>
 
-![Pinhole camera from https://commons.wikimedia.org/wiki/File:Pinhole-camera.svg](https://huggingface.co/datasets/hf-vision/course-assets/resolve/main/Pinhole-camera.png)
 The simplest kind of camera - perhaps one that you have made yourself - consists of a lightproof box, with a small hole made in one side and a screen or a photographic film on the other. Light rays passing through the hole generate an inverted image on the rear wall of the box. This simple model for a camera is commonly used in 3D graphics applications.
 
 ### Camera axes conventions
@@ -13,11 +15,11 @@ There are a number of different conventions for the direction of the camera axes
 ### Pinhole camera coordinate transformation
 
 ![Pinhole transformation](https://huggingface.co/datasets/hf-vision/course-assets/resolve/main/Pinhole_transform.png)
-Each point in 3D space maps to a single point on the 2D plane. To find the map between 3D and 2D coordinates, we first need to know the intrinsics of the camera, which for a pinhole camera are
- - the focal lengths, \\(f_x\\) and \\(f_y\\)
+Each point in 3D space maps to a single point on the 2D plane. To find the map between 3D and 2D coordinates, we first need to know the intrinsics of the camera, which for a pinhole camera are:
+ - the focal lengths, \\(f_x\\) and \\(f_y\\).
  - the coordinates of the principle point, \\(c_x\\)and \\(c_y\\), which is the optical centre of the image. This point is where the optical axis intersects the image plane.
  
-Using these intrinsic parameters, we construct the camera matrix
+Using these intrinsic parameters, we construct the camera matrix:
 
 $$
 K = \begin{pmatrix}
@@ -27,9 +29,9 @@ f_x & 0 & c_x  \\
 \end{pmatrix}
 $$
  
-In order to apply this to a point \\(p=[x,y,z]\\) to a point in 3D space, we multiply the point by the camera matrix $K @ p$ to give a new 3x1 vector \\([u,v,w]\\). This is a homogeneous vector in 2D, but where the last component isn't 1. To find the position of the point in the image plane we have to divide  the first two coordinates by the last one, to give the point \\([u/w, v/w]\\).
+In order to apply this to a point \\( p=[x,y,z]\\) to a point in 3D space, we multiply the point by the camera matrix \\( K @ p \\) to give a new 3x1 vector \\( [u,v,w]\\). This is a homogeneous vector in 2D, but where the last component isn't 1. To find the position of the point in the image plane we have to divide  the first two coordinates by the last one, to give the point \\([u/w, v/w]\\).
 
-Whilst this is the textbook definition of the camera matrix, if we use the Blender camera convention it will flip the image left to right and up-down (as points in front of the camera will have negative z-values). One potential way to fix this is to change the signs of some of the elements of the camera matrix
+Whilst this is the textbook definition of the camera matrix, if we use the Blender camera convention it will flip the image left to right and up-down (as points in front of the camera will have negative z-values). One potential way to fix this is to change the signs of some of the elements of the camera matrix:
 
 $$
 K = \begin{pmatrix}

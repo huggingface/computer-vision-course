@@ -99,7 +99,9 @@ plot_cube(ax, translated_cube, label="Translated", color="red")
 
 The output should look something like this:
 
-![output_translation](https://huggingface.co/datasets/hf-vision/course-assets/resolve/main/translation.png)
+<div style="display: flex; flex-direction: column; align-items: center;">
+  <img src="https://huggingface.co/datasets/hf-vision/course-assets/resolve/main/translation.png" alt="output_translation" />
+</div>
 
 ### Scaling
 
@@ -129,13 +131,15 @@ plot_cube(ax, scaled_cube, label="Scaled", color="green")
 
 The output should look something like this:
 
-![output_scaling](https://huggingface.co/datasets/hf-vision/course-assets/resolve/main/scaling.png)
+<div style="display: flex; flex-direction: column; align-items: center;">
+  <img src="https://huggingface.co/datasets/hf-vision/course-assets/resolve/main/scaling.png" alt="output_scaling" />
+</div>
 
 ### Rotations
 
 Rotations around an axis are another commonly used transformation. There are a number of different ways of representing rotations, including Euler angles and quaternions, which can be very useful in some applications. Again, libraries such as Pytorch3d include a wide range of functionalities for performing rotations. However, as a simple example, we will just show how to construct rotations about each of the three axes.
 
-- Rotation around the X-axis
+- Rotation around the X-axis:
 
 $$ R_x(\alpha) = \begin{pmatrix} 1 & 0 & 0 & 0 \\ 0 & \cos \alpha & -\sin \alpha & 0 \\ 0 & \sin \alpha & \cos \alpha & 0 \\ 0 & 0 & 0 & 1 \end{pmatrix} $$
 
@@ -168,9 +172,11 @@ plot_cube(ax, rotated_cube, label="Rotated", color="orange")
 
 The output should look something like this:
 
-![output_rotation](https://huggingface.co/datasets/hf-vision/course-assets/resolve/main/rotation.png)
+<div style="display: flex; flex-direction: column; align-items: center;">
+  <img src="https://huggingface.co/datasets/hf-vision/course-assets/resolve/main/rotation.png" alt="output_rotation" />
+</div>
 
-- Rotation around the Y-axis
+- Rotation around the Y-axis:
 
 $$ R_y(\beta) = \begin{pmatrix} \cos \beta & 0 & \sin \beta & 0 \\ 0 & 1 & 0 & 0 \\ -\sin \beta & 0 & \cos \beta & 0 \\ 0 & 0 & 0 & 1 \end{pmatrix} $$
 
@@ -178,16 +184,16 @@ We are sure you can use the example snippet above and figure out how to implemen
 
 - Rotation around the Z-axis
 
-$$ R_y(\beta) = \begin{pmatrix} \cos \beta & 0 & \sin \beta & 0 \\ 0 & 1 & 0 & 0 \\ -\sin \beta & 0 & \cos \beta & 0 \\ 0 & 0 & 0 & 1 \end{pmatrix} $$
+$$ R_z(\beta) = \begin{pmatrix} \cos \beta & -\sin \beta & 0 & 0 \\ \sin \beta & \cos \beta & 0 & 0 \\ 0 & 0 & 1 & 0 \\ 0 & 0 & 0 & 1 \end{pmatrix} $$
 
 Again, can you use the last code snippet and implement a rotation around the Z-axis❓
 
 Note that the standard convention is that a positive rotation angle corresponds to an anti-clockwise rotation when the axis of rotation is pointing toward the viewer. Also note that in most libraries the cosine function requires the angle to be in radians. To convert from
-degrees to radians, multiply by \\(pi/180\\).
+degrees to radians, multiply by \\( pi/180\\).
 
 ### Combining transformations
 
-Multiple transformations can be combined by multiplying together their matrices. Note that the order that matrices are multiplied matters - with the matrices being applied right to left. To make a matrix that applies the transforms P, Q, and R, in that order, the composite transformation is given by \\(X = R @ Q @ P\\).
+Multiple transformations can be combined by multiplying together their matrices. Note that the order that matrices are multiplied matters - with the matrices being applied right to left. To make a matrix that applies the transforms P, Q, and R, in that order, the composite transformation is given by \\( X = R @ Q @ P\\).
 
 If we want to do first the translation, then the rotation, and then the scaling that we did above in one operation, it looks as follows:
 
@@ -207,4 +213,6 @@ plot_cube(ax, final_result, label="Combined", color="violet")
 
 The output should look something like the following.
 
-![output_rotation](https://huggingface.co/datasets/hf-vision/course-assets/resolve/main/combined.png)
+<div style="display: flex; flex-direction: column; align-items: center;">
+  <img src="https://huggingface.co/datasets/hf-vision/course-assets/resolve/main/combined.png" alt="output_combined" />
+</div>

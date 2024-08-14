@@ -9,12 +9,13 @@ ConvNext represents a significant improvement to pure convolution models by inco
 ## Key Improvements
 The author of the ConvNeXT paper starts building the model with a regular ResNet (ResNet-50), then modernizes and improves the architecture step-by-step to imitate the hierarchical structure of Vision Transformers.
 The key improvements are:
-- Training Techniques
-- Macro Design
+- Training techniques
+- Macro design
 - ResNeXt-ify
 - Inverted Bottleneck
 - Large Kernel Sizes
 - Micro Design
+
 We will go through each of the key improvements.
 These designs are not novel in itself. However, you can learn how researchers adapt and modify designs systematically to improve existing models.
 To show the effectiveness of each improvement, we will compare the model's accuracy before and after the modification on ImageNet-1K.
@@ -27,10 +28,9 @@ The researchers first discerned that, while architectural design choices are cru
 Inspired by DeiT and Swin Transformers, ConvNext closely adapts their training techniques. Some of the notable changes are:
 - Epochs: Extending the epochs from the original 90 epochs to 300 epochs.
 - Optimizer: Using AdamW optimizer instead of Adam optimizer, which differs in how it handles weight decay.
-- Regularization: Using Stochastic Depth and Label Smoothing as regularization techniques.
 - Mixup (generates a weighted combination of random image pairs), Cutmix (cuts part of an image and replace it with a patch from another image), RandAugment (applies a series of random augmentations such as rotation, translation, and shear), and Random Erasing (randomly selects a rectangle region in an image and erases its pixels with random values) to increase training data.
-Modifying these training procedures has improved ResNet-50's accuracy from 76.1% to 78.8%.
 - Regularization: Using Stochastic Depth and Label Smoothing as regularization techniques.
+
 Modifying these training procedures has improved ResNet-50's accuracy from 76.1% to 78.8%.
 
 

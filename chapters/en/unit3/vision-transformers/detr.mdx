@@ -138,12 +138,12 @@ class DETR(nn.Module):
 ```
 ### Going line by line in the `forward` function: 
 **Backbone**   
-The input image is first put through a ResNet backbone and then a convolution layer, which reduces the dimension to the `hidden_dim`
+The input image is first put through a ResNet backbone and then a convolution layer, which reduces the dimension to the `hidden_dim`.
 ```python
 x = self.backbone(inputs)
 h = self.conv(x)
 ```
-they are declared in the `__init__` function
+They are declared in the `__init__` function.
 ```python
 self.backbone = nn.Sequential(*list(resnet50(pretrained=True).children())[:-2])
 self.conv = nn.Conv2d(2048, hidden_dim, 1)
@@ -171,7 +171,7 @@ self.row_embed = nn.Parameter(torch.rand(50, hidden_dim // 2))
 self.col_embed = nn.Parameter(torch.rand(50, hidden_dim // 2))
 ```
 **Resize**   
-Before going into the transformer, the features with size `(batch size, hidden_dim, H, W)` are reshaped to `(hidden_dim, batch size, H*W)`. This makes them a sequential input for the transformer
+Before going into the transformer, the features with size `(batch size, hidden_dim, H, W)` are reshaped to `(hidden_dim, batch size, H*W)`. This makes them a sequential input for the transformer.
 ```python
 h.flatten(2).permute(2, 0, 1)
 ```
@@ -185,7 +185,7 @@ In the end, the outputs, which is a tensor of size `(query_pos_dim, batch size, 
 ```python
 return self.linear_class(h), self.linear_bbox(h).sigmoid()
 ```
-The first of which predicts the class. An additional class is added for the `No Object` class
+The first of which predicts the class. An additional class is added for the `No Object` class.
 ```python
 self.linear_class = nn.Linear(hidden_dim, num_classes + 1)
 ```
