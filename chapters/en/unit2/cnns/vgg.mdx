@@ -70,7 +70,19 @@ class VGG19(nn.Module):
             nn.Conv2d(512, 512, kernel_size=3, padding=1),
             nn.ReLU(),
             nn.MaxPool2d(kernel_size=2, stride=2),
+            nn.Conv2d(512, 512, kernel_size=3, padding=1),
+            nn.ReLU(),
+            nn.Conv2d(512, 512, kernel_size=3, padding=1),
+            nn.ReLU(),
+            nn.Conv2d(512, 512, kernel_size=3, padding=1),
+            nn.ReLU(),
+            nn.Conv2d(512, 512, kernel_size=3, padding=1),
+            nn.ReLU(),
+            nn.MaxPool2d(kernel_size=2, stride=2),
         )
+
+        # Pooling Layer
+        self.avgpool = nn.AdaptiveAvgPool2d(output_size=(7, 7))
 
         # Fully connected layers for classification
         self.classifier = nn.Sequential(
@@ -87,6 +99,7 @@ class VGG19(nn.Module):
 
     def forward(self, x):
         x = self.feature_extractor(x)  # Pass input through the feature extractor layers
+        x = self.avgpool(x)  # Pass Data through a pooling layer
         x = x.view(x.size(0), -1)  # Flatten the output for the fully connected layers
         x = self.classifier(x)  # Pass flattened output through the classifier layers
         return x

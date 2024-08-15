@@ -57,7 +57,7 @@
   - title: MobileViT v2
     local: "unit3/vision-transformers/mobilevit"
   - title: FineTuning Vision Transformer for Object Detection
-    local: "unit3/vision-transformers/vision-transformer-for-objection-detection"
+    local: "unit3/vision-transformers/vision-transformer-for-object-detection"
   - title: DEtection TRansformer (DETR)
     local: "unit3/vision-transformers/detr"
   - title: Vision Transformers for Image Segmentation

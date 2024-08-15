@@ -8,7 +8,7 @@ Imagine you have a giant box of puzzle pieces, and you're trying to find a speci
 
 Now that we have an intuitive idea of how brute-force matches are found, let's dive into the algorithms. We are going to use the descriptors that we learned about in the previous chapter to find the matching features in two images.
 
-First install and load libraries
+First install and load libraries.
 
 ```bash
 !pip install opencv-python
@@ -137,13 +137,13 @@ We also create a dictionary to specify the maximum leafs to visit as follows.
 search_params = dict(checks=50)
 ```
 
-Initiate SIFT detector
+Initiate SIFT detector.
 
 ```python
 sift = cv2.SIFT_create()
 ```
 
-Find the keypoints and descriptors with SIFT
+Find the keypoints and descriptors with SIFT.
 
 ```python
 kp1, des1 = sift.detectAndCompute(img1, None)
@@ -259,7 +259,7 @@ Fm, inliers = cv2.findFundamentalMat(mkpts0, mkpts1, cv2.USAC_MAGSAC, 0.5, 0.999
 inliers = inliers > 0
 ```
 
-Finally, we can visualize the matches
+Finally, we can visualize the matches.
 
 ```python
 draw_LAF_matches(

@@ -38,7 +38,7 @@ For the machines around us to be more intelligent, better at communicating with 
 - Vision + Text : Infographics, Memes, Articles, Blogs.
 - Vision + Audio: A Skype call with your friend, dyadic conversations.
 - Vision + Audio + Text: Watching YouTube videos or movies with captions, social media content in general is multimodal.
-- Audio + Text: Voice notes, music files with lyrics
+- Audio + Text: Voice notes, music files with lyrics.
 
 ## Multimodal Datasets
 
@@ -48,8 +48,7 @@ A dataset consisting of multiple modalities is a multimodal dataset. Out of the 
 - Vision + Audio: [VGG-Sound Dataset](https://www.robots.ox.ac.uk/~vgg/data/vggsound/), [RAVDESS Dataset](https://zenodo.org/records/1188976), [Audio-Visual Identity Database (AVID)](https://www.avid.wiki/Main_Page).
 - Vision + Audio + Text: [RECOLA Database](https://diuf.unifr.ch/main/diva/recola/), [IEMOCAP Dataset](https://sail.usc.edu/iemocap/).
 
-Now let us see what kind of tasks can be performed using a multimodal dataset? There are many examples, but we will focus generally on tasks that contains the visual and textual
-A multimodal dataset will require a model which is able to process data from multiple modalities, such a model is a multimodal model.
+Now, let us see what kind of tasks can be performed using a multimodal dataset. There are many examples, but we will generally focus on tasks that contain both visual and textual elements. A multimodal dataset requires a model that is able to process data from multiple modalities. Such a model is called a multimodal model.
 
 ## Multimodal Tasks and Models
 
@@ -64,7 +63,7 @@ Hugging Face supports a wide variety of multimodal tasks. Let us look into some 
 
 - [Visual Question Answering or VQA](https://huggingface.co/tasks/visual-question-answering): Aiding visually impaired persons, efficient image retrieval, video search, Video Question Answering, Document VQA.
 - [Image to Text](https://huggingface.co/tasks/image-to-text): Image Captioning, Optical Character Recognition (OCR), Pix2Struct.
-- [Text to Image](https://huggingface.co/tasks/text-to-image): Image Generation
+- [Text to Image](https://huggingface.co/tasks/text-to-image): Image Generation.
 - [Text to Video](https://huggingface.co/tasks/text-to-video): Text-to-video editing, Text-to-video search, Video Translation, Text-driven Video Prediction.
 
 2. Audio + Text:
@@ -89,7 +88,7 @@ A detailed section on multimodal tasks and models with a focus on Vision and Tex
 ## An application of multimodality: Multimodal Search 🔎📲💻
 
 Internet search was the one key advantage Google had, but with the introduction of ChatGPT by OpenAI, Microsoft started out with
-powering up their Bing search engine so that they can crush the competition. It was only restricted initially to LLMs, looking into large corpus of text data but the world around us, mainly social media content, web articles and all possible form of online content is largely multimodal. When we search about an image, the image pops up with a corresponding text to describe it. Won't it be super cool to have another powerful multimodal model which involved both Vision and Text at the same time? This can revolutionize the search landscape hugely, and the core tech involved in this is multimodal learning. We know that many companies also have a large database which is multimodal and mostly unstructured in nature. Multimodal models might help companies with internal search, interactive documentation (chatbots), and many such use cases. This is another domain of Enterprise AI where we leverage AI for organizational intelligence.
+powering up their Bing search engine so that they can crush the competition. It was only restricted initially to LLMs, looking into large corpus of text data but the world around us, mainly social media content, web articles and all possible forms of online content are largely multimodal. When we search for an image, the image pops up with a corresponding text to describe it. Wouldn't it be super cool to have another powerful multimodal model which involved both Vision and Text at the same time? This can revolutionize the search landscape hugely, and the core tech involved in this is multimodal learning. We know that many companies also have a large database which is multimodal and mostly unstructured in nature. Multimodal models might help companies with internal search, interactive documentation (chatbots), and many such use cases. This is another domain of Enterprise AI where we leverage AI for organizational intelligence.
 
 Vision Language Models (VLMs) are models that can understand and process both vision and text modalities. The joint understanding of both modalities lead VLMs to perform various tasks efficiently like Visual Question Answering, Text-to-image search etc. VLMs thus can serve as one of the best candidates for multimodal search. So overall, VLMs should find some way to map text and image pairs to a joint embedding space where each text-image pair is present as an embedding. We can perform various downstream tasks using these embeddings, which can also be used for search. The idea of such a joint space is that image and text embeddings that are similar in meaning will lie close together, enabling us to do searches for images based on text (text-to-image search) or vice-versa.
 

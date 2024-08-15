@@ -1,8 +1,8 @@
 # Applications of Computer Vision
 
-In today's world, computer vision systems perform ever more challenging tasks. Some of which are even difficult for humans to do. Let's consider India. Do you know India has the highest number of registered two-wheelers in the world? With that many people, sometimes they forget to use a helmet. This is dangerous and can cause severe injuries to the person. To address these issues, the government of India, in collaboration with other institutions, developed a computer vision system that automatically catches riders without a helmet and their license plate and imposes strict fines against them to discourage people from breaking the law.
+In today's world, computer vision systems perform ever more challenging tasks. Some of which are even difficult for humans to do. Let's consider India. Do you know India has the highest number of registered two-wheelers in the world? With that many drivers, some of them forget to use a helmet. This is dangerous practice, and can cause severe injuries. To address this issue, the government of India, in collaboration with other institutions, developed a computer vision system that automatically catches riders without a helmet and their license plate. The system imposes strict fines against them to discourage people from breaking the law.
 
-Of course, fining people is not the only application of computer vision. There are many more in different fields, such as healthcare, retail, and other industries. Here, we provide a few high-level examples of computer vision systems.
+Of course, fining people is not the only application of computer vision. There are uses across healthcare, retail, and many other industries. Here, we provide a few high-level examples of computer vision systems.
 
 ## A High Level Overview of Computer Vision System with Examples
 
@@ -20,7 +20,7 @@ Computer vision is revolutionizing the retail industry. Many online retailers an
 
 ### Quality Control in Assembly Lines
 
-CV in quality control on assembly lines helps achieve higher accuracy, efficiency, and consistency in detecting and rectifying defects, reducing waste, improving product quality, and streamlining manufacturing processes. There are many domains in which this is used; some of them are:
+CV in quality control on assembly lines helps achieve higher accuracy, efficiency, and consistency in detecting and rectifying defects, reducing waste, improving product quality, and streamlining manufacturing processes. There are many domains in which this is used:
 
 **Defect detection**:  CV systems can analyze products on assembly lines in real-time, identifying defects or irregularities that might not be immediately visible to the human eye. For instance, CV can inspect electronic components, automotive parts, or packaged goods in manufacturing to spot imperfections, scratches, dents, or incorrect assembly. These systems compare the product against a standard reference to determine if it meets quality standards.
 
@@ -34,7 +34,7 @@ CV in quality control on assembly lines helps achieve higher accuracy, efficienc
     <img src="https://huggingface.co/datasets/hf-vision/course-assets/resolve/743a2a115b53f258c9e6bc7744534d9e03b8a124/application_02.png" alt="Example of Tumor Detection in Medical Imaging">
 </div>
 
-Medical image analysis involves the application of computer vision and machine learning techniques to interpret and extract information from medical images like X-rays, CT scans, MRIs, ultrasounds, and histopathology slides.
+Medical image analysis applies computer vision and machine learning techniques to interpret and extract information from medical images like X-rays, CT scans, MRIs, ultrasounds, and histopathology slides.
 
 - **Diagnostic Assistance**: Computer vision aids in diagnosing diseases and conditions by analyzing medical images. For instance, in radiology, algorithms can detect abnormalities such as tumors and fractures in X-rays or MRIs. These systems assist healthcare professionals by highlighting areas of concern or providing quantitative data that helps decision-making.
 
@@ -69,19 +69,19 @@ Computer Vision systems face a multitude of challenges that arise from the compl
     <img src="https://huggingface.co/datasets/hf-vision/course-assets/resolve/743a2a115b53f258c9e6bc7744534d9e03b8a124/ethical_considerations.png" alt="Another summary of Ethical Considerations. Created Isabella Bicalho-Frazeto and Seshu Pavan">
 </div>
 
-Ethical considerations in computer vision are of paramount importance as this technology becomes increasingly integrated into various aspects of our lives. It is important to note that ethical consideration existed long before the spread of AI based technologies. It is intrinsecately tied to its birth.
+Ethical considerations in computer vision are of paramount importance as this technology becomes increasingly integrated into various aspects of our lives. These ethical considerations have existed long before the spread of AI based technologies. It is intrinsically tied to its birth.
 
-The London Hospital survival predictor is a great example of that. It was created in 1972 and its job was to predict whether patients would recover from a coma. It had a dial that either indictated "survive" or "irreversible brain damage". It was the first applications of patter recognition. Most surprisingly, it was one of the early forms of neural networks. Even at its birth, this raised concerned and doctors were advise to not take its input solely and the machine was never used to remove patient's life support.
+The London Hospital survival predictor is a great example of that. It was created in 1972 and its job was to predict whether patients would recover from a coma. It had a dial that either indicated "survive" or "irreversible brain damage". It was one of the first applications of pattern recognition, and of artificial neural networks. Even at early stages, this raised concerns. Doctors were advised not to make decisions solely from the predictor's judgements, and the machine was never used to remove patient's life support.
 
-Life has changed between then and now. We lived in a global, digital society. The ethical considerations of a model must keep considered in these lenses too. Today, we talk a lot of about buildin fair models. Fairness, in this context, refers to a property of a model to behave in a equitative manner, without target discrimination or unfair bias against a group of a individual. Where bias refers to the inclination for or against a person or group. This is tricky in practice.
+Life has changed between then and now. The world has become a more digital, interconnected place and the ethical considerations for a model must reflect that. Now, we consider fairness and bias in a global perspective. Fairness, in this context, refers to a property of a model to behave in a equitative manner, without target discrimination or unfair bias against a group or individual. Bias refers to the inclination for or against a person or group. Considering fairness and bias can be tricky in practice.
 
-In contrast to performance metrics, there is not a mathematical metric of fairness. To evaluate it, you must understand the problem at hand. To complicate things fowards, bias can pop at any point in model development; on the data, the AI design, the deployment, and the model applications.
+In contrast to performance metrics, there is not a mathematical metric of fairness. To evaluate it, you must understand the problem at hand. Making things more complicated, bias can pop at any point in model development; on the data, the AI design, the deployment, and the model applications.
 
 <div class="flex justify-center">
     <img src="https://huggingface.co/datasets/hf-vision/course-assets/resolve/743a2a115b53f258c9e6bc7744534d9e03b8a124/fairness.png" alt="Example of accuracy, precision, bias and unfairness in models. Created by Marilia Melo Favalesso and Isabella Bicalho-Frazeto. Adapted with permission by Isabella Bicalho-Frazeto and Seshu Pavan.">
 </div>
 
-There are several efforts in this direction, including the systematic report of model risks, limitation and biases in model cards (special files that accopany the model and provide important information on it). There is a lot more to be said on this topic and that is why there is a dedicated chapter on it in this course. However, there are some key concepts will introduce here to provide a high-level overview of some of the ethical considerations behind it. We summarize these in the table below.
+There are several efforts to assist this, including the systematic report of model risks, limitation and biases in model cards (special files that accopany the model and provide important information on it). There is a lot more to be said on this topic and that is why there is a dedicated chapter on it in this course. However, there are some key concepts we will introduce here to provide a high-level overview of some of the ethical considerations behind it. We summarize these in the table below.
 
 | Ethical Considerations                | Challenges                                                                                                                                                                                                                                                                                    |
 |---------------------------------------|-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|

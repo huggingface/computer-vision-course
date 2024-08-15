@@ -139,7 +139,7 @@ The output should look something like this:
 
 Rotations around an axis are another commonly used transformation. There are a number of different ways of representing rotations, including Euler angles and quaternions, which can be very useful in some applications. Again, libraries such as Pytorch3d include a wide range of functionalities for performing rotations. However, as a simple example, we will just show how to construct rotations about each of the three axes.
 
-- Rotation around the X-axis
+- Rotation around the X-axis:
 
 $$ R_x(\alpha) = \begin{pmatrix} 1 & 0 & 0 & 0 \\ 0 & \cos \alpha & -\sin \alpha & 0 \\ 0 & \sin \alpha & \cos \alpha & 0 \\ 0 & 0 & 0 & 1 \end{pmatrix} $$
 
@@ -176,7 +176,7 @@ The output should look something like this:
   <img src="https://huggingface.co/datasets/hf-vision/course-assets/resolve/main/rotation.png" alt="output_rotation" />
 </div>
 
-- Rotation around the Y-axis
+- Rotation around the Y-axis:
 
 $$ R_y(\beta) = \begin{pmatrix} \cos \beta & 0 & \sin \beta & 0 \\ 0 & 1 & 0 & 0 \\ -\sin \beta & 0 & \cos \beta & 0 \\ 0 & 0 & 0 & 1 \end{pmatrix} $$
 

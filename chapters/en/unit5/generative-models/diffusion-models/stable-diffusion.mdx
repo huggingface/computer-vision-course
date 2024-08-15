@@ -4,7 +4,7 @@ This chapter introduces the building blocks of Stable Diffusion which is a gener
 
 What will you learn from this chapter?
 - Fundamental components of Stable Diffusion
-- How to use `text-to-image`, `image2image`, inpainting pipelines 
+- How to use `text-to-image`, `image2image`, inpainting pipelines
 
 ## What Do We Need for Stable Diffusion to Work?
 To make this section interesting we will try to answer some questions to understand the basic components of the Stable Diffusion process. 
@@ -25,7 +25,7 @@ Latent diffusion models address the high computational demands of processing lar
 - How are we fusing texts with images since we are using prompts?
 
 We know that during inference time, we can feed in the description of an image we'd like to see and some pure noise as a starting point, and the model does its best to 'denoise' the random input into something that matches the caption.
-SD leverages a pre-trained transformer model based on something called [CLIP](https://github.com/johko/computer-vision-course/blob/main/chapters/en/Unit%204%20-%20Mulitmodal%20Models/CLIP%20and%20relatives/clip.mdx). CLIP's text encoder was designed to process image captions into a form that could be used to compare images and text, so it is well suited to the task of creating useful representations from image descriptions. An input prompt is first tokenized (based on a large vocabulary where each word or sub-word is assigned a specific token) and then fed through the CLIP text encoder, producing a 768-dimensional (in the case of SD 1.X) or 1024-dimensional (SD 2.X) vector for each token. To keep things consistent prompts are always padded/truncated to be 77 tokens long, and so the final representation which we use as conditioning is a tensor of shape 77x1024 per prompt.
+SD leverages a pre-trained transformer model based on something called [CLIP](https://huggingface.co/learn/computer-vision-course/unit4/multimodal-models/clip-and-relatives/clip). CLIP's text encoder was designed to process image captions into a form that could be used to compare images and text, so it is well suited to the task of creating useful representations from image descriptions. An input prompt is first tokenized (based on a large vocabulary where each word or sub-word is assigned a specific token) and then fed through the CLIP text encoder, producing a 768-dimensional (in the case of SD 1.X) or 1024-dimensional (SD 2.X) vector for each token. To keep things consistent prompts are always padded/truncated to be 77 tokens long, and so the final representation which we use as conditioning is a tensor of shape 77x1024 per prompt.
 
 - How can we add-in good inductive biases? 
 

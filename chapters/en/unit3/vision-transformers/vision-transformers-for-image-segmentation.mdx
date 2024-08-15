@@ -40,7 +40,7 @@ The architecture is composed of three components:
 
 **Segmentation Module**: Generates class probability predictions and mask embeddings for each segment using a linear classifier and a Multi-Layer Perceptron (MLP), respectively. The mask embeddings are used in combination with per-pixel embeddings to predict binary masks for each segment.
 
-The model is trained with a binary mask loss, the same one as [DETR](https://github.com/johko/computer-vision-course/blob/9ad9b01f2383377ac9482dcbe02c91465b573b0b/chapters/en/Unit%203%20-%20Vision%20Transformers/Common%20Vision%20Transformers%20-%20DETR.mdx), and a cross-entropy classification loss per predicted segment.
+The model is trained with a binary mask loss, the same one as [DETR](https://huggingface.co/learn/computer-vision-course/unit3/vision-transformers/detr), and a cross-entropy classification loss per predicted segment.
 
 ### Panoptic Segmentation Inference Example with Hugging Face Transformers
 

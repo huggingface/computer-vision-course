@@ -40,7 +40,7 @@ Key parts of the [implementation of Swin from the original paper](https://github
 1. **Initialize Parameters**. Among various other dropout and normalization parameters, these parameters include:
     - `window_size`: Size of the windows for local self-attention.
     - `ape (bool)`: If True, add absolute position embedding to the patch embedding. 
-    - `fused_window_process`: Optional hardware optimization
+    - `fused_window_process`: Optional hardware optimization.
 
 2. **Apply Patch Embedding**: Similar to ViT, Images are split into non-overlapping patches and linearly embedded using `Conv2D`.
     
@@ -52,7 +52,7 @@ Key parts of the [implementation of Swin from the original paper](https://github
     - The model is composed of multiple layers (`BasicLayer`) of `SwinTransformerBlock`s, each downsampling the feature map for hierarchical processing using `PatchMerging`.
     - The dimensionality of features and resolution of feature maps change across layers.
       
-7. **Classification Head**: Similar to ViT, it uses an Multi-Layer Perceptron (MLP) head for classification tasks, as defined in `self.head`, as the last step
+7. **Classification Head**: Similar to ViT, it uses an Multi-Layer Perceptron (MLP) head for classification tasks, as defined in `self.head`, as the last step.
 
 ```python
 class SwinTransformer(nn.Module):
@@ -379,9 +379,9 @@ The feature map is partitioned into windows via `window_partition`. A **cyclic s
 
 Cyclic shift allows the model to capture relationships between adjacent windows, enhancing its ability to learn spatial contexts beyond the local scope of individual windows.
 
-2. **Windowed attention**: Perform attention using window-based multi-head self attention (W-MSA) module
+2. **Windowed attention**: Perform attention using window-based multi-head self attention (W-MSA) module.
 
-3. **Merge Patches**: Patches are merged via `PatchMerging`
+3. **Merge Patches**: Patches are merged via `PatchMerging`.
 
 4. **Reverse cyclic shift**: After attention is done, the window partitioning is undone via `reverse_window`, and the cyclic shift operation is reversed, so that the feature map retains its original form.
 

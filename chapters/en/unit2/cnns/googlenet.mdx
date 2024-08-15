@@ -95,7 +95,10 @@ class InceptionModule(nn.Module):
     def __init__(self, in_channels, n1x1, n3x3red, n3x3, n5x5red, n5x5, pool_proj):
         super(InceptionModule, self).__init__()
 
-        self.b1 = BaseConv2d(in_channels, n1x1, kernel_size=1)
+        self.b1 = nn.Sequential(
+            nn.Conv2d(in_channels, n1x1, kernel_size=1),
+            nn.ReLU(True),
+        )
 
         self.b2 = nn.Sequential(
             BaseConv2d(in_channels, n3x3red, kernel_size=1),

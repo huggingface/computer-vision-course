@@ -56,7 +56,7 @@ A model was trained separately on each class of object (e.g. planes, benches, ca
   <p>Image from: <a href="https://alexyu.net/pixelnerf">PixelNeRF</a></p>
 </div>
 
-The PixelNeRF code can be found on [GitHub](https://github.com/sxyu/pixel-nerf)
+The PixelNeRF code can be found on [GitHub](https://github.com/sxyu/pixel-nerf).
 
 ### Related methods
 
@@ -64,7 +64,7 @@ In the [ObjaverseXL](https://arxiv.org/pdf/2307.05663.pdf) paper, PixelNeRF was 
 
 See also - [Generative Query Networks](https://deepmind.google/discover/blog/neural-scene-representation-and-rendering/),
 [Scene Representation Networks](https://www.vincentsitzmann.com/srns/),
-[LRM](https://arxiv.org/pdf/2311.04400.pdf)
+[LRM](https://arxiv.org/pdf/2311.04400.pdf).
 
 
 ## Zero123 (or Zero-1-to-3)
@@ -78,7 +78,7 @@ Zero123 is built upon the [Stable Diffusion](https://arxiv.org/abs/2112.10752) a
 However, it adds a few new twists. 
 The model actually starts with the weights from [Stable Diffusion Image Variations](https://huggingface.co/spaces/lambdalabs/stable-diffusion-image-variations), which uses the CLIP image embeddings (the final hidden state) of the input image to condition the diffusion U-Net, instead of a text prompt. 
 However, here these CLIP image embeddings are concatenated with the relative viewpoint transformation between the input and novel views.
-(This viewpoint change is represented in terms of spherical polar coordinates.)
+(This viewpoint change is represented in terms of spherical polar coordinates).
 
 <div style="display: flex; flex-direction: column; align-items: center;">
   <img src="https://huggingface.co/datasets/hf-vision/course-assets/resolve/main/Zero123.png" alt="Zero123" />
@@ -88,11 +88,12 @@ However, here these CLIP image embeddings are concatenated with the relative vie
 The rest of the architecture is the same as Stable Diffusion.
 However, the latent representation of the input image is concatenated channel-wise with the noisy latents before being input into the denoising U-Net.
 
-To explore this model further, see the [Live Demo](https://huggingface.co/spaces/cvlab/zero123-live)
+To explore this model further, see the [Live Demo](https://huggingface.co/spaces/cvlab/zero123-live).
 
 ### Related methods
 
 [3DiM](https://3d-diffusion.github.io/) - X-UNet architecture, with cross-attention between input and noisy frames.
-[Zero123-XL](https://arxiv.org/pdf/2311.13617.pdf) - Trained on the larger objaverseXL dataset. See also [Stable Zero 123](https://huggingface.co/stabilityai/stable-zero123)
 
-[Zero123++](https://arxiv.org/abs/2310.15110) - Generates 6 new fixed views, at fixed relative positions to the input view, with reference attention between input and generated images
+[Zero123-XL](https://arxiv.org/pdf/2311.13617.pdf) - Trained on the larger objaverseXL dataset. See also [Stable Zero 123](https://huggingface.co/stabilityai/stable-zero123).
+
+[Zero123++](https://arxiv.org/abs/2310.15110) - Generates 6 new fixed views, at fixed relative positions to the input view, with reference attention between input and generated images.

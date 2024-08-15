@@ -23,7 +23,7 @@ A diagram of the MobileViT Block is shown below:
 Okay, that's a lot to take in. Let's break that down.
 
 - The block takes in an image with multiple channels. Let's say for an RGB image 3 channels, so the block takes in a three channeled image. 
-- It then performs a N by N convolution on the channels appending them to the existing channels
+- It then performs a N by N convolution on the channels appending them to the existing channels.
 - The block then creates a linear combination of these channels and adds them to the existing stack of channels.
 - For each channel these images are unfolded into flattened patches.
 - Then these flattened patches are passed through a transformer to project them into new patches. 
