@@ -36,14 +36,16 @@ To see this loss function implemented in Python and a fully worked out example i
 
 Knowledge distillation has become increasingly crucial as AI models are deployed on edge devices. Deploying a large-scale model, such as one with a 1 GB size and a latency of 1 second, is impractical for real-time applications due to high computational and memory requirements. These limitations are primarily attributed to the model's size. As a result, the field has embraced knowledge distillation, a technique that reduces model parameters by over 90% with minimal performance degradation.
 
-## The Mechanisms Behind Knowledge Distillation
+## The Consequences(good & bad) of Knowledge Distillation
 
 ### 1. Entropy Gain
 In the context of information theory, entropy is analogous to its counterpart in physics, where it measures the "chaos" or disorder within a system. In our scenario, it quantifies the amount of information a distribution contains. Consider the following example:
 
 - Which is harder to remember: `[0, 1, 0, 0]` or `[0.2, 0.5, 0.2, 0.1]`?
 
-The first vector, `[0, 1, 0, 0]`, is easier to remember and compress, as it contains less information. This can be represented as "1" in the second position. On the other hand, `[0.2, 0.5, 0.2, 0.1]` contains more information, which means it conveys "inter-class structure" that the model can learn from, as discussed earlier.
+The first vector, `[0, 1, 0, 0]`, is easier to remember and compress, as it contains less information. This can be represented as "1" in the second position. On the other hand, `[0.2, 0.5, 0.2, 0.1]` contains more information.
+Building on that, let’s say, for example, we trained an 80M parameter network on ImageNet and then distilled it (as discussed earlier) into a 5M parameter student model. We would find that the entropy contained in the output of the teacher model is much lower than that of the student model. This means that the output of the student model, even though correct, is more chaotic than the teacher’s outputs. This comes down to a simple fact: the teacher’s additional parameters help it discern between classes more easily as it extracts more features. This perspective on knowledge distillation is very interesting and is actively being researched to reduce the student’s entropy, either by using it as a loss function or by applying similar metrics inspired by physics (such as energy).
+
 
 ### 2. Coherent Gradient Updates
 Models learn iteratively by minimizing a loss function and updating their parameters through gradient descent. Consider a set of parameters `P = {w1, w2, w3, ..., wn}`, whose role in the teacher model is to activate when detecting a sample of class A. If an ambiguous sample resembles class A but belongs to class B, the model's gradient update will be aggressive after the misclassification, leading to instability. In contrast, the distillation process, with the teacher model's soft targets, promotes more stable and coherent gradient updates during training, resulting in a smoother learning process for the student model.
