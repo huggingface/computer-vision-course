@@ -1,0 +1,307 @@
+# 引言
+本节解释了立体视觉的工作原理，以及如何利用它来找到周围物体的三维结构。立体视觉涉及从不同位置和视角捕获同一场景的两张或更多图像。这些图像可以使用多个相机或重新定位同一相机来获得。
+
+## 问题陈述
+通过理解图像形成的几何原理，让我们理解找到物体三维结构的问题陈述。如图 1 所示，我们在三维中有一个点 P，具有 x、y、z 坐标。点 P 通过针孔投影到相机的像平面上。这也可以看作是将一个三维点投影到一个二维像平面上。
+
+现在，假设我们得到了这张二维图像以及点 P 在该图像中的像素坐标位置。我们想要找到点 P 的三维坐标。这可能吗？点 P 是唯一的吗？还是有其他三维点也映射到与点 P 相同的像素坐标？答案是，所有位于连接点 P 和针孔的直线上的三维点都将映射到二维像平面上的相同像素坐标。
+
+我们的目标是解决确定物体三维结构的问题。在我们的问题陈述中，我们可以将一个三维物体表示为一组三维点。找到这些点中的每一个的三维坐标有助于我们确定物体的三维结构。
+
+<div style="display: flex; flex-direction: column; align-items: center;">
+  <img src="https://huggingface.co/datasets/hf-vision/course-assets/resolve/main/3d_stereo_vision_images/image_formation_single_camera.png?download=true" alt="图 1：使用单个相机的图像形成" />
+  <p>图 1：使用单个相机的图像形成</p>
+</div>
+
+## 解决方案
+假设我们得到以下信息：
+
+1. 场景点 P 的单张图像。
+2. 点 P 在图像中的像素坐标。
+3. 用于捕获图像的相机的位置和方向。为简单起见，我们也可以在针孔的位置放置一个 XYZ 坐标系，其中 z 轴垂直于像平面，x 轴和 y 轴平行于像平面，如图 1 所示。
+4. 相机的内部参数，如焦距和主点的位置。主点是光轴与像平面相交的点。它在像平面中的位置通常表示为(Ox,Oy)。
+
+有了上述信息，我们可以找到一条三维直线，该直线从点 P 的像素坐标（点 P 在像平面上的投影）开始，穿过针孔，并延伸到无穷远。根据图像形成几何原理，我们可以得出结论，点 P 一定存在于这条直线上的某个位置。
+
+1. 最初（没有图像时），点 P 可以存在于三维空间的任何位置。
+2. 使用单张图像，我们将点 P 的可能位置减少到三维中的一条直线。
+3. 现在，让我们考虑是否可以进一步缩小潜在位置，以确定点 P 在这条三维直线上的精确位置。
+4. 想象将相机移动到不同的位置。让坐标系保持在先前的位置。我们找到的三维直线也保持不变，点 P 仍然位于这条直线上的某个位置。
+5. 从相机的这个新位置，捕获同一场景点 P 的另一张图像。再次，利用点 P 在这张新图像中的像素坐标，并考虑相机针孔的更新位置，找到点 P 必须位于的三维直线。
+6. 现在我们有了三维中的两条直线，点 P 位于这两条直线上的某个位置。因此，点 P 必须位于这两条直线的交点处。
+
+给定三维中的两条直线，它们的交点有三种可能性：
+
+1. 恰好交于一个点。
+2. 交于无数个点。
+3. 不相交。
+
+如果两张图像（具有原始和新相机位置）都包含点 P，我们可以得出结论，这两条三维直线必须至少相交一次，并且交点就是点 P。此外，我们可以想象只有当两条直线共线时，才有无数个点相交。如果新相机位置的针孔位于原始三维直线上的某个位置，这是可以实现的。对于新相机位置的所有其他位置和方向，这两条三维直线必须恰好交于一个点，即点 P 所在的位置。
+
+因此，使用同一场景点 P 的两张图像、已知的相机位置和方向以及已知的相机内部参数，我们可以精确地找到点 P 在三维空间中的位置。
+
+## 简化解决方案
+由于可以选择许多不同的相机位置和方向，我们可以选择一个使数学更简单、复杂度更低并且在计算机或嵌入式设备上运行时减少计算处理的位置。图 2 所示的一种配置很受欢迎并且通常被使用。在这种配置中，我们使用两个相机，这相当于一个相机从两个不同位置捕获两张图像。
+
+<div style="display: flex; flex-direction: column; align-items: center;">
+  <img src="https://huggingface.co/datasets/hf-vision/course-assets/resolve/main/3d_stereo_vision_images/image_formation_simple_stereo.jpg?download=true" alt="图 2：使用两个相机的图像形成" />
+  <p>图 2：使用两个相机的图像形成</p>
+</div>
+
+1. 坐标系的原点位于第一个相机（通常是左相机）的针孔处。
+2. 坐标系的 z 轴定义为垂直于像平面。
+3. 坐标系的 x 轴和 y 轴定义为平行于像平面。
+4. 我们在二维图像中也有 x 和 y 方向。x 是水平方向，y 是垂直方向。我们将图像平面中的这些方向分别称为 u 和 v。因此，一个点的像素坐标使用(u,v)值来定义。
+5. 坐标系的 x 轴定义为图像平面中的 u 方向/水平方向。
+6. 类似地，坐标系的 y 轴定义为图像平面中的 v 方向/垂直方向。
+7. 第二个相机（更准确地说是第二个相机的针孔）放置在距离 b（称为基线）的正 x 方向上，位于第一个相机的右侧。因此，第二个相机针孔的 x,y,z 坐标是(b,0,0)。
+5. 第二个相机的像平面与第一个相机的像平面平行定向。
+6. 第二个/右相机的图像平面中的 u 和 v 方向与第一个/左相机的图像平面中的 u 和 v 方向对齐。
+7. 假设左相机和右相机具有相同的内部参数，如焦距和主点的位置。
+
+有了上述配置，我们有以下方程，将三维中的一个点映射到二维的像平面上。
+
+1. 左相机
+    1. $u\_left = f\_x *\frac{x}{z}+O\_x$
+    2. $v\_left = f\_y *\frac{y}{z}+O\_y$
+
+2. 右相机
+    1. $u\_right = f\_x *\frac{x-b}{z}+O\_x$
+    2. $v\_right = f\_y *\frac{y}{z}+O\_y$
+
+上述方程中使用的不同符号定义如下：
+* $u\_left$、$v\_left$指的是点 P 在左图像中的像素坐标。
+* $u\_right$、$v\_right$指的是点 P 在右图像中的像素坐标。
+* $f\_x$指的是 x 方向上的焦距（以像素为单位），$f\_y$指的是 y 方向上的焦距（以像素为单位）。实际上，对于一个相机只有一个焦距，即针孔（镜头的光学中心）到像平面的距离。然而，像素可能是矩形而不是完美的正方形，当我们用像素表示 f 时，会导致不同的 fx 和 fy 值。
+* x、y、z 是点 P 的三维坐标（可以使用任何单位，如厘米、英尺等）。
+* $O\_x$和$O\_y$指的是主点的像素坐标。
+* b 称为基线，指的是左相机和右相机之间的距离。b 和 x、y、z 坐标使用相同的单位（可以使用任何单位，如厘米、英尺等）。
+
+我们有上面的四个方程和三个未知数——三维点 P 的 x、y 和 z 坐标。假设相机的内部参数——焦距和主点是已知的。方程 1.2 和 2.2 表明左图像和右图像中的 v 坐标值是相同的。
+
+3. $v\_left = v\_right$
+
+使用方程 1.1、1.2 和 2.1，我们可以推导出点 P 的 x、y、z 坐标。
+
+4. $x=\frac{b*(u\_left - O\_x)}{u\_left - u\_right}$
+5. $y=\frac{b*f\_x*(v\_left - O\_y)}{f\_y*(u\_left - u\_right)}$
+6. $z=\frac{b*f\_x}{u\_left - u\_right}$
+
+请注意，上面的 x 和 y 值涉及左相机，因为坐标系的原点与左相机对齐。上述方程表明，我们可以使用点 P 的两张从两个不同相机位置捕获的图像来找到点 P 的三维坐标。z 值也称为深度值。使用这种技术，我们可以找到图像中不同像素的深度值以及它们在现实世界中的 x 和 y 坐标。我们还可以找到图像中不同点之间的现实世界距离。
+
+
+## 演示
+### 设置
+我们将通过一个示例进行操作，捕获一些图像，并进行一些计算，以确定我们上述的假设和数学运算是否正确！对于捕获图像，我们将使用一种名为 OAK-D Lite 的硬件（OAK 代表 OpenCV AI Kit）。这个设备有三个摄像头——左、右单目（黑白）和一个中央彩色摄像头。我们将使用左、右单目摄像头进行我们的实验。普通智能手机摄像头也可以使用，但 OAK-D Lite 有以下一些优点。
+
+* OAK-D Lite 的内在相机参数，如焦距和主点位置是已知的，因为该设备是预先校准过的，并且可以使用其 Python API 从设备中读取这些参数。对于智能手机摄像头，内在参数需要确定，可以通过进行相机校准来找到，或者有时可以在使用智能手机拍摄的图像的元数据中找到。
+* 上述主要假设之一是左、右摄像头的位置和方向是已知的。使用智能手机摄像头，可能很难确定此信息，或者可能需要进行额外的校准。另一方面，对于 OAK-D Lite 设备，左、右摄像头的位置和方向是固定的、已知的、预先校准过的，并且与上述简化解决方案的几何形状非常相似。尽管仍然需要对原始图像进行一些后期处理/图像校正，如下文所述。
+
+### 原始左、右图像
+OAK-D Lite 中的左、右摄像头的方向与上述简化解决方案的几何形状相似。左、右摄像头之间的基线距离为 7.5 厘米。使用该设备捕获的场景的左、右图像如下所示。该图还显示了这些图像水平堆叠，并在恒定高度（即恒定 v 值）处绘制了一条红线。我们将水平 x 轴称为 u，垂直 y 轴称为 v。
+
+原始左图像
+<div style="display: flex; flex-direction: column; align-items: center;">
+  <img src="https://huggingface.co/datasets/hf-vision/course-assets/resolve/main/3d_stereo_vision_images/unrectified_left_frame.jpg?download=true" alt="Raw Left Image" />
+<p>图1：图 1：使用单个相机的图像形成" />
+  <p>图 1：使用单个相机的图像形成</p>
+</div>
+
+## 解决方案
+假设我们得到以下信息：
+
+1. 场景点 P 的单张图像。
+2. 点 P 在图像中的像素坐标。
+3. 用于捕获图像的相机的位置和方向。为简单起见，我们也可以在针孔的位置放置一个 XYZ 坐标系，其中 z 轴垂直于像平面，x 轴和 y 轴平行于像平面，如图 1 所示。
+4. 相机的内部参数，如焦距和主点的位置。主点是光轴与像平面相交的点。它在像平面中的位置通常表示为(Ox,Oy)。
+
+有了上述信息，我们可以找到一条三维直线，该直线从点 P 的像素坐标（点 P 在像平面上的投影）开始，穿过针孔，并延伸到无穷远。根据图像形成几何原理，我们可以得出结论，点 P 一定存在于这条直线上的某个位置。
+
+1. 最初（没有图像时），点 P 可以存在于三维空间的任何位置。
+2. 使用单张图像，我们将点 P 的可能位置减少到三维中的一条直线。
+3. 现在，让我们考虑是否可以进一步缩小潜在位置，以确定点 P 在这条三维直线上的精确位置。
+4. 想象将相机移动到不同的位置。让坐标系保持在先前的位置。我们找到的三维直线也保持不变，点 P 仍然位于这条直线上的某个位置。
+5. 从相机的这个新位置，捕获同一场景点 P 的另一张图像。再次，利用点 P 在这张新图像中的像素坐标，并考虑相机针孔的更新位置，找到点 P 必须位于的三维直线。
+6. 现在我们有了三维中的两条直线，点 P 位于这两条直线上的某个位置。因此，点 P 必须位于这两条直线的交点处。
+
+给定三维中的两条直线，它们的交点有三种可能性：
+
+1. 恰好交于一个点。
+2. 交于无数个点。
+3. 不相交。
+
+如果两张图像（具有原始和新相机位置）都包含点 P，我们可以得出结论，这两条三维直线必须至少相交一次，并且交点就是点 P。此外，我们可以想象只有当两条直线共线时，才有无数个点相交。如果新相机位置的针孔位于原始三维直线上的某个位置，这是可以实现的。对于新相机位置的所有其他位置和方向，这两条三维直线必须恰好交于一个点，即点 P 所在的位置。
+
+因此，使用同一场景点 P 的两张图像、已知的相机位置和方向以及已知的相机内部参数，我们可以精确地找到点 P 在三维空间中的位置。
+
+## 简化解决方案
+由于可以选择许多不同的相机位置和方向，我们可以选择一个使数学更简单、复杂度更低并且在计算机或嵌入式设备上运行时减少计算处理的位置。图 2 所示的一种配置很受欢迎并且通常被使用。在这种配置中，我们使用两个相机，这相当于一个相机从两个不同位置捕获两张图像。
+
+<div style="display: flex; flex-direction: column; align-items: center;">
+  <img src="https://huggingface.co/datasets/hf-vision/course-assets/resolve/main/3d_stereo_vision_images/image_formation_simple_stereo.jpg?download=true" alt="图 2：使用两个相机的图像形成" />
+  <p>图 2：使用两个相机的图像形成</p>
+</div>
+
+1. 坐标系的原点位于第一个相机（通常是左相机）的针孔处。
+2. 坐标系的 z 轴定义为垂直于像平面。
+3. 坐标系的 x 轴和 y 轴定义为平行于像平面。
+4. 我们在二维图像中也有 x 和 y 方向。x 是水平方向，y 是垂直方向。我们将图像平面中的这些方向分别称为 u 和 v。因此，一个点的像素坐标使用(u,v)值来定义。
+5. 坐标系的 x 轴定义为图像平面中的 u 方向/水平方向。
+6. 类似地，坐标系的 y 轴定义为图像平面中的 v 方向/垂直方向。
+7. 第二个相机（更准确地说是第二个相机的针孔）放置在距离 b（称为基线）的正 x 方向上，位于第一个相机的右侧。因此，第二个相机针孔的 x,y,z 坐标是(b,0,0)。
+5. 第二个相机的像平面与第一个相机的像平面平行定向。
+6. 第二个/右相机的图像平面中的 u 和 v 方向与第一个/左相机的图像平面中的 u 和 v 方向对齐。
+7. 假设左相机和右相机具有相同的内部参数，如焦距和主点的位置。
+
+有了上述配置，我们有以下方程，将三维中的一个点映射到二维的像平面上。
+
+1. 左相机
+    1. $u\_left = f\_x *\frac{x}{z}+O\_x$
+    2. $v\_left = f\_y *\frac{y}{z}+O\_y$
+
+2. 右相机
+    1. $u\_right = f\_x *\frac{x-b}{z}+O\_x$
+    2. $v\_right = f\_y *\frac{y}{z}+O\_y$
+
+上述方程中使用的不同符号定义如下：
+* $u\_left$、$v\_left$指的是点 P 在左图像中的像素坐标。
+* $u\_right$、$v\_right$指的是点 P 在右图像中的像素坐标。
+* $f\_x$指的是 x 方向上的焦距（以像素为单位），$f\_y$指的是 y 方向上的焦距（以像素为单位）。实际上，对于一个相机只有一个焦距，即针孔（镜头的光学中心）到像平面的距离。然而，像素可能是矩形而不是完美的正方形，当我们用像素表示 f 时，会导致不同的 fx 和 fy 值。
+* x、y、z 是点 P 的三维坐标（可以使用任何单位，如厘米、英尺等）。
+* $O\_x$和$O\_y$指的是主点的像素坐标。
+* b 称为基线，指的是左相机和右相机之间的距离。b 和 x、y、z 坐标使用相同的单位（可以使用任何单位，如厘米、英尺等）。
+
+我们有上面的四个方程和三个未知数——三维点 P 的 x、y 和 z 坐标。假设相机的内部参数——焦距和主点是已知的。方程 1.2 和 2.2 表明左图像和右图像中的 v 坐标值是相同的。
+
+3. $v\_left = v\_right$
+
+使用方程 1.1、1.2 和 2.1，我们可以推导出点 P 的 x、y、z 坐标。
+
+4. $x=\frac{b*(u\_left - O\_x)}{u\_left - u\_right}$
+5. $y=\frac{b*f\_x*(v\_left - O\_y)}{f\_y*(u\_left - u\_right)}$
+6. $z=\frac{b*f\_x}{u\_left - u\_right}$
+
+请注意，上面的 x 和 y 值涉及左相机，因为坐标系的原点与左相机对齐。上述方程表明，我们可以使用点 P 的两张从两个不同相机位置捕获的图像来找到点 P 的三维坐标。z 值也称为深度值。使用这种技术，我们可以找到图像中不同像素的深度值以及它们在现实世界中的 x 和 y 坐标。我们还可以找到图像中不同点之间的现实世界距离。
+
+
+## 演示
+### 设置
+我们将通过一个示例进行操作，捕获一些图像，并进行一些计算，以确定我们上述的假设和数学运算是否正确！对于捕获图像，我们将使用一种名为 OAK-D Lite 的硬件（OAK 代表 OpenCV AI Kit）。这个设备有三个摄像头——左、右单目（黑白）和一个中央彩色摄像头。我们将使用左、右单目摄像头进行我们的实验。普通智能手机摄像头也可以使用，但 OAK-D Lite 有以下一些优点。
+
+* OAK-D Lite 的内在相机参数，如焦距和主点位置是已知的，因为该设备是预先校准过的，并且可以使用其 Python API 从设备中读取这些参数。对于智能手机摄像头，内在参数需要确定，可以通过进行相机校准来找到，或者有时可以在使用智能手机拍摄的图像的元数据中找到。
+* 上述主要假设之一是左、右摄像头的位置和方向是已知的。使用智能手机摄像头，可能很难确定此信息，或者可能需要进行额外的校准。另一方面，对于 OAK-D Lite 设备，左、右摄像头的位置和方向是固定的、已知的、预先校准过的，并且与上述简化解决方案的几何形状非常相似。尽管仍然需要对原始图像进行一些后期处理/图像校正，如下文所述。
+
+### 原始左、右图像
+OAK-D Lite 中的左、右摄像头的方向与上述简化解决方案的几何形状相似。左、右摄像头之间的基线距离为 7.5 厘米。使用该设备捕获的场景的左、右图像如下所示。该图还显示了这些图像水平堆叠，并在恒定高度（即恒定 v 值）处绘制了一条红线。我们将水平 x 轴称为 u，垂直 y 轴称为 v。
+
+原始左图像
+<div style="display: flex; flex-direction: column; align-items: center;">
+  <img src=</p>
+</div>
+
+原始右图像
+<div style="display: flex; flex-direction: column; align-items: center;">
+  <img src="https://huggingface.co/datasets/hf-vision/course-assets/resolve/main/3d_stereo_vision_images/unrectified_right_frame.jpg?download=true" alt="Raw Right Image" />
+<p>图2：Raw Right Image</p>
+</div>
+
+原始堆叠的左、右图像
+<div style="display: flex; flex-direction: column; align-items: center;">
+  <img src="https://huggingface.co/datasets/hf-vision/course-assets/resolve/main/3d_stereo_vision_images/unrectified_stacked_frames.jpg?download=true" alt="Raw Stacked Left and Right Images" />
+<p>图3：Raw Stacked Left and Right Images</p>
+</div>
+
+让我们关注一个点——笔记本电脑的左上角。根据上述公式 3，左、右图像中同一位置的$v\_left = v\_right$。然而，请注意，在恒定 v 值处的红线在左图像中触及笔记本电脑的左上角，但在右图像中与此点相差几个像素。出现这种差异有两个主要原因：
+
+* 左、右摄像头的内在参数不同。左摄像头的主点为(319.13, 233.86)，而右摄像头的主点为(298.85, 245.52)。左摄像头的焦距为 450.9，而右摄像头的焦距为 452.9。左、右摄像头的 fx 值等于 fy 值。这些内在参数是使用其 Python API 从设备中读取的，并且对于不同的 OAK-D Lite 设备可能不同。
+* 左、右摄像头的方向与上述简化解决方案的几何形状略有不同。
+
+### 校正后的左、右图像
+我们可以进行图像校正/后期处理，以校正左、右摄像头的内在参数和方向的差异。这个过程涉及进行 3x3 矩阵变换。在 OAK-D Lite API 中，一个立体节点执行这些计算并输出校正后的左、右图像。详细信息和源代码可以在[这里](https://github.com/luxonis/depthai-experiments/blob/master/gen2-stereo-on-host/main.py)查看。在这个特定的实现中，使用内在相机矩阵对内在参数进行校正，使用左、右摄像头的旋转矩阵（校准参数的一部分）对方向进行校正。校正后的左图像被变换为好像左摄像头具有与右摄像头相同的内在参数。因此，在我们所有的后续计算中，我们将使用右摄像头的内在参数，即焦距为 452.9，主点为(298.85, 245.52)。在下面的校正和堆叠图像中，请注意在恒定 v 处的红线在左、右图像中都触及笔记本电脑的左上角。
+
+校正后的左图像
+<div style="display: flex; flex-direction: column; align-items: center;">
+  <img src="https://huggingface.co/datasets/hf-vision/course-assets/resolve/main/3d_stereo_vision_images/rectified_left_frame.jpg?download=true" alt="Rectified Left Image" />
+<p>图4：Rectified Left Image</p>
+</div>
+
+校正后的右图像
+<div style="display: flex; flex-direction: column; align-items: center;">
+  <img src="https://huggingface.co/datasets/hf-vision/course-assets/resolve/main/3d_stereo_vision_images/rectified_right_frame.jpg?download=true" alt="Rectified Right Image" />
+<p>图5：Rectified Right Image</p>
+</div>
+
+校正并堆叠的左、右图像
+<div style="display: flex; flex-direction: column; align-items: center;">
+  <img src="https://huggingface.co/datasets/hf-vision/course-assets/resolve/main/3d_stereo_vision_images/rectified_stacked_frames.jpg?download=true" alt="Rectified and Stacked Left and Right Images" />
+<p>图6：Rectified and Stacked Left and Right Images</p>
+</div>
+
+让我们也重叠校正后的左、右图像以查看差异。我们可以看到，左、右图像中不同点的 v 值大部分保持恒定。然而，u 值发生变化，并且 u 值的这种差异帮助我们找到场景中不同点的深度信息，如上述公式 6 所示。u 值的这种差异$u\_left - u\_right$被称为视差，我们可以注意到，靠近相机的点的视差比较远的点更大。深度 z 和视差$u\_left - u\_right$成反比，如公式 6 所示。
+
+校正并重叠的左、右图像
+<div style="display: flex; flex-direction: column; align-items: center;">
+  <img src="https://huggingface.co/datasets/hf-vision/course-assets/resolve/main/3d_stereo_vision_images/rectified_overlapping_frames.jpg?download=true" alt="Rectified and Overlapped Left and Right Images" />
+<p>图7：Rectified and Overlapped Left and Right Images</p>
+</div>
+
+### 带注释的校正后的左、右图像
+让我们找到场景中一些点的 3D 坐标。选择一些点并手动用它们的(u,v)值进行注释，如下图所示。代替手动注释，我们也可以使用基于模板的匹配、SIFT 等特征检测算法来找到左、右图像中的对应点。
+
+带注释的左图像
+<div style="display: flex; flex-direction: column; align-items: center;">
+  <img src="https://huggingface.co/datasets/hf-vision/course-assets/resolve/main/3d_stereo_vision_images/annotated_left_img.jpg?download=true" alt="Annotated Left Image" />
+<p>图8：Annotated Left Image</p>
+</div>
+
+带注释的右图像
+<div style="display: flex; flex-direction: column; align-items: center;">
+  <img src="https://huggingface.co/datasets/hf-vision/course-assets/resolve/main/3d_stereo_vision_images/annotated_right_img.jpg?download=true" alt="Annotated Right Image" />
+<p>图9：Annotated Right Image</p>
+</div>
+
+### 3D 坐标计算
+在场景中选择十二个点，并在下面的表格中列出它们在左、右图像中的(u,v)值。使用公式 4、5 和 6，也计算出这些点的(x,y,z)坐标并在下面的表格中列出。X 和 Y 坐标是相对于左摄像头的，原点在左摄像头的针孔（或镜头的光学中心）处。因此，针孔左侧和上方的 3D 点分别具有负的 X 和 Y 值。
+
+| 点    |   $u\_left$  |   $v\_left$  |   $u\_right$  |   $v\_right$  |   深度/z(cm)  |   $x\_wrt\_left$|   $y\_wrt\_left$  |
+|:--------:|:---------:|:---------:|:----------:|:----------:|:--------------:|:-----------------:|:-----------------:|
+| pt1     |      138 |      219 |       102 |       219 |         94.36 |           -33.51 |            -5.53 |
+| pt2     |      264 |      216 |       234 |       217 |        113.23 |            -8.72 |            -7.38 |
+| pt3     |      137 |      320 |       101 |       321 |         94.36 |           -33.72 |            15.52 |
+| pt4     |      263 |      303 |       233 |       302 |        113.23 |            -8.97 |            14.37 |
+| pt5     |      307 |      211 |       280 |       211 |        125.81 |             2.26 |            -9.59 |
+| pt6     |      367 |      212 |       339 |       212 |        121.32 |            18.25 |            -8.98 |
+| pt7     |      305 |      298 |       278 |       298 |        125.81 |             1.71 |            14.58 |
+| pt8     |      365 |      299 |       338 |       299 |        125.81 |            18.37 |            14.86 |
+| pt9     |      466 |      225 |       415 |       225 |         66.61 |            24.58 |            -3.02 |
+| pt10    |      581 |      225 |       530 |       226 |         66.61 |            41.49 |            -3.02 |
+| pt11    |      464 |      387 |       413 |       388 |         66.61 |            24.29 |            20.81 |
+| pt12    |      579 |      388 |       528 |       390 |         66.61 |            41.2  |            20.95 |
+
+### 尺寸计算和精度
+我们还可以使用公式$distance = \sqrt{(x\_2 - x\_1)^2 + (y\_2 - y\_1)^2 + (z\_2 - z\_1)^2}$使用不同点的(x,y,z)值计算它们之间的 3D 距离。一些点之间的计算距离以及它们的实际测量值在下面的表格中列出。还计算并列出了百分比误差$(\frac{(actual-measured) * 100}{actual})$。请注意，计算值和实际值非常匹配，百分比误差为 1.2%或更小。
+
+| 尺寸    |   计算值(cm)  |   实际值(cm)  |       百分比误差       |
+|:------------:|:---------------:|:-------------:|:-------------------:|
+| d1(1-2)     |           31.2 |         31.2 |               0    |
+| d2(1-3)     |           21.1 |         21.3 |               0.94 |
+| d3(5-6)     |           16.6 |         16.7 |               0.6  |
+| d4(5-7)     |           24.2 |         24   |               0.83 |
+| d5(9-10)    |           16.9 |         16.7 |               1.2  |
+| d6(9-11)    |           23.8 |         24   |               0.83 |
+
+计算尺寸结果
+<div class="flex justify-center">
+    <img src="https://huggingface.co/datasets/hf-vision/course-assets/resolve/main/3d_stereo_vision_images/calculated_dim_results.png?download=true" alt="Calculated Dimension Results">
+<p>图10：Calculated Dimension Results</p>
+</div>
+
+## 结论
+1. 总之，我们了解了立体视觉的工作原理，用于在给定从不同视点捕获的点 P 的两个图像的情况下找到点 P 的真实世界坐标(x, y, z)的公式，并将理论值与实验结果进行了比较。
+2. 我们假设相机的内在参数——焦距和主点——是已知的，以及它们的位置和方向信息。这也被称为校准立体视觉。
+3. 有趣的是，如果相机的位置和方向未知，也可以找到点 P 的 3D 坐标。实际上，相机相对于彼此的位置和方向可以使用图像本身找到。这被称为未校准立体视觉！
+
+## 参考文献
+1. 3D 重建——多视点 [Coursera](https://www.coursera.org/learn/3d-reconstruction-multiple-viewpoints)
+2. 使用 OpenCV AI Kit 的立体视觉和深度估计 [LearnOpenCV](https://learnopencv.com/stereo-vision-and-depth-estimation-using-opencv-ai-kit/)
+3. OAK-D Lite [Luxonics](https://docs.luxonis.com/projects/hardware/en/latest/pages/DM9095/)

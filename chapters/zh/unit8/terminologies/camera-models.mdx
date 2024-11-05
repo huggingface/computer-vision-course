@@ -1,0 +1,57 @@
+# 相机模型
+
+## 针孔相机
+<div style="display: flex; flex-direction: column; align-items: center;">
+  <img src="https://huggingface.co/datasets/hf-vision/course-assets/resolve/main/Pinhole-camera.png" alt="Pinhole camera from https://commons.wikimedia.org/wiki/File:Pinhole-camera.svg" />
+<p>图1：Pinhole camera from https://commons.wikimedia.org/wiki/File:Pinhole-camera.svg</p>
+</div>
+
+最简单的相机类型——可能是你自己制作的——由一个不透光的盒子组成，一侧有一个小孔，另一侧则是一个屏幕或摄影胶卷。通过孔的光线在盒子的后墙上生成一个倒立的图像。这个简单的相机模型通常用于3D图形应用中。
+
+### 相机坐标轴约定
+
+<div class="flex justify-center">
+    <img src="https://huggingface.co/datasets/hf-vision/course-assets/resolve/main/axes_handedness.png" alt="Blender相机坐标轴约定">
+<p>图2：Blender相机坐标轴约定</p>
+</div>
+相机坐标轴的方向有多种不同的约定。这里我们遵循Blender的约定（见图），相机指向负Z轴，相机的X轴指向左侧（从相机看），相机的Y轴指向上方。
+
+### 针孔相机坐标变换
+
+<div class="flex justify-center">
+    <img src="https://huggingface.co/datasets/hf-vision/course-assets/resolve/main/Pinhole_transform.png" alt="针孔变换">
+<p>图3：针孔变换</p>
+</div>
+3D空间中的每个点都映射到2D平面上的一个点。为了找到3D和2D坐标之间的映射，我们首先需要知道相机的内参，对于针孔相机，它们是：
+ - 焦距，$f_x$ 和 $f_y$。
+ - 主点的坐标，$c_x$ 和 $c_y$，这是图像的光学中心。此点是光轴与图像平面相交的地方。
+
+使用这些内参，我们构建相机矩阵：
+
+$$
+K = \begin{pmatrix}
+f_x & 0 & c_x  \\
+0 & f_y & c_y  \\
+0 & 0 & 1  \\
+\end{pmatrix}
+$$
+ 
+为了将点 $p=[x,y,z]$ 应用到3D空间中的一个点，我们将点乘以相机矩阵 $K @ p$，得到一个新的3x1向量 $[u,v,w]$。这是一个2D中的齐次向量，但最后一个分量不是1。为了找到图像平面中点的位置，我们必须将前两个坐标除以最后一个坐标，从而得到点 $[u/w, v/w]$。
+
+虽然这是相机矩阵的教科书定义，但如果我们使用Blender的相机约定，它将左右翻转图像并上下翻转（因为位于相机前面的点会有负的z值）。修复此问题的一种潜在方法是改变相机矩阵某些元素的符号：
+
+$$
+K = \begin{pmatrix}
+-f_x & 0 & c_x  \\
+0 & -f_y & c_y  \\
+0 & 0 & 1  \\
+\end{pmatrix}
+$$
+
+### 相机变换矩阵
+
+通常，相机并不只是位于原点，我们需要将点从世界坐标转换为相对于相机的坐标。为此，我们首先将世界到相机的矩阵应用于点，然后再应用相机矩阵。
+
+### 更复杂的相机模型
+
+可以使用更复杂的相机模型，模拟真实镜头产生的畸变。有关此类模型的讨论，请参见[计算机视觉中的多视图几何](https://www.robots.ox.ac.uk/~vgg/hzbook/)。

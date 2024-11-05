@@ -160,3 +160,5 @@ cython_debug/
 #.idea/
 
 !chapters/en/Unit 5 -
+
+.DS_Store

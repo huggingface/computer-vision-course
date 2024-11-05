@@ -1,0 +1,10 @@
+Sphinx
+myst-parser
+sphinx-rtd-theme
+readthedocs-sphinx-ext
+nbsphinx
+ipython
+Pygments
+sphinxcontrib-bibtex
+sphinxcontrib-svg2pdfconverter
+sphinx-gallery

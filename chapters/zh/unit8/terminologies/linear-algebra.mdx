@@ -1,0 +1,225 @@
+# 三维数据的线性代数基础
+
+## 坐标系统
+
+大多数三维数据由具有空间中定义位置的对象组成，这些位置通常用其三维笛卡尔坐标 \\([X, Y, Z]\\) 表示。
+
+<div class="flex justify-center">
+    <img src=" https://huggingface.co/datasets/hf-vision/course-assets/resolve/main/axes_handedness.png" alt="坐标轴的手性">
+<p>图1：坐标轴的手性</p>
+</div>
+
+然而，各种系统对这一坐标系统有不同的约定。最重要的区别是手性，即 X、Y 和 Z 轴的相对方向。记住这个区别的最简单方法是将中指指向内侧，使得拇指、食指和中指大致呈直角关系。在左手上，拇指（X）、食指（Y）和中指（Z）形成一个左手坐标系统。类似地，右手的手指形成一个右手坐标系统。
+
+在数学和物理学中，通常使用右手坐标系。然而，在计算机图形学中，不同的库和环境有不同的约定。特别地，Blender、Pytorch3d 和 OpenGL（大多数情况下）使用右手坐标，而 DirectX 使用左手坐标。这里我们将遵循 Blender 和 NerfStudio 的右手约定。
+
+## 变换
+
+能够在空间中旋转、缩放和平移这些坐标是很有用的。例如，如果一个物体在移动，或者我们想将这些坐标从相对于某个固定坐标轴的世界坐标转换为相对于我们摄像机的坐标。
+
+这些变换可以用矩阵表示。这里我们将使用 `@` 表示矩阵乘法。为了使我们以一致的方式表示平移、旋转和缩放，我们取三维坐标 \\([x,y,z]\\)，并添加一个额外的坐标 \\(w=1\\)。这些称为齐次坐标 - 更一般地，\\(w\\) 可以取任何值，四维线上的所有点 \\([wx, wy, wz, w]\\) 对应于三维空间中的同一点 \\([x,y,z]\\)。然而，在这里，\\(w\\) 将始终为 1。
+
+像 [Pytorch3d](https://pytorch3d.org/) 这样的库提供了一系列用于生成和操作变换的函数。
+
+还有一个约定需要注意 - OpenGL 将位置视为列向量 `x`（形状为 4x1），并通过将向量与矩阵进行左乘（`M @ x`）来应用变换，而 DirectX 和 Pytorch3d 将位置视为形状为 (1x4) 的行向量，并通过将向量与矩阵进行右乘（`x @ M`）来应用变换。要在这两种约定之间转换，我们需要对矩阵 `M` 进行转置 `M.T`。我们将展示一个立方体在不同变换矩阵下的变换效果，通过一些代码片段来演示。在这些代码片段中，我们将使用 OpenGL 约定。
+
+### 平移
+
+平移是将空间中所有点按相同距离和方向移动的过程，可以表示为
+
+$$T = \begin{pmatrix} 1 & 0 & 0 & t_x \\ 0 & 1 & 0 & t_y \\ 0 & 0 & 1 & t_z \\ 0 & 0 & 0 & 1 \end{pmatrix}$$
+
+其中 \\(t = [t_x,t_y,t_z]\\) 是用于平移所有点的方向向量。
+
+为了自己尝试一下平移，让我们首先写一个小的辅助函数来可视化一个立方体：
+
+```python
+import numpy as np
+import matplotlib.pyplot as plt
+
+
+def plot_cube(ax, cube, label, color="black"):
+    ax.scatter3D(cube[0, :], cube[1, :], cube[2, :], label=label, color=color)
+    lines = [
+        [0, 1],
+        [1, 2],
+        [2, 3],
+        [3, 0],
+        [4, 5],
+        [5, 6],
+        [6, 7],
+        [7, 4],
+        [0, 4],
+        [1, 5],
+        [2, 6],
+        [3, 7],
+    ]
+    for line in lines:
+        ax.plot3D(cube[0, line], cube[1, line], cube[2, line], color=color)
+    ax.set_xlabel("X")
+    ax.set_ylabel("Y")
+    ax.set_zlabel("Z")
+    ax.legend()
+    ax.set_xlim([-2, 2])
+    ax.set_ylim([-2, 2])
+    ax.set_zlim([-2, 2])
+```
+
+现在，我们可以创建一个立方体并用平移矩阵进行左乘：
+
+```python
+# 定义立方体的 8 个角，坐标为 (x,y,z,w)，在我们的情况下 w 始终为 1
+cube = np.array(
+    [
+        [-1, -1, -1, 1],
+        [1, -1, -1, 1],
+        [1, 1, -1, 1],
+        [-1, 1, -1, 1],
+        [-1, -1, 1, 1],
+        [1, -1, 1, 1],
+        [1, 1, 1, 1],
+        [-1, 1, 1, 1],
+    ]
+)
+
+# 根据 OpenGL 约定进行平移
+cube = cube.T
+
+# 设置图形
+fig = plt.figure()
+ax = fig.add_subplot(111, projection="3d")
+
+# 绘制原始立方体
+plot_cube(ax, cube, label="Original", color="blue")
+
+# 平移矩阵（在正 x 轴和正 y 轴上平移 1 个单位）
+translation_matrix = np.array([[1, 0, 0, 1], [0, 1, 0, 1], [0, 0, 1, 0], [0, 0, 0, 1]])
+
+# 平移
+translated_cube = translation_matrix @ cube
+plot_cube(ax, translated_cube, label="Translated", color="red")
+```
+
+输出应如下所示：
+
+<div style="display: flex; flex-direction: column; align-items: center;">
+  <img src="https://huggingface.co/datasets/hf-vision/course-assets/resolve/main/translation.png" alt="output_translation" />
+<p>图2：output_translation</p>
+</div>
+
+### 缩放
+
+缩放是均匀增加或减少物体大小的过程。缩放变换由一个矩阵表示，该矩阵将每个坐标乘以一个缩放因子。缩放矩阵为：
+
+$$S = \begin{pmatrix} s_x & 0 & 0 & 0 \\ 0 & s_y & 0 & 0 \\ 0 & 0 & s_z & 0 \\ 0 & 0 & 0 & 1 \end{pmatrix}$$
+
+让我们尝试将立方体在 X 轴上缩放 2 倍，在 Y 轴上缩放 0.5 的示例。
+
+```python
+# 设置图形
+fig = plt.figure()
+ax = fig.add_subplot(111, projection="3d")
+
+# 绘制原始立方体
+plot_cube(ax, cube, label="Original", color="blue")
+
+# 缩放矩阵（在 x 轴上缩放 2 倍，y 轴上缩放 0.5）
+scaling_matrix = np.array([[2, 0, 0, 0], [0, 0.5, 0, 0], [0, 0, 1, 0], [0, 0, 0, 1]])
+
+
+scaled_cube = scaling_matrix @ cube
+
+plot_cube(ax, scaled_cube, label="Scaled", color="green")
+```
+
+输出应如下所示：
+
+<div style="display: flex; flex-direction: column; align-items: center;">
+  <img src="https://huggingface.co/datasets/hf-vision/course-assets/resolve/main/scaling.png" alt="output_scaling" />
+<p>图3：output_scaling</p>
+</div>
+
+### 旋转
+
+围绕轴的旋转是另一种常用的变换。有多种不同的方式来表示旋转，包括欧拉角和四元数，这在某些应用中非常有用。同样，像 Pytorch3d 这样的库提供了执行旋转的广泛功能。然而，作为一个简单的示例，我们将展示如何构造围绕三个轴的旋转。
+
+- 围绕 X 轴的旋转：
+
+$$ R_x(\alpha) = \begin{pmatrix} 1 & 0 & 0 & 0 \\ 0 & \cos \alpha & -\sin \alpha & 0 \\ 0 & \sin \alpha & \cos \alpha & 0 \\ 0 & 0 & 0 & 1 \end{pmatrix} $$
+
+下面是一个围绕 X 轴进行正 20 度旋转的小示例：
+
+```python
+# 设置图形
+fig = plt.figure()
+ax = fig.add_subplot(111, projection="3d
+
+")
+
+# 绘制原始立方体
+plot_cube(ax, cube, label="Original", color="blue")
+
+# 旋转矩阵：围绕 x 轴正转 20 度
+angle = 20 * np.pi / 180
+rotation_matrix = np.array(
+    [
+        [1, 0, 0, 0],
+        [0, np.cos(angle), -np.sin(angle), 0],
+        [0, np.sin(angle), np.cos(angle), 0],
+        [0, 0, 0, 1],
+    ]
+)
+
+
+rotated_cube = rotation_matrix @ cube
+
+plot_cube(ax, rotated_cube, label="Rotated", color="orange")
+```
+
+输出应如下所示：
+
+<div style="display: flex; flex-direction: column; align-items: center;">
+  <img src="https://huggingface.co/datasets/hf-vision/course-assets/resolve/main/rotation.png" alt="output_rotation" />
+<p>图4：output_rotation</p>
+</div>
+
+- 围绕 Y 轴的旋转：
+
+$$ R_y(\beta) = \begin{pmatrix} \cos \beta & 0 & \sin \beta & 0 \\ 0 & 1 & 0 & 0 \\ -\sin \beta & 0 & \cos \beta & 0 \\ 0 & 0 & 0 & 1 \end{pmatrix} $$
+
+我们相信您可以使用上面的示例代码并找出如何实现围绕 Y 轴的旋转。😎😎
+
+- 围绕 Z 轴的旋转：
+
+$$ R_z(\beta) = \begin{pmatrix} \cos \beta & -\sin \beta & 0 & 0 \\ \sin \beta & \cos \beta & 0 & 0 \\ 0 & 0 & 1 & 0 \\ 0 & 0 & 0 & 1 \end{pmatrix} $$
+
+同样，您能否使用最后的代码片段实现围绕 Z 轴的旋转❓
+
+请注意，标准约定是正的旋转角度对应于当旋转轴指向观察者时的逆时针旋转。同样注意，在大多数库中，余弦函数要求角度以弧度为单位。要将度转换为弧度，请乘以 \\( pi/180\\)。
+
+### 组合变换
+
+多个变换可以通过将它们的矩阵相乘来组合。注意，矩阵相乘的顺序很重要 - 矩阵是从右到左应用的。要制作一个按顺序应用变换 P、Q 和 R 的矩阵，复合变换为 \\( X = R @ Q @ P\\)。
+
+如果我们想在一个操作中先进行平移，然后进行旋转，最后进行我们上面所做的缩放，代码如下：
+
+```python
+# 设置图形
+fig = plt.figure()
+ax = fig.add_subplot(111, projection="3d")
+
+# 绘制原始立方体
+plot_cube(ax, cube, label="Original", color="blue")
+
+# 变换组合
+combination_transform = rotation_matrix.dot(scaling_matrix.dot(translation_matrix))
+final_result = combination_transform.dot(cube)
+plot_cube(ax, final_result, label="Combined", color="violet")
+```
+
+输出应如下所示：
+
+<div style="display: flex; flex-direction: column; align-items: center;">
+  <img src="https://huggingface.co/datasets/hf-vision/course-assets/resolve/main/combined.png" alt="output_combined" />
+<p>图5：output_combined</p>
+</div>

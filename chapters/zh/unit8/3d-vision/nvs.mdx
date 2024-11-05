@@ -1,0 +1,80 @@
+# 新视角合成
+
+在NeRF章节中，我们已经看到，给定大量图像，我们可以生成物体的三维表示。然而，有时我们只有少量图像，甚至只有一张。新视角合成（Novel View Synthesis, NVS）是一系列方法的集合，用于从新的相机角度生成与一组图像相符的视图。一旦我们拥有大量一致的图像，我们可以使用NeRF或类似算法构建三维表示。
+
+最近已经开发了许多方法来完成这一任务。然而，这些方法大致可以分为两类——那些生成中间三维表示的，这些表示可以从新的视角渲染，和那些直接生成新图像的。
+
+一个关键的困难在于，这一任务几乎总是欠定的。例如，对于一个标牌背面的图像，前面可能有许多不同的内容。同样，物体的某些部分可能被遮挡，一个部分可能在另一个部分的前面。如果一个模型被训练来直接预测（回归）未见部分，并使用一个损失来惩罚重建保留视图的错误，那么在不清楚应该放置什么时，模型必然会预测出一个模糊的灰色区域，正如[NerfDiff](https://jiataogu.me/nerfdiff/)中所指出的。这激发了对生成性扩散模型的兴趣，这些模型能够从未见区域的多种合理可能性中进行采样。
+
+在这里，我们将简要讨论两种方法，它们代表了这两类。
+
+[PixelNeRF](https://alexyu.net/pixelnerf)直接从输入图像预测场景的NeRF。
+
+[Zero123](https://zero123.cs.columbia.edu/)调整了稳定扩散潜在扩散模型，直接生成新视图，而无需中间三维表示。
+
+## PixelNeRF
+
+PixelNeRF是一种直接从一张或多张图像生成NeRF参数的方法。换句话说，它使NeRF以输入图像为条件。与原始NeRF不同，原始NeRF训练一个将空间点映射到密度和颜色的MLP，而PixelNeRF使用从输入图像生成的空间特征。
+
+<div style="display: flex; flex-direction: column; align-items: center;">
+  <img src="https://huggingface.co/datasets/hf-vision/course-assets/resolve/main/PixelNeRF_pipeline.png" alt="PixelNeRF diagram" />
+  <p>图片来源： <a href="https://alexyu.net/pixelnerf">PixelNeRF</a></p>
+</div>
+
+该方法首先通过卷积神经网络（ResNet34）传递输入图像，将多个层的特征双线性上采样到与输入图像相同的分辨率。与标准NeRF一样，新视图通过体积渲染生成。然而，NeRF本身具有稍微不寻常的结构。在渲染体积中的每个查询点 $ x $，通过使用输入图像相机变换 $ \pi $ 投影来找到输入图像中的相应点。在此点的输入图像特征 $ W(\pi x) $ 通过双线性插值获得。与原始NeRF一样，查询点 $ x $ 被位置编码，并与视角方向 $ d $ 连接。NeRF网络由一组ResNet块组成；输入图像特征 $ W(\pi(x)) $ 通过一个线性层，并在前三个残差块的开始处与特征相加。然后还有两个残差块进一步处理这些特征，最后一个输出层将通道数减少到四个（RGB+密度）。当提供多个输入视图时，这些视图在前三个残差块中独立处理，然后在最后两个块之前对特征进行平均。
+
+原始的PixelNeRF模型是在相对较小的[ShapeNet](https://huggingface.co/datasets/ShapeNet/ShapeNetCore)数据集的渲染集上训练的。该模型使用一张或两张输入图像进行训练，并尝试从新的相机角度预测单个新视图。损失是渲染视图和期望新视图之间的均方误差。一个模型在每类物体（例如，飞机、长椅、汽车）上单独训练。
+
+### 结果（来自PixelNeRF网站）
+
+<div style="display: flex; flex-direction: column; align-items: center;">
+  <img src="https://huggingface.co/datasets/hf-vision/course-assets/resolve/main/PixelNeRF_input.png" alt="Input image of a chair" />
+<p>图1：PixelNeRF diagram" />
+  <p>图片来源： <a href="https://alexyu.net/pixelnerf">PixelNeRF</a></p>
+</div>
+
+该方法首先通过卷积神经网络（ResNet34）传递输入图像，将多个层的特征双线性上采样到与输入图像相同的分辨率。与标准NeRF一样，新视图通过体积渲染生成。然而，NeRF本身具有稍微不寻常的结构。在渲染体积中的每个查询点 $ x $，通过使用输入图像相机变换 $ \pi $ 投影来找到输入图像中的相应点。在此点的输入图像特征 $ W(\pi x) $ 通过双线性插值获得。与原始NeRF一样，查询点 $ x $ 被位置编码，并与视角方向 $ d $ 连接。NeRF网络由一组ResNet块组成；输入图像特征 $ W(\pi(x)) $ 通过一个线性层，并在前三个残差块的开始处与特征相加。然后还有两个残差块进一步处理这些特征，最后一个输出层将通道数减少到四个（RGB+密度）。当提供多个输入视图时，这些视图在前三个残差块中独立处理，然后在最后两个块之前对特征进行平均。
+
+原始的PixelNeRF模型是在相对较小的[ShapeNet](https://huggingface.co/datasets/ShapeNet/ShapeNetCore)数据集的渲染集上训练的。该模型使用一张或两张输入图像进行训练，并尝试从新的相机角度预测单个新视图。损失是渲染视图和期望新视图之间的均方误差。一个模型在每类物体（例如，飞机、长椅、汽车）上单独训练。
+
+### 结果（来自PixelNeRF网站）
+
+<div style="display: flex; flex-direction: column; align-items: center;">
+  <img src=</p>
+</div>
+
+<div style="display: flex; flex-direction: column; align-items: center;">
+  <img src="https://huggingface.co/datasets/hf-vision/course-assets/resolve/main/PixelNeRF_output.gif" alt="Rotating gif animation of rendered novel views" />
+  <p>图片来源： <a href="https://alexyu.net/pixelnerf">PixelNeRF</a></p>
+</div>
+
+PixelNeRF的代码可以在[GitHub](https://github.com/sxyu/pixel-nerf)上找到。
+
+### 相关方法
+
+在[ObjaverseXL](https://arxiv.org/pdf/2307.05663.pdf)论文中，PixelNeRF在一个*更大*的数据集上训练，[allenai/objaverse-xl](https://huggingface.co/datasets/allenai/objaverse-xl)。
+
+另见 - [生成查询网络](https://deepmind.google/discover/blog/neural-scene-representation-and-rendering/)，[场景表示网络](https://www.vincentsitzmann.com/srns/)，[LRM](https://arxiv.org/pdf/2311.04400.pdf)。
+
+## Zero123（或Zero-1-to-3）
+
+Zero123采取了不同的方法，成为一种扩散模型。它不是尝试生成三维表示，而是直接预测新视角的图像。该模型采用一张输入图像，以及输入与新视角方向之间的相对视点变换。它尝试从新的视角生成一个合理的、三维一致的图像。
+
+Zero123建立在[Stable Diffusion](https://arxiv.org/abs/2112.10752)架构上，并通过微调现有权重进行训练。然而，它增加了一些新的变化。该模型实际上从[Stable Diffusion Image Variations](https://huggingface.co/spaces/lambdalabs/stable-diffusion-image-variations)的权重开始，该模型使用输入图像的CLIP图像嵌入（最终隐藏状态）来调节扩散U-Net，而不是文本提示。然而，在这里，这些CLIP图像嵌入与输入与新视角之间的相对视点变换连接在一起。（这种视点变化以球面极坐标表示）。
+
+<div style="display: flex; flex-direction: column; align-items: center;">
+  <img src="https://huggingface.co/datasets/hf-vision/course-assets/resolve/main/Zero123.png" alt="Zero123" />
+  <p>图片来源： <a href="https://zero123.cs.columbia.edu">https://zero123.cs.columbia.edu</a></p>
+</div>
+
+其余架构与Stable Diffusion相同。然而，输入图像的潜在表示与噪声潜在表示在通道上连接，然后输入到去噪U-Net中。
+
+要进一步探索该模型，请参见[现场演示](https://huggingface.co/spaces/cvlab/zero123-live)。
+
+### 相关方法
+
+[3DiM](https://3d-diffusion.github.io/) - X-UNet架构，输入和噪声帧之间的交叉注意力。
+
+[Zero123-XL](https://arxiv.org/pdf/2311.13617.pdf) - 在更大的objaverseXL数据集上训练。另见[Stable Zero 123](https://huggingface.co/stabilityai/stable-zero123)。
+
+[Zero123++](https://arxiv.org/abs/2310.15110) - 在与输入视图固定相对位置的情况下生成6个新的固定视图，输入与生成图像之间具有参考注意力。
