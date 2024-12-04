@@ -126,6 +126,8 @@
     local: "unit7/video-processing/introduction-to-video"
   - title: Video Processing Basics
     local: "unit7/video-processing/video-processing-basics"
+  - title: Multimodal Based Video Models
+    local: "unit7/video-processing/multimodal-based-video-models"
   - title: CNN Based Video Model
     local: "unit7/video-processing/cnn-based-video-model"
   - title: RNN Based Video Model
