@@ -76,7 +76,7 @@ YOLO is a single step detector where the bounding box and the class of the objec
 #### Reframing Object Detection
 YOLO reframes the Object Detection task as a single regression problem, which predicts bounding box coordinates and class probabilities. 
 
-In this design, we divide the image into an $S \times S$ grid. If the center of the object falls into a grid cell, that grid cell is responsible to detect that object. We can define $B$ as the maximum number of objects to be detected in each cell. So each grid cell predicts $B$ bounding boxes including confidence scores for each box. 
+In this design, we divide the image into an $$S \times S$$ grid. If the center of the object falls into a grid cell, that grid cell is responsible to detect that object. We can define $B$ as the maximum number of objects to be detected in each cell. So each grid cell predicts $B$ bounding boxes including confidence scores for each box. 
 
 #### Confidence
 The confidence score of a bounding box should reflect how accurately the box was predicted. It should be close to the IOU (Intersection over Union) of the ground truth box versus the predicted box. If the grid was not supposed to predict a box, then it should be zero. So this should encode the probability of the center of the box being present in the grid and the correctness of the bounding box.
