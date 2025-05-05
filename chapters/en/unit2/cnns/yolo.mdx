@@ -89,7 +89,7 @@ $$\text{confidence} := P(\text{Object}) \times \text{IOU}_{\text{pred}}^{\text{t
 The coordinates of a bounding box are encoded in 4 numbers $(x, y, w, h)$. The $(x, y)$ coordinates represent the center of the box relative to the bounds of the grid cell. The width and height are normalized to image dimensions.
 
 #### Class
-The class probabilities is a $C$ long vecto,r representing conditional class probabilities of each class given an object existed in a cell. Each grid cell only predicts one vector, i.e a single class will be assigned to each grid cell and so all the $B$ bounding boxes predicted by that grid cell will have the same class.
+The class probabilities is a $C$ long vector, representing conditional class probabilities of each class given an object existed in a cell. Each grid cell only predicts one vector, i.e a single class will be assigned to each grid cell and so all the $B$ bounding boxes predicted by that grid cell will have the same class.
 
 Formally,
 $$C_i = P(\text{class}_i \mid \text{Object})$$
