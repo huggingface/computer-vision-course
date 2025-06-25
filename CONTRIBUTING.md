@@ -5,7 +5,7 @@ Hey 👋, great that you want to contribute to the Community Computer Vision Cou
 ### Adding content to the course
 *Important Note: If you’ve never contributed to open-source projects on GitHub, kindly read [this document](https://www.notion.so/19411c29298644df8e9656af45a7686d?pvs=25) which shows to do so with an example for the skops repository.*
 
-1. First go to the [discussion section](https://github.com/johko/computer-vision-course/discussions/).
+1. First go to the [discussion section](https://github.com/huggingface/computer-vision-course/discussions/).
 2. Here you find a section for each unit of the course. Go to the unit you want to contribute to. Open a new discussion and describe what you want to add.
 3. Wait for an approval from the repository maintainers or change requests
 4. When your suggestions is approved, follow these steps:
@@ -15,7 +15,7 @@ Hey 👋, great that you want to contribute to the Community Computer Vision Cou
 
 
 ### Typos/Bug fixes
-1. Open an [Issue](https://github.com/johko/computer-vision-course/issues) describing which content you want to add, change or fix
+1. Open an [Issue](https://github.com/huggingface/computer-vision-course/issues) describing which content you want to add, change or fix
 2. Wait for an approval from the repository maintainers
 3. Follow the steps below to create a PR
 
@@ -24,7 +24,7 @@ Hey 👋, great that you want to contribute to the Community Computer Vision Cou
 1. Fork the repository
 2. Create a new branch for your changes
 3. Make your changes
-4. Create a pull request to the [stage](https://github.com/johko/computer-vision-course/tree/stage) branch of the main repository
+4. Create a pull request to the [stage](https://github.com/huggingface/computer-vision-course/tree/stage) branch of the main repository
 5. Wait for the maintainers to approve your PR
 6. Celebrate your contribution 🥳🎉
 

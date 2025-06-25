@@ -1,4 +1,4 @@
-![Course](https://github.com/johko/computer-vision-course/assets/53175384/58e39903-5a3a-4d48-8f3c-5811f31b93b5)
+![Course](https://github.com/huggingface/computer-vision-course/assets/53175384/58e39903-5a3a-4d48-8f3c-5811f31b93b5)
 
 # Community-led Computer Vision Community Course  🤗
 
@@ -39,7 +39,7 @@ Join [the Hugging Face discord](https://discord.gg/hugging-face-8795489624644936
 
 ### Contributors
 
-<a href="https://github.com/johko/computer-vision-course/graphs/contributors">
+<a href="https://github.com/huggingface/computer-vision-course/graphs/contributors">
   <img src="https://contrib.rocks/image?repo=johko/computer-vision-course" />
 </a>
 
