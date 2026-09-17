@@ -12,7 +12,6 @@ jobs:
       commit_sha: ${{ github.sha }}
       package: computer-vision-course
       package_name: computer-vision-course
-      repo_owner: johko
       path_to_docs: computer-vision-course/chapters/
       additional_args: --not_python_module
       languages: en

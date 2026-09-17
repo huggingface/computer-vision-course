@@ -1,12 +1,12 @@
 # These owners will be the default owners for everything in
 # the repo. Unless a later match takes precedence,
-*       @merveenoyan @johko @lunarflu
+*       @merveenoyan @johko @lunarflu @burtenshaw
 
 # Order is important; the last matching pattern takes the most
 # precedence. When someone opens a pull request that only
 # modifies files in /chapters/ or /notebooks/, only the here mentioned 
 # and not the global owner(s) will be requested for a review.
 
-/chapters/    @merveenoyan @johko
+/chapters/    @merveenoyan @johko @burtenshaw
 
-/notebooks/    @merveenoyan @johko
+/notebooks/    @merveenoyan @johko @burtenshaw

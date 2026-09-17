@@ -15,7 +15,6 @@ jobs:
       pr_number: ${{ github.event.number }}
       package: computer-vision-course
       package_name: computer-vision-course
-      repo_owner: johko
       path_to_docs: computer-vision-course/chapters/
       additional_args: --not_python_module
       languages: en
