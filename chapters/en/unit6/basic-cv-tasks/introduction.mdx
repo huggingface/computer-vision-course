@@ -1,11 +1,33 @@
 # Introduction
 
-So far you have learned a lot about different Neural Network architectures for Computer Vision, from CNNs to Transformers, Multimodal architectures and Generative AI.
-This unit is meant to give you a better overview of basic Computer Vision tasks, such as _Image Classification_, _Object Detection_ and _Image Segmentation_.
+So far you have learned a lot about different Neural Network architectures for Computer Vision, from CNNs to Transformers, Multimodal architectures and Generative AI. This unit is meant to give you a better overview of basic Computer Vision tasks, such as Image Classification, Object Detection and Image Segmentation.
 
-The goal is to get a better understanding of what exactly these tasks are about and which subcategories exist (e.g., Semantic or Instance Segmentation).
-We will also highlight popular datasets for these tasks and how they are evaluated. And, of course, we will talk about some of the most popular models that are used for the respective tasks.
+The goal is to get a better understanding of what exactly these tasks are about and which subcategories exist (e.g., Semantic or Instance Segmentation). We will also highlight popular datasets for these tasks and how they are evaluated. And, of course, we will talk about some of the most popular models that are used for the respective tasks.
+
+## Why These Tasks Matter
+
+Nearly every practical computer vision system is built on top of one (or a combination) of these three tasks. A self-driving car needs object detection to spot pedestrians, segmentation to understand drivable road surface, and classification to read traffic signs — often all three running together in the same pipeline. Understanding what each task actually asks of a model, and where they overlap, makes it much easier to pick the right approach when you're solving a real vision problem later in this course.
+
+## What You'll Find in This Unit
+
+This unit is organized around the three tasks below. Note that Image Classification is explored earlier in the course, in the context of Vision Transformers — we link to it here so you have one place to navigate from:
+
+- **Image Classification** — assigning one or more labels to a whole image. Covered in [Unit 3: Vision Transformers for Image Classification](../../unit3/vision-transformers/vision-transformers-for-image-classification).
+- **[Object Detection](./object_detection)** — locating objects in an image with bounding boxes and labeling each one.
+- **[Image Segmentation](./segmentation)** — classifying an image at the pixel level, producing a mask for each object or region.
+
+A quick way to tell these tasks apart:
+
+| Task | Question it answers | Typical output |
+|---|---|---|
+| Image Classification | "What is in this image?" | One or more labels for the whole image |
+| Object Detection | "What objects are here, and where?" | Bounding boxes + a class label per object |
+| Image Segmentation | "Which pixels belong to what?" | A per-pixel mask, at the semantic, instance, or panoptic level |
+
+## Prerequisites
+
+This unit assumes you're comfortable with the neural network architectures covered earlier in the course (CNNs in Unit 2, Vision Transformers in Unit 3). If any of those feel shaky, it's worth a quick review before diving in, since the models used for detection and segmentation build directly on top of them.
 
 ## Contributions Welcome
 
-You will notice that this unit so far is a bit short on content. If you want to change that, you are happily invited to join our efforts and have a look at the [Contribution Guidelines](../../../CONTRIBUTING.md).
+If you want to help expand this unit further, you are happily invited to join our efforts and have a look at the [Contribution Guidelines](https://github.com/johko/computer-vision-course/blob/main/CONTRIBUTING.md).
