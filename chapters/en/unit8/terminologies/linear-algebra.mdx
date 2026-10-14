@@ -8,7 +8,7 @@ Most three-dimensional data consists of objects such as points which have a defi
 
 However, various systems have different conventions for this coordinate system. The most important difference is handedness, which is the relative orientation of the X, Y and Z axes. The easiest way to remember the difference is to point your middle finger inwards, such that your thumb, index, and middle fingers are roughly at right angles to each other. On your left hand, your thumb (X), index finger (Y), and middle finger (Z) form a left-handed coordinate system. Similarly, the fingers of your right hand make a right-handed coordinate system.
 
-In mathematics and physics, a right-handed system is usually used. However, in computer graphics, different libraries and environments have different conventions. Notably, Blender, Pytorch3d and OpenGL (mostly) use right-handed coordinates, whilst DirectX uses left-handed coordinates.Here we will use the right-handed convention, following Blender and NerfStudio.
+In mathematics and physics, a right-handed system is usually used. However, in computer graphics, different libraries and environments have different conventions. Notably, Blender, PyTorch3D and OpenGL (mostly) use right-handed coordinates, whilst DirectX uses left-handed coordinates.Here we will use the right-handed convention, following Blender and NerfStudio.
 
 ## Transformations
 
@@ -16,9 +16,9 @@ It is useful to be able to rotate, scale, and translate these coordinates in spa
 
 These transformations can be represented by matrices. Here we'll use `@` to denote matrix multiplication. To allow us to represent translation, rotation and scaling in a consistent manner, we take the three dimensional coordinates \\([x,y,z]\\), and add an extra coordinate \\(w=1\\). These are known as homogeneous coordinates - more generally, \\(w\\) can take any value, and all points on the four-dimensional line \\([wx, wy, wz, w]\\) correspond to the same point \\([x,y,z]\\) in three-dimensional space. However, here, \\(w\\) will always be 1.
 
-Libraries such as [Pytorch3d](https://pytorch3d.org/) provide a range of functions for generating and manipulating transformations.
+Libraries such as [PyTorch3D](https://pytorch3d.org/) provide a range of functions for generating and manipulating transformations.
 
-Yet another convention to note - OpenGL treats positions as column vectors `x` (of shape 4x1), and applies a transformation `M` by pre-multiplying the vector by the matrix (`M @ x`), whereas DirectX and Pytorch3d consider positions as row vectors of shape (1x4), and apply a transformation by post-multiplying the vector by the matrix ( `x @ M` ). To convert between the two conventions we need to take the transpose of the matrix `M.T`. We will show how a cube transforms under different transformation matrices in a few code snippets. For these code snippets, we will use the OpenGL convention.
+Yet another convention to note - OpenGL treats positions as column vectors `x` (of shape 4x1), and applies a transformation `M` by pre-multiplying the vector by the matrix (`M @ x`), whereas DirectX and PyTorch3D consider positions as row vectors of shape (1x4), and apply a transformation by post-multiplying the vector by the matrix ( `x @ M` ). To convert between the two conventions we need to take the transpose of the matrix `M.T`. We will show how a cube transforms under different transformation matrices in a few code snippets. For these code snippets, we will use the OpenGL convention.
 
 ### Translations
 
@@ -137,7 +137,7 @@ The output should look something like this:
 
 ### Rotations
 
-Rotations around an axis are another commonly used transformation. There are a number of different ways of representing rotations, including Euler angles and quaternions, which can be very useful in some applications. Again, libraries such as Pytorch3d include a wide range of functionalities for performing rotations. However, as a simple example, we will just show how to construct rotations about each of the three axes.
+Rotations around an axis are another commonly used transformation. There are a number of different ways of representing rotations, including Euler angles and quaternions, which can be very useful in some applications. Again, libraries such as PyTorch3D include a wide range of functionalities for performing rotations. However, as a simple example, we will just show how to construct rotations about each of the three axes.
 
 - Rotation around the X-axis:
 
